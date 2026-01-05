@@ -26,6 +26,8 @@ export default function Navbar() {
     { name: 'FAQ', href: '#faq' },
   ];
 
+  const whatsappUrl = 'https://wa.me/6281320005405?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis%20pembuatan%20website';
+
   return (
     <nav
       className={cn(
@@ -58,7 +60,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <div className='hidden md:flex items-center gap-8'>
+        <div className='hidden lg:flex items-center gap-8'>
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -70,13 +72,15 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className='hidden md:block'>
-          <Button>Konsultasi Gratis</Button>
+        <div className='hidden lg:block '>
+          <Link href={whatsappUrl} target='_blank' rel='noopener noreferrer'>
+            <Button className='cursor-pointer'>Konsultasi Gratis</Button>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button
-          className='md:hidden text-slate-900'
+          className='lg:hidden text-slate-900'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -85,7 +89,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className='md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 p-4 shadow-lg flex flex-col gap-4'>
+        <div className='lg:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 p-4 shadow-lg flex flex-col gap-4'>
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -96,7 +100,9 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Button className='w-full'>Konsultasi Gratis</Button>
+          <Link href={whatsappUrl} target='_blank' rel='noopener noreferrer'>
+            <Button className='w-full'>Konsultasi Gratis</Button>
+          </Link>
         </div>
       )}
     </nav>

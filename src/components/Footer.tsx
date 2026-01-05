@@ -1,24 +1,32 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
+import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
 
 export default function Footer() {
+  const whatsappUrl = 'https://wa.me/6281320005405';
+
   return (
     <footer className='bg-slate-900 text-slate-300 py-12 border-t border-slate-800'>
       <div className='container mx-auto px-4 md:px-6'>
-        <div className='grid md:grid-cols-4 gap-8 mb-8'>
-          <div className='col-span-1 md:col-span-1'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-8'>
+          {/* Brand Column */}
+          <div className='flex flex-col'>
             <Link href='/' className='text-2xl font-bold text-white mb-4 block'>
               Cetha Technologies
             </Link>
-            <p className='text-sm text-slate-400 leading-relaxed mb-4'>
-              Jasa pembuatan website modern, cepat, dan berorientasi pada
-              konversi bisnis Anda.
+            <p className='text-slate-400 leading-relaxed max-w-sm mb-6'>
+              Partner digital terpercaya untuk transformasi bisnis Anda. Kami
+              membangun website yang tidak hanya indah, tapi juga menghasilkan.
             </p>
+            <div className='flex items-start gap-3 text-slate-400'>
+              <MapPin className='w-5 h-5 text-blue-500 shrink-0 mt-1' />
+              <span>Bandung, Jawa Barat, Indonesia</span>
+            </div>
           </div>
 
-          <div>
-            <h4 className='text-white font-semibold mb-4'>Menu</h4>
-            <ul className='space-y-2 text-sm'>
+          {/* Menu Column */}
+          <div className='md:pl-8'>
+            <h4 className='text-white font-semibold mb-6 text-lg'>Menu</h4>
+            <ul className='space-y-4'>
               <li>
                 <Link
                   href='#services'
@@ -54,51 +62,42 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Connect Column */}
           <div>
-            <h4 className='text-white font-semibold mb-4'>Legal</h4>
-            <ul className='space-y-2 text-sm'>
-              <li>
-                <Link
-                  href='#'
-                  className='hover:text-blue-400 transition-colors'
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='#'
-                  className='hover:text-blue-400 transition-colors'
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className='text-white font-semibold mb-4'>Connect</h4>
-            <div className='flex space-x-4 mb-4'>
-              <Link href='#' className='hover:text-blue-400 transition-colors'>
-                <Twitter size={20} />
-              </Link>
-              <Link href='#' className='hover:text-blue-400 transition-colors'>
-                <Facebook size={20} />
-              </Link>
-              <Link href='#' className='hover:text-blue-400 transition-colors'>
-                <Instagram size={20} />
-              </Link>
-              <Link href='#' className='hover:text-blue-400 transition-colors'>
-                <Linkedin size={20} />
-              </Link>
+            <h4 className='text-white font-semibold mb-6 text-lg'>Connect</h4>
+            <div className='flex flex-col gap-4'>
+              <a
+                href='https://instagram.com'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-3 hover:text-pink-500 transition-colors group'
+              >
+                <div className='w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors'>
+                  <Instagram size={20} />
+                </div>
+                <span>@cethatech</span>
+              </a>
+              <a
+                href={whatsappUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-3 hover:text-green-500 transition-colors group'
+              >
+                <div className='w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors'>
+                  <Phone size={20} />
+                </div>
+                <span>WhatsApp Kami</span>
+              </a>
+              <a
+                href='mailto:hello@cethatech.id'
+                className='flex items-center gap-3 hover:text-blue-400 transition-colors group'
+              >
+                <div className='w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors'>
+                  <Mail size={20} />
+                </div>
+                <span>hello@cethatech.id</span>
+              </a>
             </div>
-            <a
-              href='mailto:hello@cethatech.id'
-              className='flex items-center gap-2 hover:text-blue-400 transition-colors text-sm'
-            >
-              <Mail size={16} />
-              hello@cethatech.id
-            </a>
           </div>
         </div>
 

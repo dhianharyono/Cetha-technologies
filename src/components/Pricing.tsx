@@ -2,6 +2,7 @@
 
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -60,6 +61,11 @@ const plans = [
 ];
 
 export default function Pricing() {
+  const getWhatsappUrl = (planName: string) => {
+    const text = `Halo, saya tertarik dengan paket ${planName} untuk pembuatan website.`;
+    return `https://wa.me/6281320005405?text=${encodeURIComponent(text)}`;
+  };
+
   return (
     <section id='pricing' className='py-20 bg-white'>
       <div className='container mx-auto px-4 md:px-6'>
@@ -72,15 +78,14 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className='grid md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto'>
           {plans.map((plan) => (
             <Card
               key={plan.name}
-              className={`relative flex flex-col ${
-                plan.popular
-                  ? 'border-blue-600 shadow-xl scale-105 z-10'
-                  : 'border-slate-200 shadow-sm hover:shadow-md'
-              }`}
+              className={`relative flex flex-col ${plan.popular
+                ? 'border-blue-600 shadow-xl scale-105 z-10'
+                : 'border-slate-200 shadow-sm hover:shadow-md'
+                }`}
             >
               {plan.popular && (
                 <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium shadow-md'>
@@ -108,13 +113,20 @@ export default function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button
-                  className='w-full cursor-pointer'
-                  variant={plan.popular ? 'default' : 'outline'}
-                  size='lg'
+                <Link
+                  href={getWhatsappUrl(plan.name)}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='w-full'
                 >
-                  {plan.cta}
-                </Button>
+                  <Button
+                    className='w-full cursor-pointer'
+                    variant={plan.popular ? 'default' : 'outline'}
+                    size='lg'
+                  >
+                    {plan.cta}
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}

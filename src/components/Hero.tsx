@@ -1,11 +1,15 @@
 'use client';
 
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function Hero() {
+  const whatsappUrl =
+    'https://wa.me/6281320005405?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis%20pembuatan%20website';
+
   return (
     <section className='relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-slate-50'>
       <div className='container mx-auto px-4 md:px-6'>
@@ -35,15 +39,27 @@ export default function Hero() {
             </p>
 
             <div className='flex flex-col sm:flex-row gap-4 mb-10'>
-              <Button
-                size='lg'
-                className='px-8 text-base shadow-lg shadow-blue-600/20'
+              <Link
+                href={whatsappUrl}
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                Konsultasi Gratis
-              </Button>
-              <Button size='lg' variant='outline' className='px-8 text-base'>
-                Lihat Paket Harga
-              </Button>
+                <Button
+                  size='lg'
+                  className='px-8 text-base shadow-lg shadow-blue-600/20 cursor-pointer w-full sm:w-auto'
+                >
+                  Konsultasi Gratis
+                </Button>
+              </Link>
+              <Link href='#pricing'>
+                <Button
+                  size='lg'
+                  variant='outline'
+                  className='px-8 text-base w-full sm:w-auto cursor-pointer'
+                >
+                  Lihat Paket Harga
+                </Button>
+              </Link>
             </div>
 
             <div className='flex flex-col sm:flex-row gap-6 text-sm text-slate-500 font-medium'>
