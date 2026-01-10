@@ -67,7 +67,7 @@ export default function Footer() {
             <h4 className='text-white font-semibold mb-6 text-lg'>Connect</h4>
             <div className='flex flex-col gap-4'>
               <a
-                href='https://instagram.com'
+                href='https://www.instagram.com/cethatechnologies/'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='flex items-center gap-3 hover:text-pink-500 transition-colors group'
