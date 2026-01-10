@@ -88,15 +88,6 @@ export default function Footer() {
                 </div>
                 <span>WhatsApp Kami</span>
               </a>
-              <a
-                href='mailto:hello@cethatech.id'
-                className='flex items-center gap-3 hover:text-blue-400 transition-colors group'
-              >
-                <div className='w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors'>
-                  <Mail size={20} />
-                </div>
-                <span>hello@cethatech.id</span>
-              </a>
             </div>
           </div>
         </div>
