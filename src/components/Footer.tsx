@@ -5,19 +5,25 @@ export default function Footer() {
   const whatsappUrl = 'https://wa.me/6281320005405';
 
   return (
-    <footer className='bg-slate-900 text-slate-300 py-12 border-t border-slate-800'>
+    <footer className='bg-[#04060A] text-slate-400 py-12 border-t border-white/10 relative z-10'>
       <div className='container mx-auto px-4 md:px-6'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-8'>
           {/* Brand Column */}
           <div className='flex flex-col'>
-            <Link href='/' className='text-2xl font-bold text-white mb-4 block'>
-              Cetha Technologies
+            <Link
+              href='/'
+              className='text-2xl font-extrabold text-white mb-4 block group'
+            >
+              <span className='group-hover:text-cyan-400 transition-colors'>
+                Cetha
+              </span>{' '}
+              Technologies
             </Link>
-            <p className='text-slate-400 leading-relaxed max-w-sm mb-6'>
+            <p className='text-slate-400 text-sm leading-relaxed max-w-sm mb-6'>
               Partner digital terpercaya untuk transformasi bisnis Anda. Kami
               membangun website yang tidak hanya indah, tapi juga menghasilkan.
             </p>
-            <div className='flex items-start gap-3 text-slate-400'>
+            <div className='flex items-center gap-3 text-slate-400 text-sm '>
               <MapPin className='w-5 h-5 text-blue-500 shrink-0 mt-1' />
               <span>Bandung, Jawa Barat, Indonesia</span>
             </div>
@@ -26,7 +32,7 @@ export default function Footer() {
           {/* Menu Column */}
           <div className='md:pl-8'>
             <h4 className='text-white font-semibold mb-6 text-lg'>Menu</h4>
-            <ul className='space-y-4'>
+            <ul className='space-y-4 text-sm'>
               <li>
                 <Link
                   href='#services'
@@ -65,7 +71,7 @@ export default function Footer() {
           {/* Connect Column */}
           <div>
             <h4 className='text-white font-semibold mb-6 text-lg'>Connect</h4>
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 text-sm'>
               <a
                 href='https://www.instagram.com/cethatechnologies/'
                 target='_blank'

@@ -26,21 +26,22 @@ export default function Navbar() {
     { name: 'FAQ', href: '#faq' },
   ];
 
-  const whatsappUrl = 'https://wa.me/6281320005405?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis%20pembuatan%20website';
+  const whatsappUrl =
+    'https://wa.me/6281320005405?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis%20pembuatan%20website';
 
   return (
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-6'
+          ? 'bg-[#07090E]/80 backdrop-blur-md shadow-sm shadow-blue-900/10 py-4'
+          : 'bg-transparent py-6',
       )}
     >
       <div className='container mx-auto px-4 md:px-6 flex items-center justify-between'>
         <Link
           href='/'
-          className='text-2xl font-bold text-blue-600 flex items-center gap-2'
+          className='text-2xl font-bold text-cyan-500 flex items-center gap-2'
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -54,7 +55,7 @@ export default function Navbar() {
           >
             <path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' />
           </svg>
-          <span className='text-slate-900 text-lg md:text-2xl'>
+          <span className='text-white text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight'>
             Cetha Technologies
           </span>
         </Link>
@@ -65,7 +66,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className='text-slate-600 hover:text-blue-600 font-medium transition-colors'
+              className='text-slate-300 hover:text-cyan-400 font-medium transition-colors'
             >
               {link.name}
             </Link>
@@ -74,13 +75,15 @@ export default function Navbar() {
 
         <div className='hidden lg:block '>
           <Link href={whatsappUrl} target='_blank' rel='noopener noreferrer'>
-            <Button className='cursor-pointer'>Konsultasi Gratis</Button>
+            <Button className='cursor-pointer bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)] rounded-full px-6 transition-all hover:scale-105'>
+              Konsultasi Gratis
+            </Button>
           </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button
-          className='lg:hidden text-slate-900'
+          className='lg:hidden text-white'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -89,20 +92,17 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className='lg:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 p-4 shadow-lg flex flex-col gap-4'>
+        <div className='lg:hidden absolute top-full left-0 right-0 bg-[#07090E]/95 backdrop-blur-xl border-b border-white/10 p-4 shadow-xl flex flex-col gap-4'>
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className='text-slate-600 hover:text-blue-600 font-medium py-2'
+              className='text-slate-300 hover:text-cyan-400 text-sm font-medium transition-colors'
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.name}
             </Link>
           ))}
-          <Link href={whatsappUrl} target='_blank' rel='noopener noreferrer'>
-            <Button className='w-full'>Konsultasi Gratis</Button>
-          </Link>
         </div>
       )}
     </nav>

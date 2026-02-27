@@ -41,20 +41,20 @@ const services = [
 
 export default function Services() {
   return (
-    <section id='services' className='py-20 bg-white'>
+    <section id='services' className='py-16 md:py-24 relative z-10'>
       <div className='container mx-auto px-4 md:px-6'>
         <div className='text-center max-w-2xl mx-auto mb-16'>
-          <h2 className='text-3xl md:text-4xl font-bold text-slate-900 mb-4'>
+          <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
             Layanan Spesialis Kami
           </h2>
-          <p className='text-lg text-slate-600'>
+          <p className='text-sm md:text-lg text-slate-400'>
             Fokus pada kualitas teknis dan hasil bisnis. Kami tidak sekadar
             membuat website cantik, tapi website yang bekerja optimal untuk
             Anda.
           </p>
         </div>
 
-        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className='grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8'>
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -63,19 +63,24 @@ export default function Services() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className='h-full border-none shadow-lg hover:shadow-xl transition-shadow duration-300'>
-                <CardHeader>
+              <Card className='h-full border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 transition-all duration-300 group relative overflow-hidden'>
+                {/* Glow effect on hover */}
+                <div className='absolute inset-0 bg-linear-to-br from-cyan-500/0 via-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 transition-colors duration-500'></div>
+
+                <CardHeader className='relative z-10 p-4 md:p-6 pb-2 md:pb-6'>
                   <div className='place-items-center'>
                     <div
-                      className={`w-12 h-12 rounded-lg ${service.bg} flex items-center justify-center mb-4`}
+                      className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl ${service.bg} bg-opacity-20 flex items-center justify-center mb-3 md:mb-5 shadow-inner border border-white/5`}
                     >
-                      <service.icon className={`w-6 h-6 ${service.color}`} />
+                      <service.icon className={`w-5 h-5 md:w-6 md:h-6 ${service.color}`} />
                     </div>
-                    <CardTitle>{service.title}</CardTitle>
+                    <CardTitle className='text-white text-sm md:text-xl text-center leading-tight'>
+                      {service.title}
+                    </CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <p className='text-slate-600 leading-relaxed'>
+                <CardContent className='relative z-10 p-4 pt-0 md:p-6 md:pt-0'>
+                  <p className='text-slate-400 leading-relaxed text-center text-xs md:text-base'>
                     {service.description}
                   </p>
                 </CardContent>

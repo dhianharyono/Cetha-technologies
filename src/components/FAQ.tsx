@@ -37,13 +37,13 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <section id='faq' className='py-20 bg-slate-50'>
+    <section id='faq' className='py-16 md:py-24 relative z-10 p-5'>
       <div className='container mx-auto px-4 md:px-6'>
         <div className='text-center max-w-2xl mx-auto mb-16'>
-          <h2 className='text-3xl md:text-4xl font-bold text-slate-900 mb-4'>
+          <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
             Pertanyaan yang Sering Diajukan
           </h2>
-          <p className='text-lg text-slate-600'>
+          <p className='text-sm md:text-lg text-slate-400'>
             Kami mencoba menjawab segala keraguan Anda di sini.
           </p>
         </div>
@@ -54,12 +54,12 @@ export default function FAQ() {
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className='border-b border-slate-200'
+                className='border-b border-white/10'
               >
-                <AccordionTrigger className='text-left text-slate-900 font-medium hover:text-blue-600 hover:no-underline cursor-pointer'>
+                <AccordionTrigger className='text-left text-white font-medium hover:text-cyan-400 hover:no-underline cursor-pointer py-4 transition-colors text-xs md:text-lg'>
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className='text-slate-600 leading-relaxed'>
+                <AccordionContent className='text-slate-400 leading-relaxed pb-4 text-xs md:text-sm'>
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
