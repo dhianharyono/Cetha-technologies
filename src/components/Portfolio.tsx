@@ -7,7 +7,7 @@ import { projects } from '@/utils/data';
 
 export default function Portfolio() {
   return (
-    <section id='portfolio' className='py-16 md:py-24 relative z-10'>
+    <section id='portfolio' className='py-16 md:py-24 relative z-10 p-4'>
       {/* Decorative gradient */}
       <div className='absolute inset-0 bg-linear-to-b from-[#07090E] via-[#0B101C] to-[#07090E] -z-10'></div>
 
@@ -19,7 +19,8 @@ export default function Portfolio() {
           <p className='text-sm md:text-lg text-slate-400'>
             Beberapa proyek yang telah kami kerjakan.
             <br />
-            Bukti nyata dari dedikasi untuk memberikan yang terbaik bagi bisnis Anda.
+            Bukti nyata dari dedikasi untuk memberikan yang terbaik bagi bisnis
+            Anda.
           </p>
         </div>
 
@@ -78,7 +79,7 @@ export default function Portfolio() {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              className='min-w-[85vw] snap-center shrink-0'
+              className='w-[280px] sm:w-[320px] snap-center shrink-0'
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
@@ -122,7 +123,6 @@ export default function Portfolio() {
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

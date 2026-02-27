@@ -41,14 +41,15 @@ const services = [
 
 export default function Services() {
   return (
-    <section id='services' className='py-16 md:py-24 relative z-10'>
+    <section id='services' className='py-16 md:py-24 relative z-10 p-4'>
       <div className='container mx-auto px-4 md:px-6'>
         <div className='text-center max-w-2xl mx-auto mb-16'>
           <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
             Layanan Kami
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
-            Fokus pada kualitas teknis dan hasil bisnis. Kami membuat website yang bekerja optimal untuk Anda.
+            Fokus pada kualitas teknis dan hasil bisnis. Kami membuat website
+            yang bekerja optimal untuk Anda.
           </p>
         </div>
 
@@ -70,7 +71,9 @@ export default function Services() {
                     <div
                       className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl ${service.bg} bg-opacity-20 flex items-center justify-center mb-3 md:mb-5 shadow-inner border border-white/5`}
                     >
-                      <service.icon className={`w-5 h-5 md:w-6 md:h-6 ${service.color}`} />
+                      <service.icon
+                        className={`w-5 h-5 md:w-6 md:h-6 ${service.color}`}
+                      />
                     </div>
                     <CardTitle className='text-white text-sm md:text-xl text-center leading-tight'>
                       {service.title}

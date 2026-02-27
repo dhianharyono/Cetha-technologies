@@ -118,7 +118,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <motion.div
               key={index}
-              className='min-w-[85vw] sm:min-w-[60vw] snap-center shrink-0'
+              className='w-[280px] sm:w-[320px] snap-center shrink-0'
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
