@@ -16,7 +16,7 @@ const services = [
   {
     title: 'Responsive Design',
     description:
-      'Tampilan sempurna di setiap perangkat, mulai dari HP Android murah hingga Desktop layar lebar 4K.',
+      'Tampilan sempurna di setiap perangkat, mulai dari HP Android hingga Desktop layar lebar.',
     icon: Smartphone,
     color: 'text-blue-500',
     bg: 'bg-blue-50',
@@ -45,12 +45,10 @@ export default function Services() {
       <div className='container mx-auto px-4 md:px-6'>
         <div className='text-center max-w-2xl mx-auto mb-16'>
           <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
-            Layanan Spesialis Kami
+            Layanan Kami
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
-            Fokus pada kualitas teknis dan hasil bisnis. Kami tidak sekadar
-            membuat website cantik, tapi website yang bekerja optimal untuk
-            Anda.
+            Fokus pada kualitas teknis dan hasil bisnis. Kami membuat website yang bekerja optimal untuk Anda.
           </p>
         </div>
 

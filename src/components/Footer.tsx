@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { Instagram, MapPin, Phone } from 'lucide-react';
 
 export default function Footer() {
   const whatsappUrl = 'https://wa.me/6281320005405';

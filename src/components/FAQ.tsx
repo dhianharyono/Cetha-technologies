@@ -44,7 +44,7 @@ export default function FAQ() {
             Pertanyaan yang Sering Diajukan
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
-            Kami mencoba menjawab segala keraguan Anda di sini.
+            Kami mencoba menjawab segala keraguan Anda
           </p>
         </div>
 
