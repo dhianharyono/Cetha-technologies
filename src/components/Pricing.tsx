@@ -15,9 +15,8 @@ import {
 import { pricingPlans as plans } from '@/utils/data';
 
 export default function Pricing() {
-  const getWhatsappUrl = (planName: string) => {
-    const text = `Halo, saya tertarik dengan paket ${planName} untuk pembuatan website.`;
-    return `https://wa.me/6281320005405?text=${encodeURIComponent(text)}`;
+  const getFormUrl = (planName: string) => {
+    return `/pemesanan?paket=${encodeURIComponent(planName)}`;
   };
 
   return (
@@ -55,7 +54,7 @@ export default function Pricing() {
                   }`}
               >
                 {plan.popular && (
-                  <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-[0_5px_15px_rgba(6,182,212,0.4)] whitespace-nowrap'>
+                  <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-md shadow-cyan-500/20 whitespace-nowrap'>
                     Most Popular
                   </div>
                 )}
@@ -94,13 +93,11 @@ export default function Pricing() {
                 </CardContent>
                 <CardFooter>
                   <Link
-                    href={getWhatsappUrl(plan.name)}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                    href={getFormUrl(plan.name)}
                     className='w-full'
                   >
                     <Button
-                      className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
+                      className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-sm shadow-cyan-500/20' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
                       variant={plan.popular ? 'default' : 'outline'}
                       size='lg'
                     >
@@ -125,13 +122,13 @@ export default function Pricing() {
               viewport={{ once: true }}
             >
               <Card
-                className={`h-full relative flex flex-col transition-all duration-300 ${plan.popular
+                className={`h-full relative flex flex-col transition-all duration-300 shadow-sm shadow-white/5 group ${plan.popular
                   ? 'bg-[#182136] border border-cyan-500/30'
                   : 'bg-[#131826]/80 backdrop-blur-md border border-white/5'
                   }`}
               >
                 {plan.popular && (
-                  <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-[0_5px_15px_rgba(6,182,212,0.4)] whitespace-nowrap z-20'>
+                  <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-md shadow-cyan-500/20 whitespace-nowrap z-20'>
                     Most Popular
                   </div>
                 )}
@@ -170,13 +167,11 @@ export default function Pricing() {
                 </CardContent>
                 <CardFooter className='pt-4'>
                   <Link
-                    href={getWhatsappUrl(plan.name)}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                    href={getFormUrl(plan.name)}
                     className='w-full'
                   >
                     <Button
-                      className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
+                      className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-sm shadow-cyan-500/20' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
                       variant={plan.popular ? 'default' : 'outline'}
                       size='lg'
                     >

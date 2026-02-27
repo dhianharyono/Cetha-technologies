@@ -96,7 +96,7 @@ export default function Hero() {
             >
               <Button
                 size='lg'
-                className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer w-full rounded-full transition-all hover:scale-105 group/btn border-none whitespace-nowrap'
+                className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-md shadow-cyan-500/20 sm:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer w-full rounded-full transition-all hover:scale-105 group/btn border-none whitespace-nowrap'
               >
                 Konsultasi Gratis
               </Button>
