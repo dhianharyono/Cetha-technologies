@@ -60,7 +60,7 @@ export default function Portfolio() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 hover:shadow-md hover:shadow-white/10 hover:border-white/10 transition-all duration-300 group'>
+                  <Card className='h-full flex flex-col overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 hover:shadow-md hover:shadow-white/10 hover:border-white/10 transition-all duration-300 group'>
                     <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
                       <div className='absolute inset-0 bg-cyan-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
                       <Image
@@ -70,7 +70,7 @@ export default function Portfolio() {
                         className='object-cover transition-transform duration-700 group-hover:scale-110'
                       />
                     </div>
-                    <CardContent className='p-6 relative'>
+                    <CardContent className='p-6 relative flex flex-col grow'>
                       <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3 group-hover:text-cyan-400 transition-colors'>
                         {project.title}
                       </h3>
@@ -89,7 +89,7 @@ export default function Portfolio() {
                         ))}
                       </div>
 
-                      <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
+                      <div className='mt-auto pt-4 border-t border-white/10 flex items-center justify-between'>
                         <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
                           Paket {project.paket}
                         </span>
@@ -111,7 +111,7 @@ export default function Portfolio() {
                   transition={{ duration: 0.3 }}
                   viewport={{ once: true }}
                 >
-                  <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 group relative'>
+                  <Card className='h-full flex flex-col overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 group relative'>
                     <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
                       <Image
                         src={project.image}
@@ -120,7 +120,7 @@ export default function Portfolio() {
                         className='object-cover'
                       />
                     </div>
-                    <CardContent className='p-6 relative'>
+                    <CardContent className='p-6 relative flex flex-col grow'>
                       <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3'>
                         {project.title}
                       </h3>
@@ -139,7 +139,7 @@ export default function Portfolio() {
                         ))}
                       </div>
 
-                      <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
+                      <div className='mt-auto pt-4 border-t border-white/10 flex items-center justify-between'>
                         <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
                           Paket {project.paket}
                         </span>

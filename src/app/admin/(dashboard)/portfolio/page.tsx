@@ -88,6 +88,21 @@ export default function PortfolioPage() {
         }
     };
 
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('Ukuran gambar maksimal 5MB', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData({ ...formData, image: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -141,7 +156,7 @@ export default function PortfolioPage() {
                     <p className="text-slate-500 col-span-3">Belum ada portofolio.</p>
                 ) : (
                     portfolios.map((item) => (
-                        <div key={item._id} className={`bg-[#131826]/80 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden group transition-all ${item.isHidden ? 'opacity-50 grayscale hover:grayscale-0' : 'hover:border-white/20'}`}>
+                        <div key={item._id} className={`bg-[#131826]/80 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden group transition-all flex flex-col ${item.isHidden ? 'opacity-50 grayscale hover:grayscale-0' : 'hover:border-white/20'}`}>
                             <div className="relative h-48 w-full bg-[#0B101C]">
                                 {item.image ? (
                                     <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -157,14 +172,14 @@ export default function PortfolioPage() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="p-5">
-                                <span className="text-xs font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-2 py-1 rounded-md mb-3 inline-block">
+                            <div className="p-5 flex flex-col grow">
+                                <span className="text-xs w-fit font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-2 py-1 rounded-md mb-3 inline-block">
                                     {item.paket}
                                 </span>
                                 <h3 className="text-lg font-bold text-white mb-2 leading-tight line-clamp-1">{item.title}</h3>
                                 <p className="text-sm text-slate-400 mb-4 line-clamp-2">{item.description}</p>
 
-                                <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                                <div className="flex gap-2 mt-auto pt-4 border-t border-white/10">
                                     <button onClick={() => handleOpenEdit(item)} className="flex-1 flex items-center justify-center py-2 bg-white/5 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-400 rounded-lg text-sm transition-colors gap-2">
                                         <Edit2 className="w-4 h-4" /> Edit
                                     </button>
@@ -203,8 +218,15 @@ export default function PortfolioPage() {
                                 <textarea required rows={2} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full px-3 py-2 bg-[#0B101C]/50 border border-white/10 rounded-lg text-white outline-none focus:border-cyan-500 transition-colors text-sm resize-none" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-300 mb-1">URL Gambar cover (Link bebas)</label>
-                                <input required type="text" value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} className="w-full px-3 py-2 bg-[#0B101C]/50 border border-white/10 rounded-lg text-white outline-none focus:border-cyan-500 transition-colors text-sm" placeholder="https://..." />
+                                <label className="block text-sm font-medium text-slate-300 mb-1">Gambar Cover (Max 5MB)</label>
+                                <div className="flex flex-col gap-2">
+                                    {formData.image && (
+                                        <div className="relative w-full h-32 rounded-lg overflow-hidden border border-white/10">
+                                            <Image src={formData.image} alt="Preview" fill className="object-cover" />
+                                        </div>
+                                    )}
+                                    <input type="file" required={!formData.image} accept="image/*" onChange={handleImageUpload} className="w-full px-3 py-2 bg-[#0B101C]/50 border border-white/10 rounded-lg text-slate-300 outline-none focus:border-cyan-500 transition-colors text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20" />
+                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
