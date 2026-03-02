@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import { getPublicPortfolios } from '@/app/actions/userActions';
 import { projects as fallbackProjects } from '@/utils/data';
 
 export default function Portfolio() {
   const [projects, setProjects] = useState<any[]>(fallbackProjects);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
@@ -19,6 +21,8 @@ export default function Portfolio() {
         }
       } catch (error) {
         console.error('Failed to fetch portfolios', error);
+      } finally {
+        setIsLoading(false);
       }
     }
     loadData();
@@ -39,105 +43,114 @@ export default function Portfolio() {
           </p>
         </div>
 
-        {/* Desktop View */}
-        <div className='hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 hover:shadow-md hover:shadow-white/10 hover:border-white/10 transition-all duration-300 group'>
-                <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
-                  <div className='absolute inset-0 bg-cyan-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className='object-cover transition-transform duration-700 group-hover:scale-110'
-                  />
-                </div>
-                <CardContent className='p-6 relative'>
-                  <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3 group-hover:text-cyan-400 transition-colors'>
-                    {project.title}
-                  </h3>
-                  <p className='text-slate-400 text-sm mb-4 leading-relaxed'>
-                    {project.description}
-                  </p>
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 z-20 relative">
+            <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mb-4" />
+            <p className="text-slate-400 text-sm animate-pulse">Memuat data portofolio...</p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop View */}
+            <div className='hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+              {projects.map((project, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 hover:shadow-md hover:shadow-white/10 hover:border-white/10 transition-all duration-300 group'>
+                    <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
+                      <div className='absolute inset-0 bg-cyan-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className='object-cover transition-transform duration-700 group-hover:scale-110'
+                      />
+                    </div>
+                    <CardContent className='p-6 relative'>
+                      <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3 group-hover:text-cyan-400 transition-colors'>
+                        {project.title}
+                      </h3>
+                      <p className='text-slate-400 text-sm mb-4 leading-relaxed'>
+                        {project.description}
+                      </p>
 
-                  <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.fitur?.map((t: string) => (
-                      <span
-                        key={t}
-                        className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+                      <div className='flex flex-wrap gap-2 mb-6'>
+                        {project.fitur?.map((t: string) => (
+                          <span
+                            key={t}
+                            className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
 
-                  <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
-                    <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
-                      Paket {project.paket}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+                      <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
+                        <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
+                          Paket {project.paket}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
 
-        {/* Mobile View (Horizontal Swipeable) */}
-        <div className='md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scrollbar-hide -mx-4 px-4'>
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              className='w-[280px] sm:w-[320px] snap-center shrink-0'
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 group relative'>
-                <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className='object-cover'
-                  />
-                </div>
-                <CardContent className='p-6 relative'>
-                  <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3'>
-                    {project.title}
-                  </h3>
-                  <p className='text-slate-400 text-sm mb-4 leading-relaxed'>
-                    {project.description}
-                  </p>
+            {/* Mobile View (Horizontal Swipeable) */}
+            <div className='md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 scrollbar-hide -mx-4 px-4'>
+              {projects.map((project, index) => (
+                <motion.div
+                  key={index}
+                  className='w-[280px] sm:w-[320px] snap-center shrink-0'
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className='h-full overflow-hidden border border-white/5 bg-[#131826]/80 backdrop-blur-md shadow-sm shadow-white/5 group relative'>
+                    <div className='relative h-48 w-full overflow-hidden border-b border-white/10'>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className='object-cover'
+                      />
+                    </div>
+                    <CardContent className='p-6 relative'>
+                      <h3 className='text-lg md:text-xl font-bold text-white mb-2 md:mb-3'>
+                        {project.title}
+                      </h3>
+                      <p className='text-slate-400 text-sm mb-4 leading-relaxed'>
+                        {project.description}
+                      </p>
 
-                  <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.fitur?.map((t: string) => (
-                      <span
-                        key={t}
-                        className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+                      <div className='flex flex-wrap gap-2 mb-6'>
+                        {project.fitur?.map((t: string) => (
+                          <span
+                            key={t}
+                            className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
 
-                  <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
-                    <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
-                      Paket {project.paket}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+                      <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
+                        <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
+                          Paket {project.paket}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
