@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   Card,
@@ -15,9 +15,11 @@ import { Send } from 'lucide-react';
 
 function PemesananFormContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const initialPaket = searchParams.get('paket') || 'Starter';
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(false);
   const [formData, setFormData] = useState(() => {
     let kategori = '';
     let pilihan = '';
@@ -87,43 +89,32 @@ function PemesananFormContent() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const message = `*FORMULIR KEBUTUHAN KONTEN WEBSITE*
-(Order Paket: *${paket}*)
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...formData, paket }),
+      });
 
-*1. Informasi Dasar Brand*
-- Nama Usaha: ${formData.namaUsaha || '-'}
-- Slogan/Tagline: ${formData.slogan || '-'}
-- Deskripsi Singkat: ${formData.deskripsiSingkat || '-'}
-
-*2. Kebutuhan Detail Halaman*
-- Kategori Website: ${formData.kategoriKebutuhan || '-'}
-- Detail Kebutuhan/Fitur: ${formData.pilihanKebutuhan || '-'}
-
-*3. Domain & Referensi*
-- Sudah memiliki domain?: ${formData.sudahDomain}
-- Domain yang diinginkan: ${formData.namaDomain || '-'}
-- Referensi Desain Website: ${formData.referensiDesain || '-'}
-
-*4. Kontak & Media Sosial*
-- Nomor WhatsApp: ${formData.nomorWa || '-'}
-- Link Instagram: ${formData.linkIg || '-'}
-- Alamat Fisik: ${formData.alamatFisik || '-'}
-
-*5. Materi Visual (Gambar/Foto/Logo)*
-- Link Google Drive Materi Visual: ${formData.linkMateriVisual || '-'}
-
-Terima kasih.`;
-
-    const waUrl = `https://wa.me/6281320005405?text=${encodeURIComponent(message)}`;
-
-    setTimeout(() => {
-      window.open(waUrl, '_blank');
+      if (res.ok) {
+        setSuccessMsg(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 3000);
+      } else {
+        alert('Gagal mengirim form. Silakan coba lagi.');
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      alert('Terjadi kesalahan jaringan.');
       setIsSubmitting(false);
-    }, 800);
+    }
   };
 
   return (
@@ -219,8 +210,8 @@ Terima kasih.`;
                     }))
                   }
                   className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Portofolio'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
                     }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
@@ -262,8 +253,8 @@ Terima kasih.`;
                     }))
                   }
                   className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Website Usaha'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
                     }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
@@ -308,8 +299,8 @@ Terima kasih.`;
                     }))
                   }
                   className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Custom'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
                     }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
@@ -617,15 +608,21 @@ Terima kasih.`;
             </CardContent>
           </Card>
 
+          {successMsg && (
+            <div className="p-4 mb-4 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center font-medium">
+              Yeay! Pesanan berhasil dikirim. Anda akan dialihkan ke halaman utama...
+            </div>
+          )}
+
           <Button
             type='submit'
-            disabled={isSubmitting}
-            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-md transition-all ${isSubmitting
-                ? 'bg-cyan-500/50 cursor-not-allowed'
-                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
+            disabled={isSubmitting || successMsg}
+            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-md transition-all ${isSubmitting || successMsg
+              ? 'bg-cyan-500/50 cursor-not-allowed'
+              : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
               }`}
           >
-            {isSubmitting ? 'Menghasilkan pesan...' : 'Kirim via WhatsApp'}{' '}
+            {isSubmitting ? 'Mengirim Data...' : successMsg ? 'Terkirim!' : 'Submit Order'}{' '}
             <Send className='w-4 h-4' />
           </Button>
         </form>

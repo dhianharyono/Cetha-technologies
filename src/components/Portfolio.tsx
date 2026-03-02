@@ -1,11 +1,29 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { projects } from '@/utils/data';
+import { getPublicPortfolios } from '@/app/actions/userActions';
+import { projects as fallbackProjects } from '@/utils/data';
 
 export default function Portfolio() {
+  const [projects, setProjects] = useState<any[]>(fallbackProjects);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await getPublicPortfolios();
+        if (data && data.length > 0) {
+          setProjects(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch portfolios', error);
+      }
+    }
+    loadData();
+  }, []);
+
   return (
     <section id='portfolio' className='py-16 md:py-24 relative z-10 p-4'>
       {/* Decorative gradient */}
@@ -50,7 +68,7 @@ export default function Portfolio() {
                   </p>
 
                   <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.fitur?.map((t) => (
+                    {project.fitur?.map((t: string) => (
                       <span
                         key={t}
                         className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
@@ -100,7 +118,7 @@ export default function Portfolio() {
                   </p>
 
                   <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.fitur?.map((t) => (
+                    {project.fitur?.map((t: string) => (
                       <span
                         key={t}
                         className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'

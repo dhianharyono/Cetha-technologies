@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -12,9 +14,26 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { pricingPlans as plans } from '@/utils/data';
+import { getPublicPackages } from '@/app/actions/userActions';
+import { pricingPlans as fallbackPlans } from '@/utils/data';
 
 export default function Pricing() {
+  const [plans, setPlans] = useState<any[]>(fallbackPlans);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await getPublicPackages();
+        if (data && data.length > 0) {
+          setPlans(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch packages', error);
+      }
+    }
+    loadData();
+  }, []);
+
   const getFormUrl = (planName: string) => {
     return `/pemesanan?paket=${encodeURIComponent(planName)}`;
   };
@@ -48,11 +67,10 @@ export default function Pricing() {
               viewport={{ once: true }}
             >
               <Card
-                className={`h-full relative flex flex-col transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-[#182136] border border-cyan-500/30 shadow-md shadow-white/10 lg:scale-105 z-10'
-                    : 'bg-[#131826]/80 backdrop-blur-md border border-white/5 shadow-sm shadow-white/5 hover:border-white/10 hover:shadow-md hover:shadow-white/10 hover:-translate-y-2'
-                }`}
+                className={`h-full relative flex flex-col transition-all duration-300 ${plan.popular
+                  ? 'bg-[#182136] border border-cyan-500/30 shadow-md shadow-white/10 lg:scale-105 z-10'
+                  : 'bg-[#131826]/80 backdrop-blur-md border border-white/5 shadow-sm shadow-white/5 hover:border-white/10 hover:shadow-md hover:shadow-white/10 hover:-translate-y-2'
+                  }`}
               >
                 {plan.popular && (
                   <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-md shadow-cyan-500/20 whitespace-nowrap'>
@@ -81,7 +99,7 @@ export default function Pricing() {
                 </CardHeader>
                 <CardContent className='flex-1'>
                   <ul className='space-y-4'>
-                    {plan.features.map((feature) => (
+                    {plan.features?.map((feature: string) => (
                       <li
                         key={feature}
                         className='flex items-start gap-3 text-sm text-slate-300'
@@ -93,7 +111,7 @@ export default function Pricing() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Link href={getFormUrl(plan.name)} className='w-full'>
+                  <Link href={getFormUrl(plan.name)} target='_blank' rel='noopener noreferrer' className='w-full'>
                     <Button
                       className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-sm shadow-cyan-500/20' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
                       variant={plan.popular ? 'default' : 'outline'}
@@ -120,11 +138,10 @@ export default function Pricing() {
               viewport={{ once: true }}
             >
               <Card
-                className={`h-full relative flex flex-col transition-all duration-300 shadow-sm shadow-white/5 group ${
-                  plan.popular
-                    ? 'bg-[#182136] border border-cyan-500/30'
-                    : 'bg-[#131826]/80 backdrop-blur-md border border-white/5'
-                }`}
+                className={`h-full relative flex flex-col transition-all duration-300 shadow-sm shadow-white/5 group ${plan.popular
+                  ? 'bg-[#182136] border border-cyan-500/30'
+                  : 'bg-[#131826]/80 backdrop-blur-md border border-white/5'
+                  }`}
               >
                 {plan.popular && (
                   <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-md shadow-cyan-500/20 whitespace-nowrap z-20'>
@@ -153,7 +170,7 @@ export default function Pricing() {
                 </CardHeader>
                 <CardContent className='flex-1 pb-2'>
                   <ul className='space-y-3'>
-                    {plan.features.map((feature) => (
+                    {plan.features?.map((feature: string) => (
                       <li
                         key={feature}
                         className='flex items-start gap-3 text-sm text-slate-300'
@@ -165,7 +182,7 @@ export default function Pricing() {
                   </ul>
                 </CardContent>
                 <CardFooter className='pt-4'>
-                  <Link href={getFormUrl(plan.name)} className='w-full'>
+                  <Link href={getFormUrl(plan.name)} target='_blank' rel='noopener noreferrer' className='w-full'>
                     <Button
                       className={`w-full cursor-pointer rounded-xl font-bold py-6 ${plan.popular ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-sm shadow-cyan-500/20' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
                       variant={plan.popular ? 'default' : 'outline'}
