@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getOrders, updateOrderStatus, deleteOrder } from '@/app/actions/adminActions';
+import { getOrders, updateOrderStatus, deleteOrder, updateOrder } from '@/app/actions/adminActions';
 import { useToast } from '@/components/admin/ToastProvider';
 import ConfirmModal from '@/components/admin/ConfirmModal';
-import { FileText, MoreVertical, Trash2, CheckCircle, RefreshCcw, Eye } from 'lucide-react';
+import OrderDetailModal from '@/components/admin/OrderDetailModal';
+import { FileText, MoreVertical, Trash2, CheckCircle, RefreshCcw, Eye, Edit2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
@@ -14,6 +15,8 @@ export default function OrdersPage() {
     const { showToast } = useToast();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [detailModalOpen, setDetailModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
     const fetchOrders = async () => {
@@ -56,6 +59,22 @@ export default function OrdersPage() {
             fetchOrders();
         } catch {
             showToast('Gagal menghapus order', 'error');
+        }
+    };
+
+    const handleViewDetail = (order: any) => {
+        setSelectedOrder(order);
+        setDetailModalOpen(true);
+    };
+
+    const handleUpdateOrder = async (id: string, data: any) => {
+        try {
+            await updateOrder(id, data);
+            showToast('Order berhasil diperbarui', 'success');
+            fetchOrders();
+        } catch {
+            showToast('Gagal memperbarui order', 'error');
+            throw new Error('Failed to update');
         }
     };
 
@@ -114,9 +133,9 @@ export default function OrdersPage() {
                                                 value={order.status}
                                                 onChange={(e) => handleStatusChange(order._id, e.target.value)}
                                                 className={`text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 outline-none cursor-pointer appearance-none ${order.status === 'Baru' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                                                        order.status === 'Diproses' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                                                            order.status === 'Selesai' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                                                                'bg-red-500/10 text-red-400 border-red-500/20'
+                                                    order.status === 'Diproses' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                                                        order.status === 'Selesai' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                                                            'bg-red-500/10 text-red-400 border-red-500/20'
                                                     }`}
                                             >
                                                 <option value="Baru" className="bg-[#131826] text-amber-400">Baru</option>
@@ -127,13 +146,29 @@ export default function OrdersPage() {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                {/* TODO: Add View Detail Modal logic when Eye clicked */}
-                                                <button className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-lg transition-colors cursor-not-allowed opacity-50" title="Fitur Detail Segera Hadir">
+                                                <button
+                                                    onClick={() => handleViewDetail(order)}
+                                                    className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-lg transition-colors"
+                                                    title="Lihat Detail"
+                                                >
                                                     <Eye className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedOrder(order);
+                                                        setDetailModalOpen(true);
+                                                        // We can't easily trigger the 'isEditing' state of the child from here
+                                                        // without a ref or a prop. For now, opening the modal is good.
+                                                    }}
+                                                    className="p-2 text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-colors"
+                                                    title="Edit Pesanan"
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteParams(order._id)}
                                                     className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                    title="Hapus Order"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -153,6 +188,13 @@ export default function OrdersPage() {
                 onConfirm={confirmDelete}
                 title="Hapus Data Order"
                 message="Apakah Anda yakin ingin menghapus data order ini secara permanen? Data yang sudah dihapus tidak dapat dipulihkan."
+            />
+
+            <OrderDetailModal
+                isOpen={detailModalOpen}
+                onClose={() => setDetailModalOpen(false)}
+                order={selectedOrder}
+                onUpdate={handleUpdateOrder}
             />
         </div>
     );

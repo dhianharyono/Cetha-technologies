@@ -89,10 +89,21 @@ export default function Portfolio() {
                         ))}
                       </div>
 
-                      <div className='mt-auto pt-4 border-t border-white/10 flex items-center justify-between'>
-                        <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
+                      <div className='mt-auto pt-4 border-t border-white/10 flex items-center justify-between gap-3'>
+                        <span className='text-[10px] sm:text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap'>
                           Paket {project.paket}
                         </span>
+                        {project.website && (
+                          <a
+                            href={project.website.startsWith('http') ? project.website : `https://${project.website}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] sm:text-sm font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full transition-all flex items-center gap-1.5 group/btn"
+                          >
+                            <span>View</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform"><path d="M7 3h5v5" /><path d="M12 3 2 13" /></svg>
+                          </a>
+                        )}
                       </div>
                     </CardContent>
                   </Card>

@@ -64,6 +64,12 @@ export async function updateOrderStatus(id: string, status: string) {
     revalidatePath('/admin/orders');
 }
 
+export async function updateOrder(id: string, data: any) {
+    await connectToDatabase();
+    await Order.findByIdAndUpdate(id, data);
+    revalidatePath('/admin/orders');
+}
+
 // --- PORTFOLIO ACTIONS ---
 export async function getPortfolios() {
     try {

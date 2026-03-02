@@ -6,6 +6,7 @@ export interface IPortfolio extends Document {
     image: string;
     fitur: string[];
     paket: string;
+    website?: string;
     isHidden: boolean;
 }
 
@@ -16,6 +17,7 @@ const PortfolioSchema: Schema = new Schema(
         image: { type: String, required: true },
         fitur: { type: [String], required: true },
         paket: { type: String, required: true },
+        website: { type: String, required: false },
         isHidden: { type: Boolean, default: false },
     },
     { timestamps: true }
