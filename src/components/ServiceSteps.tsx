@@ -74,7 +74,7 @@ export default function ServiceSteps() {
               >
                 {/* Arrow connecting steps (desktop only) */}
                 {index < steps.length - 1 && (
-                  <div className='hidden lg:block absolute top-12 left-full w-full h-[2px] -ml-8 px-4 z-0'>
+                  <div className='hidden lg:block absolute top-[4.5rem] left-full w-full h-[2px] -ml-8 px-4 z-0'>
                     <div className='w-full h-full bg-slate-800 rounded-full overflow-hidden'>
                       <motion.div
                         className='h-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent'

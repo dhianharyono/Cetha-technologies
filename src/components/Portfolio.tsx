@@ -17,10 +17,7 @@ export default function Portfolio() {
             Portofolio
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
-            Beberapa proyek yang telah kami kerjakan.
-            <br />
-            Bukti nyata dari dedikasi untuk memberikan yang terbaik bagi bisnis
-            Anda.
+            Beberapa proyek yang telah kami kerjakan
           </p>
         </div>
 
@@ -53,7 +50,7 @@ export default function Portfolio() {
                   </p>
 
                   <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.tech.map((t) => (
+                    {project.fitur?.map((t) => (
                       <span
                         key={t}
                         className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
@@ -64,8 +61,8 @@ export default function Portfolio() {
                   </div>
 
                   <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
-                    <span className='text-sm font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1.5 rounded-full'>
-                      {project.result}
+                    <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
+                      Paket {project.paket}
                     </span>
                   </div>
                 </CardContent>
@@ -103,7 +100,7 @@ export default function Portfolio() {
                   </p>
 
                   <div className='flex flex-wrap gap-2 mb-6'>
-                    {project.tech.map((t) => (
+                    {project.fitur?.map((t) => (
                       <span
                         key={t}
                         className='px-2.5 py-1 bg-white/5 border border-white/10 text-cyan-300 text-xs rounded-full font-medium'
@@ -114,8 +111,8 @@ export default function Portfolio() {
                   </div>
 
                   <div className='pt-4 border-t border-white/10 flex items-center justify-between'>
-                    <span className='text-sm font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1.5 rounded-full'>
-                      {project.result}
+                    <span className='text-sm font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-3 py-1.5 rounded-full'>
+                      Paket {project.paket}
                     </span>
                   </div>
                 </CardContent>

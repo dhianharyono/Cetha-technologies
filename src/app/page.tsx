@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import WhyUs from "@/components/WhyUs";
 import Services from "@/components/Services";
 import ServiceSteps from "@/components/ServiceSteps";
 import Portfolio from "@/components/Portfolio";
@@ -14,6 +15,7 @@ export default function Home() {
       <Spotlight />
       <Navbar />
       <Hero />
+      <WhyUs />
       <Services />
       <ServiceSteps />
       <Portfolio />

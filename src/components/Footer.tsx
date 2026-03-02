@@ -20,8 +20,9 @@ export default function Footer() {
               Technologies
             </Link>
             <p className='text-slate-400 text-sm leading-relaxed max-w-sm mb-6'>
-              Partner digital terpercaya untuk transformasi bisnis Anda. Kami
-              membangun website yang tidak hanya indah, tapi juga menghasilkan.
+              Partner digital terpercaya untuk transformasi bisnis atau personal
+              branding Anda. Kami membangun website yang tidak hanya indah, tapi
+              juga berfungsi optimal untuk kebutuhan Anda.
             </p>
             <div className='flex items-center gap-3 text-slate-400 text-sm '>
               <MapPin className='w-5 h-5 text-blue-500 shrink-0 mt-1' />

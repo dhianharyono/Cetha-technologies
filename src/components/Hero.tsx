@@ -29,9 +29,7 @@ export default function Hero() {
   };
 
   return (
-    <section
-      className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-[90vh]'
-    >
+    <section className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-[90vh]'>
       {/* Decorative Spheres/Glows */}
       <div className='absolute top-20 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-[100px] -z-10 animate-pulse'></div>
       <div
@@ -39,14 +37,17 @@ export default function Hero() {
         style={{ animationDelay: '1s' }}
       ></div>
       <div className='absolute top-40 right-[10%] w-32 h-32 bg-purple-500/20 rounded-full blur-[80px] -z-10'></div>
-      <div className='absolute bottom-1/4 left-1/4 w-40 h-40 bg-pink-500/10 rounded-full blur-[90px] -z-10 animate-pulse' style={{ animationDelay: '2s' }}></div>
+      <div
+        className='absolute bottom-1/4 left-1/4 w-40 h-40 bg-pink-500/10 rounded-full blur-[90px] -z-10 animate-pulse'
+        style={{ animationDelay: '2s' }}
+      ></div>
 
       <div className='container mx-auto px-4 md:px-6 z-10 relative'>
         <motion.div
           className='max-w-4xl mx-auto flex flex-col items-center text-center'
           variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+          initial='hidden'
+          animate='visible'
         >
           <motion.div variants={itemVariants}>
             <div className='inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs md:text-sm font-medium mb-8 backdrop-blur-md'>
@@ -62,14 +63,14 @@ export default function Hero() {
             variants={itemVariants}
             className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 md:mb-8 leading-[1.1]'
           >
-            Landing Page Modern & Cepat untuk
+            Website Modern & Cepat untuk
             <span className='ml-5 text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 relative inline-block'>
               Bisnis
               <motion.span
-                className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"
+                className='absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full'
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+                transition={{ delay: 1, duration: 0.8, ease: 'easeOut' }}
               />
             </span>{' '}
             Anda
@@ -77,11 +78,11 @@ export default function Hero() {
 
           <motion.p
             variants={itemVariants}
-            className='text-base md:text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed'
+            className='text-base md:text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed'
           >
-            Dibangun dengan teknologi terkini untuk performa maksimal dan SEO
-            yang ramah mesin pencari. Jangan biarkan loading lambat membunuh
-            bisnis Anda.
+            Membantu Anda menghadirkan rumah digital bagi bisnis dan personal
+            branding Anda. Dengan desain modern, performa cepat, dan fitur yang
+            bisa disesuaikan
           </motion.p>
 
           <motion.div

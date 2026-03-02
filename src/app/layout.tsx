@@ -5,9 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Cetha Technologies | Jasa Pembuatan Landing Page Modern & Cepat',
+  title: 'Cetha Technologies | Jasa Pembuatan Website Modern & Cepat',
   description:
-    'Cetha Technologies spesialis pembuatan landing page performa tinggi menggunakan Next.js dan Tailwind CSS. Tingkatkan konversi penjualan Anda.',
+    'Cetha Technologies spesialis pembuatan Website performa tinggi menggunakan Next.js dan Tailwind CSS. Tingkatkan konversi penjualan Anda.',
 };
 
 export default function RootLayout({
@@ -17,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='id' className='scroll-smooth dark'>
-      <body className={`${inter.className} antialiased text-slate-50 bg-[#07090E]`}>
+      <body
+        className={`${inter.className} antialiased text-slate-50 bg-[#07090E]`}
+      >
         {children}
       </body>
     </html>

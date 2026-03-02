@@ -11,7 +11,7 @@ const faqs = [
   {
     question: 'Berapa lama proses pengerjaannya?',
     answer:
-      'Untuk paket Starter (Landing Page), estimasi pengerjaan adalah 3-5 hari kerja setelah semua materi (teks/gambar) kami terima. Untuk proyek website kompleks, waktu disesuaikan dengan fitur yang diminta.',
+      'Untuk paket Starter (Portofolio Website), estimasi pengerjaan adalah 3-5 hari kerja setelah semua materi (teks/gambar) kami terima. Untuk proyek website kompleks, waktu disesuaikan dengan fitur yang diminta.',
   },
   {
     question: 'Apakah saya dapat file sumbernya (source code)?',
@@ -44,7 +44,7 @@ export default function FAQ() {
             Pertanyaan yang Sering Diajukan
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
-            Kami mencoba menjawab segala keraguan Anda
+            Kami menjawab segala keraguan Anda
           </p>
         </div>
 
