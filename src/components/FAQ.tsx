@@ -56,10 +56,10 @@ export default function FAQ() {
                 value={`item-${index}`}
                 className='border-b border-white/10'
               >
-                <AccordionTrigger className='text-left text-white font-medium hover:text-cyan-400 hover:no-underline cursor-pointer py-4 transition-colors text-xs md:text-lg'>
+                <AccordionTrigger className='text-left text-white font-medium hover:text-cyan-400 hover:no-underline cursor-pointer py-4 transition-colors text-xs md:text-xl'>
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className='text-slate-400 leading-relaxed pb-4 text-xs md:text-sm'>
+                <AccordionContent className='text-slate-400 leading-relaxed pb-4 text-xs md:text-lg'>
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

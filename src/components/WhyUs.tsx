@@ -51,8 +51,8 @@ export default function WhyUs() {
                     transition={{ duration: 0.5 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className='text-xl md:text-4xl font-extrabold text-white mb-4'>
-                        Mengapa Anda <span className="text-cyan-400">Harus Punya</span> Website?
+                    <h2 className='text-lg md:text-4xl font-extrabold text-white mb-4'>
+                        Mengapa Anda <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Harus Punya</span> Website?
                     </h2>
                     <p className='text-sm md:text-lg text-slate-400'>
                         Di era digital, sekadar eksis di media sosial seringkali tidak cukup. Media sosial seperti menyewa ruko, sedangkan website adalah rumah Anda sendiri.
@@ -79,7 +79,7 @@ export default function WhyUs() {
                                 viewport={{ once: true }}
                                 className={`h-full ${colSpan}`}
                             >
-                                <Card className='h-full bg-[#131826]/60 backdrop-blur-xl border border-white/5 shadow-sm shadow-white/5 hover:bg-[#1A2235]/80 hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-500 group overflow-hidden relative'>
+                                <Card className='h-full bg-[#131826]/60 backdrop-blur-xl border border-white/5 hover:bg-[#1A2235]/80 hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-500 group overflow-hidden relative'>
                                     {/* Aksen background dekoratif */}
                                     <div className={`absolute -right-12 -top-12 w-48 h-48 rounded-full blur-[80px] bg-white/5 group-hover:bg-cyan-500/10 transition-colors duration-500 pointer-events-none`}></div>
 

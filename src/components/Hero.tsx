@@ -90,16 +90,14 @@ export default function Hero() {
             className='flex flex-row gap-3 md:gap-4 mb-16 w-full sm:w-auto justify-center'
           >
             <Link
-              href={whatsappUrl}
-              target='_blank'
-              rel='noopener noreferrer'
+              href={'/pemesanan'}
               className='flex-1 sm:w-auto'
             >
               <Button
                 size='lg'
                 className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-md shadow-cyan-500/20 sm:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer w-full rounded-full transition-all hover:scale-105 group/btn border-none whitespace-nowrap'
               >
-                Konsultasi Gratis
+                Pesan Sekarang
               </Button>
             </Link>
             <Link href='#pricing' className='flex-1 sm:w-auto'>

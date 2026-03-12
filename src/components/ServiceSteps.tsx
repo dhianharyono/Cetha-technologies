@@ -6,8 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const steps = [
   {
-    title: 'Konsultasi',
-    description: 'Ceritakan kebutuhan dan tujuan bisnis Anda kepada kami.',
+    title: 'Mengisi Form',
+    description: 'Isi form yang tersedia dan ceritakan kebutuhan dan tujuan bisnis Anda kepada kami.',
     icon: MessageSquare,
     color: 'text-blue-400',
     bg: 'bg-blue-400/10',
@@ -51,8 +51,8 @@ export default function ServiceSteps() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
-            Langkah Memulai Layanan
+          <h2 className='text-lg md:text-5xl font-extrabold text-white mb-4'>
+            Langkah <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Memulai Layanan</span>
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
             Proses kerja transparan dan sistematis untuk memastikan hasil
@@ -60,7 +60,7 @@ export default function ServiceSteps() {
           </p>
         </motion.div>
 
-        <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 max-w-6xl mx-auto'>
+        <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-20 max-w-7xl mx-auto'>
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -90,7 +90,7 @@ export default function ServiceSteps() {
                   </div>
                 )}
 
-                <Card className='h-full bg-[#131826]/80 backdrop-blur-md border border-white/5 shadow-sm shadow-white/5 hover:border-white/10 hover:shadow-md hover:shadow-white/10 transition-all duration-300 group z-10 relative'>
+                <Card className='h-full bg-[#131826]/80 backdrop-blur-md border border-white/5 hover:border-white/10 transition-all duration-300 group z-10 relative'>
                   <CardContent className='p-4 md:p-8 flex flex-row sm:flex-col items-center sm:text-center text-left gap-4 sm:gap-6'>
                     <div className='relative shrink-0'>
                       <div
