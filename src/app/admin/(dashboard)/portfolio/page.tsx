@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   getPortfolios,
   addPortfolio,
@@ -12,9 +12,10 @@ import { useToast } from '@/components/admin/ToastProvider';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { Plus, Edit2, Trash2, Eye, EyeOff, RefreshCcw } from 'lucide-react';
 import Image from 'next/image';
+import { IPortfolio } from '@/types';
 
 export default function PortfolioPage() {
-  const [portfolios, setPortfolios] = useState<any[]>([]);
+  const [portfolios, setPortfolios] = useState<IPortfolio[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
 
@@ -34,7 +35,7 @@ export default function PortfolioPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const fetchPortfolios = async () => {
+  const fetchPortfolios = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getPortfolios();
@@ -44,11 +45,11 @@ export default function PortfolioPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
 
   useEffect(() => {
     fetchPortfolios();
-  }, []);
+  }, [fetchPortfolios]);
 
   const handleOpenAdd = () => {
     setIsEditMode(false);
@@ -63,9 +64,9 @@ export default function PortfolioPage() {
     setIsModalOpen(true);
   };
 
-  const handleOpenEdit = (portfolio: any) => {
+  const handleOpenEdit = (portfolio: IPortfolio) => {
     setIsEditMode(true);
-    setCurrentId(portfolio._id);
+    setCurrentId(portfolio._id || null);
     setFormData({
       title: portfolio.title,
       description: portfolio.description,
@@ -125,7 +126,7 @@ export default function PortfolioPage() {
         ...formData,
         fitur: formData.fitur
           .split(',')
-          .map((f) => f.trim())
+          .map((f: string) => f.trim())
           .filter(Boolean),
       };
 
@@ -179,7 +180,7 @@ export default function PortfolioPage() {
         ) : portfolios.length === 0 ? (
           <p className='text-slate-500 col-span-3'>Belum ada portofolio.</p>
         ) : (
-          portfolios.map((item) => (
+          portfolios.map((item: IPortfolio) => (
             <div
               key={item._id}
               className={`bg-[#131826]/80 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden group transition-all flex flex-col ${item.isHidden ? 'opacity-50 grayscale hover:grayscale-0' : 'hover:border-white/20'}`}
@@ -199,7 +200,7 @@ export default function PortfolioPage() {
                 )}
                 <div className='absolute top-3 right-3 flex gap-2'>
                   <button
-                    onClick={() => handleToggleHide(item._id, item.isHidden)}
+                    onClick={() => handleToggleHide(item._id || '', item.isHidden)}
                     className='p-2 bg-black/50 backdrop-blur rounded-lg text-white hover:text-cyan-400 transition-colors'
                   >
                     {item.isHidden ? (
@@ -229,7 +230,7 @@ export default function PortfolioPage() {
                     <Edit2 className='w-4 h-4' /> Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteParams(item._id)}
+                    onClick={() => handleDeleteParams(item._id || '')}
                     className='flex-1 flex items-center justify-center py-2 bg-white/5 hover:bg-red-500/20 text-slate-300 hover:text-red-400 rounded-lg text-sm transition-colors gap-2'
                   >
                     <Trash2 className='w-4 h-4' /> Hapus

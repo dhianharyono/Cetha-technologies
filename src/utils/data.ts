@@ -1,2 +1,4 @@
-export const projects: any[] = [];
-export const pricingPlans: any[] = [];
+import { IPortfolio, IPackage } from '@/types';
+
+export const projects: IPortfolio[] = [];
+export const pricingPlans: IPackage[] = [];

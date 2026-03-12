@@ -10,11 +10,12 @@ import {
     BriefcaseBusiness
 } from 'lucide-react';
 import Link from 'next/link';
+import { IDashboardStats } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-    let stats: any = {
+    let stats: IDashboardStats = {
         totalOrders: 0, pendingOrders: 0, totalPortfolios: 0, totalPackages: 0,
         analyticData: { status: [], packages: [] }
     };
@@ -106,7 +107,7 @@ export default async function DashboardPage() {
                     </div>
                     {stats.analyticData.status.length > 0 ? (
                         <div className="space-y-4">
-                            {stats.analyticData.status.map((item: any, idx: number) => {
+                            {stats.analyticData.status.map((item: { _id: string; count: number }, idx: number) => {
                                 const percentage = Math.round((item.count / stats.totalOrders) * 100);
                                 return (
                                     <div key={idx} className="space-y-2">
@@ -116,7 +117,7 @@ export default async function DashboardPage() {
                                         </div>
                                         <div className="w-full bg-white/5 rounded-full h-2.5">
                                             <div
-                                                className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full"
+                                                className="bg-linear-to-r from-cyan-500 to-blue-500 h-2.5 rounded-full"
                                                 style={{ width: `${percentage}%` }}
                                             ></div>
                                         </div>
@@ -139,7 +140,7 @@ export default async function DashboardPage() {
                     </div>
                     {stats.analyticData.packages.length > 0 ? (
                         <div className="space-y-4">
-                            {stats.analyticData.packages.map((item: any, idx: number) => {
+                            {stats.analyticData.packages.map((item: { _id: string; count: number }, idx: number) => {
                                 const percentage = Math.round((item.count / stats.totalOrders) * 100);
                                 return (
                                     <div key={idx} className="space-y-2">
@@ -149,7 +150,7 @@ export default async function DashboardPage() {
                                         </div>
                                         <div className="w-full bg-white/5 rounded-full h-2.5">
                                             <div
-                                                className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2.5 rounded-full"
+                                                className="bg-linear-to-r from-emerald-500 to-cyan-500 h-2.5 rounded-full"
                                                 style={{ width: `${percentage}%` }}
                                             ></div>
                                         </div>

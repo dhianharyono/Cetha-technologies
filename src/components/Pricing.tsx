@@ -16,9 +16,28 @@ import {
 import { getPublicPackages } from '@/app/actions/userActions';
 import { pricingPlans as fallbackPlans } from '@/utils/data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { IPackage } from '@/types';
+
+const PricingSkeleton = () => (
+  <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+    {[1, 2, 3].map((i) => (
+      <Card key={i} className='h-125 border border-white/5 bg-[#131826]/40 p-8'>
+        <Skeleton className='h-8 w-1/2 mb-6' />
+        <Skeleton className='h-12 w-3/4 mb-4' />
+        <Skeleton className='h-4 w-full mb-10' />
+        <div className='space-y-4 mb-10'>
+          <Skeleton className='h-4 w-full' />
+          <Skeleton className='h-4 w-full' />
+          <Skeleton className='h-4 w-full' />
+        </div>
+        <Skeleton className='h-12 w-full mt-auto rounded-xl' />
+      </Card>
+    ))}
+  </div>
+);
 
 export default function Pricing() {
-  const [plans, setPlans] = useState<any[]>([]);
+  const [plans, setPlans] = useState<IPackage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -40,31 +59,10 @@ export default function Pricing() {
     loadData();
   }, []);
 
-  const PricingSkeleton = () => (
-    <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
-      {[1, 2, 3].map((i) => (
-        <Card
-          key={i}
-          className='h-[500px] border border-white/5 bg-[#131826]/40 p-8'
-        >
-          <Skeleton className='h-8 w-1/2 mb-6' />
-          <Skeleton className='h-12 w-3/4 mb-4' />
-          <Skeleton className='h-4 w-full mb-10' />
-          <div className='space-y-4 mb-10'>
-            <Skeleton className='h-4 w-full' />
-            <Skeleton className='h-4 w-full' />
-            <Skeleton className='h-4 w-full' />
-          </div>
-          <Skeleton className='h-12 w-full mt-auto rounded-xl' />
-        </Card>
-      ))}
-    </div>
-  );
-
   return (
     <section id='pricing' className='py-20 md:py-32 relative overflow-hidden'>
       {/* Background decoration */}
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-600/5 rounded-full blur-[160px] -z-10'></div>
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-cyan-600/5 rounded-full blur-[160px] -z-10'></div>
 
       <div className='container mx-auto px-4 md:px-6 relative z-10'>
         <div className='text-center max-w-3xl mx-auto mb-16 md:mb-24'>
@@ -76,7 +74,7 @@ export default function Pricing() {
           >
             <h2 className='text-xl md:text-5xl font-extrabold text-white mb-2 md:mb-6 tracking-tight'>
               Paket{' '}
-              <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400'>
+              <span className='text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400'>
                 Investasi Digital
               </span>
             </h2>
@@ -143,7 +141,7 @@ function PricingCard({
   index,
   isMobile = false,
 }: {
-  plan: any;
+  plan: IPackage;
   index: number;
   isMobile?: boolean;
 }) {
@@ -162,13 +160,13 @@ function PricingCard({
       <Card
         className={`h-full relative flex flex-col transition-all duration-500 rounded-3xl overflow-hidden group ${
           plan.popular
-            ? 'bg-gradient-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
+            ? 'bg-linear-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
             : 'bg-[#131826]/60 backdrop-blur-xl border-white/5 hover:border-white/10 hover:-translate-y-2'
         }`}
       >
         {plan.popular && (
           <div className='absolute top-0 right-0'>
-            <div className='bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1.5 rounded-bl-2xl text-[10px] uppercase font-black tracking-widest shadow-lg'>
+            <div className='bg-linear-to-r from-cyan-500 to-blue-500 text-white px-4 py-1.5 rounded-bl-2xl text-[10px] uppercase font-black tracking-widest shadow-lg'>
               Paling Populer
             </div>
           </div>

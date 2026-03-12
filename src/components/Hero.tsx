@@ -58,10 +58,10 @@ export default function Hero() {
 
           <motion.h1
             variants={itemVariants}
-            className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 md:mb-8 leading-[1.1]'
+            className='text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 md:mb-8 leading-[1.1]'
           >
             Website Modern & Cepat untuk
-            <span className='ml-5 text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 relative inline-block'>
+            <span className='ml-2 md:ml-5 text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 relative inline-block'>
               Bisnis
               <motion.span
                 className='absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-cyan-400 to-blue-500 rounded-full'
@@ -75,7 +75,7 @@ export default function Hero() {
 
           <motion.p
             variants={itemVariants}
-            className='text-base md:text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed'
+            className='text-xs md:text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed'
           >
             Membantu Anda menghadirkan rumah digital bagi bisnis dan personal
             branding Anda. Dengan desain modern, performa cepat, dan fitur yang

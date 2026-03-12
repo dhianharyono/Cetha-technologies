@@ -55,7 +55,7 @@ export default function LoginPage() {
                     <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-500/10 blur-[60px] rounded-full pointer-events-none" />
 
                     <div className="text-center mb-10 relative z-10">
-                        <h1 className="text-3xl font-black bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent mb-2">
+                        <h1 className="text-3xl font-black bg-linear-to-br from-white to-slate-400 bg-clip-text text-transparent mb-2">
                             Welcome Back
                         </h1>
                         <p className="text-slate-400 text-sm">Sign in to Cetha Tech Admin Panel</p>

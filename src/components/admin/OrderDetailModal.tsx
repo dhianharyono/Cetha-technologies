@@ -19,12 +19,13 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+import { IOrder } from '@/types';
 
 interface OrderDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  order: any;
-  onUpdate: (id: string, data: any) => Promise<void>;
+  order: IOrder | null;
+  onUpdate: (id: string, data: Partial<IOrder>) => Promise<void>;
 }
 
 export default function OrderDetailModal({
@@ -34,7 +35,7 @@ export default function OrderDetailModal({
   onUpdate,
 }: OrderDetailModalProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<any>(null);
+  const [formData, setFormData] = useState<Partial<IOrder> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -51,14 +52,16 @@ export default function OrderDetailModal({
     >,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
+    setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      await onUpdate(order._id, formData);
+      if (order?._id && formData) {
+        await onUpdate(order._id, formData);
+      }
       setIsEditing(false);
     } finally {
       setIsSaving(false);
@@ -72,7 +75,14 @@ export default function OrderDetailModal({
     name,
     type = 'text',
     options = [],
-  }: any) => {
+  }: {
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+    value: string | undefined;
+    name: keyof IOrder;
+    type?: string;
+    options?: string[];
+  }) => {
     if (isEditing) {
       return (
         <div className='space-y-1.5 w-full'>
@@ -83,7 +93,7 @@ export default function OrderDetailModal({
           {type === 'select' ? (
             <select
               name={name}
-              value={formData[name] || ''}
+              value={(formData?.[name] as string) || ''}
               onChange={handleInputChange}
               className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors'
             >
@@ -96,7 +106,7 @@ export default function OrderDetailModal({
           ) : type === 'textarea' ? (
             <textarea
               name={name}
-              value={formData[name] || ''}
+              value={(formData?.[name] as string) || ''}
               onChange={handleInputChange}
               rows={3}
               className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors resize-none'
@@ -105,7 +115,7 @@ export default function OrderDetailModal({
             <input
               type='text'
               name={name}
-              value={formData[name] || ''}
+              value={(formData?.[name] as string) || ''}
               onChange={handleInputChange}
               className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors'
             />
@@ -120,7 +130,7 @@ export default function OrderDetailModal({
           <Icon className='w-3 h-3' />
           {label}
         </span>
-        <p className='text-sm text-white font-medium break-words'>
+        <p className='text-sm text-white font-medium wrap-break-word'>
           {value || <span className='text-slate-600 italic'>Tidak data</span>}
           {name === 'nomorWa' && value && (
             <a
@@ -190,9 +200,13 @@ export default function OrderDetailModal({
                 </h2>
                 <p className='text-xs text-slate-400 mt-1'>
                   ID: {order._id} •{' '}
-                  {format(new Date(order.createdAt), 'dd MMMM yyyy HH:mm', {
-                    locale: id,
-                  })}
+                  {format(
+                    new Date(order.createdAt || new Date()),
+                    'dd MMMM yyyy HH:mm',
+                    {
+                      locale: id,
+                    },
+                  )}
                 </p>
               </div>
               <button

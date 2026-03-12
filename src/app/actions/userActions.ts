@@ -4,19 +4,20 @@ import connectToDatabase from '@/lib/db';
 import Order from '@/models/Order';
 import Portfolio from '@/models/Portfolio';
 import Package from '@/models/Package';
+import { IOrder, IPortfolio, IPackage } from '@/types';
 
-export async function submitOrder(data: any) {
+export async function submitOrder(data: Partial<IOrder>) {
     try {
         await connectToDatabase();
         // Insert order to database
         const order = await Order.create(data);
         return { success: true, orderId: order._id.toString() };
-    } catch (error: any) {
-        return { success: false, error: error.message };
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
 }
 
-export async function getPublicPortfolios() {
+export async function getPublicPortfolios(): Promise<IPortfolio[]> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return [];
@@ -27,7 +28,7 @@ export async function getPublicPortfolios() {
     }
 }
 
-export async function getPublicPackages() {
+export async function getPublicPackages(): Promise<IPackage[]> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return [];

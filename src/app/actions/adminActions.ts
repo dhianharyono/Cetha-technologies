@@ -5,9 +5,10 @@ import Order from '@/models/Order';
 import Portfolio from '@/models/Portfolio';
 import Package from '@/models/Package';
 import { revalidatePath } from 'next/cache';
+import { IPortfolio, IPackage, IOrder, IDashboardStats } from '@/types';
 
 // --- DASHBOARD ---
-export async function getDashboardStats() {
+export async function getDashboardStats(): Promise<IDashboardStats> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return { totalOrders: 0, pendingOrders: 0, totalPortfolios: 0, totalPackages: 0, analyticData: { status: [], packages: [] } };
@@ -35,13 +36,13 @@ export async function getDashboardStats() {
                 packages: JSON.parse(JSON.stringify(packageAnalytics))
             }
         };
-    } catch (error) {
+    } catch {
         return { totalOrders: 0, pendingOrders: 0, totalPortfolios: 0, totalPackages: 0, analyticData: { status: [], packages: [] } };
     }
 }
 
 // --- ORDER ACTIONS ---
-export async function getOrders() {
+export async function getOrders(): Promise<IOrder[]> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return [];
@@ -64,14 +65,14 @@ export async function updateOrderStatus(id: string, status: string) {
     revalidatePath('/admin/orders');
 }
 
-export async function updateOrder(id: string, data: any) {
+export async function updateOrder(id: string, data: Partial<IOrder>) {
     await connectToDatabase();
     await Order.findByIdAndUpdate(id, data);
     revalidatePath('/admin/orders');
 }
 
 // --- PORTFOLIO ACTIONS ---
-export async function getPortfolios() {
+export async function getPortfolios(): Promise<IPortfolio[]> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return [];
@@ -82,14 +83,14 @@ export async function getPortfolios() {
     }
 }
 
-export async function addPortfolio(data: any) {
+export async function addPortfolio(data: Partial<IPortfolio>) {
     await connectToDatabase();
     await Portfolio.create(data);
     revalidatePath('/admin/portfolio');
     revalidatePath('/'); // Landing page
 }
 
-export async function updatePortfolio(id: string, data: any) {
+export async function updatePortfolio(id: string, data: Partial<IPortfolio>) {
     await connectToDatabase();
     await Portfolio.findByIdAndUpdate(id, data);
     revalidatePath('/admin/portfolio');
@@ -111,7 +112,7 @@ export async function togglePortfolioVisibility(id: string, isHidden: boolean) {
 }
 
 // --- PACKAGE ACTIONS ---
-export async function getPackages() {
+export async function getPackages(): Promise<IPackage[]> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return [];
@@ -122,14 +123,14 @@ export async function getPackages() {
     }
 }
 
-export async function addPackage(data: any) {
+export async function addPackage(data: Partial<IPackage>) {
     await connectToDatabase();
     await Package.create(data);
     revalidatePath('/admin/packages');
     revalidatePath('/'); // Landing page
 }
 
-export async function updatePackage(id: string, data: any) {
+export async function updatePackage(id: string, data: Partial<IPackage>) {
     await connectToDatabase();
     await Package.findByIdAndUpdate(id, data);
     revalidatePath('/admin/packages');

@@ -45,6 +45,22 @@ const services = [
   },
 ];
 
+const ServiceSkeleton = () => (
+  <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8'>
+    {[1, 2, 3, 4].map((i) => (
+      <Card
+        key={i}
+        className='h-64 border border-white/5 bg-[#131826]/40 backdrop-blur-sm p-6'
+      >
+        <Skeleton className='w-12 h-12 rounded-2xl mb-6' />
+        <Skeleton className='h-6 w-3/4 mb-4' />
+        <Skeleton className='h-4 w-full mb-2' />
+        <Skeleton className='h-4 w-5/6' />
+      </Card>
+    ))}
+  </div>
+);
+
 export default function Services() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,26 +72,10 @@ export default function Services() {
     return () => clearTimeout(timer);
   }, []);
 
-  const ServiceSkeleton = () => (
-    <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8'>
-      {[1, 2, 3, 4].map((i) => (
-        <Card
-          key={i}
-          className='h-64 border border-white/5 bg-[#131826]/40 backdrop-blur-sm p-6'
-        >
-          <Skeleton className='w-12 h-12 rounded-2xl mb-6' />
-          <Skeleton className='h-6 w-3/4 mb-4' />
-          <Skeleton className='h-4 w-full mb-2' />
-          <Skeleton className='h-4 w-5/6' />
-        </Card>
-      ))}
-    </div>
-  );
-
   return (
     <section id='services' className='py-20 md:py-32 relative overflow-hidden'>
       {/* Background Glow */}
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] -z-10'></div>
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-blue-600/5 rounded-full blur-[120px] -z-10'></div>
 
       <div className='container mx-auto px-4 md:px-6 relative z-10'>
         <div className='text-center max-w-3xl mx-auto mb-16 md:mb-24'>
@@ -87,7 +87,7 @@ export default function Services() {
           >
             <h2 className='text-lg md:text-5xl font-extrabold text-white mb-6 tracking-tight'>
               Layanan{' '}
-              <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400'>
+              <span className='text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400'>
                 Unggulan
               </span>
             </h2>

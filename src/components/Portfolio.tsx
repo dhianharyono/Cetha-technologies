@@ -8,9 +8,36 @@ import { ExternalLink, Layout } from 'lucide-react';
 import { getPublicPortfolios } from '@/app/actions/userActions';
 import { projects as fallbackProjects } from '@/utils/data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { IPortfolio } from '@/types';
+
+const PortfolioSkeleton = () => (
+  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+    {[1, 2, 3].map((i) => (
+      <Card
+        key={i}
+        className='overflow-hidden border border-white/5 bg-[#131826]/40 backdrop-blur-sm'
+      >
+        <Skeleton className='h-48 w-full rounded-none' />
+        <CardContent className='p-6'>
+          <Skeleton className='h-6 w-3/4 mb-4' />
+          <Skeleton className='h-4 w-full mb-2' />
+          <Skeleton className='h-4 w-5/6 mb-6' />
+          <div className='flex gap-2 mb-6'>
+            <Skeleton className='h-6 w-16 rounded-full' />
+            <Skeleton className='h-6 w-16 rounded-full' />
+          </div>
+          <div className='flex justify-between items-center'>
+            <Skeleton className='h-8 w-24 rounded-full' />
+            <Skeleton className='h-8 w-16 rounded-full' />
+          </div>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+);
 
 export default function Portfolio() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<IPortfolio[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,32 +59,6 @@ export default function Portfolio() {
     }
     loadData();
   }, []);
-
-  const PortfolioSkeleton = () => (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-      {[1, 2, 3].map((i) => (
-        <Card
-          key={i}
-          className='overflow-hidden border border-white/5 bg-[#131826]/40 backdrop-blur-sm'
-        >
-          <Skeleton className='h-48 w-full rounded-none' />
-          <CardContent className='p-6'>
-            <Skeleton className='h-6 w-3/4 mb-4' />
-            <Skeleton className='h-4 w-full mb-2' />
-            <Skeleton className='h-4 w-5/6 mb-6' />
-            <div className='flex gap-2 mb-6'>
-              <Skeleton className='h-6 w-16 rounded-full' />
-              <Skeleton className='h-6 w-16 rounded-full' />
-            </div>
-            <div className='flex justify-between items-center'>
-              <Skeleton className='h-8 w-24 rounded-full' />
-              <Skeleton className='h-8 w-16 rounded-full' />
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
 
   return (
     <section id='portfolio' className='py-20 md:py-32 relative overflow-hidden'>
@@ -140,7 +141,7 @@ function PortfolioCard({
   index,
   isMobile = false,
 }: {
-  project: any;
+  project: IPortfolio;
   index: number;
   isMobile?: boolean;
 }) {

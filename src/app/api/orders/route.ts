@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
         const order = await Order.create(data);
         return NextResponse.json({ success: true, data: order }, { status: 201 });
-    } catch (error: any) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
     }
 }

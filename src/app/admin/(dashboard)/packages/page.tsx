@@ -5,9 +5,10 @@ import { getPackages, addPackage, updatePackage, deletePackage, togglePackageVis
 import { useToast } from '@/components/admin/ToastProvider';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import { Plus, Edit2, Trash2, Eye, EyeOff, RefreshCcw, Star } from 'lucide-react';
+import { IPackage } from '@/types';
 
 export default function PackagesPage() {
-    const [packages, setPackages] = useState<any[]>([]);
+    const [packages, setPackages] = useState<IPackage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { showToast } = useToast();
 
@@ -51,9 +52,9 @@ export default function PackagesPage() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEdit = (pkg: any) => {
+    const handleOpenEdit = (pkg: IPackage) => {
         setIsEditMode(true);
-        setCurrentId(pkg._id);
+        setCurrentId(pkg._id || null);
         setFormData({
             name: pkg.name,
             price: pkg.price,
@@ -148,14 +149,14 @@ export default function PackagesPage() {
                         <div key={pkg._id} className={`bg-[#131826]/80 backdrop-blur-md border rounded-2xl p-6 relative group transition-all ${pkg.isHidden ? 'opacity-50 grayscale hover:grayscale-0 border-white/5' : pkg.popular ? 'border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.1)]' : 'border-white/5 hover:border-white/20'}`}>
 
                             {pkg.popular && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full text-[10px] font-black tracking-widest text-white flex items-center gap-1 shadow-lg shadow-cyan-500/30">
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-linear-to-r from-cyan-500 to-blue-500 rounded-full text-[10px] font-black tracking-widest text-white flex items-center gap-1 shadow-lg shadow-cyan-500/30">
                                     <Star className="w-3 h-3 fill-white" /> POPULAR
                                 </div>
                             )}
 
                             <div className="absolute top-4 right-4 flex gap-2">
                                 <button
-                                    onClick={() => handleToggleHide(pkg._id, pkg.isHidden)}
+                                    onClick={() => handleToggleHide(pkg._id || '', pkg.isHidden)}
                                     className="p-1.5 bg-black/50 backdrop-blur rounded-md border border-white/10 text-white hover:text-cyan-400 transition-colors"
                                 >
                                     {pkg.isHidden ? <EyeOff className="w-4 h-4 text-red-400" /> : <Eye className="w-4 h-4" />}
@@ -188,7 +189,7 @@ export default function PackagesPage() {
                                 <button onClick={() => handleOpenEdit(pkg)} className="flex-1 flex items-center justify-center py-2.5 bg-white/5 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-400 rounded-lg text-sm font-semibold transition-colors gap-2">
                                     <Edit2 className="w-4 h-4" /> Edit
                                 </button>
-                                <button onClick={() => handleDeleteParams(pkg._id)} className="flex-1 flex items-center justify-center py-2.5 bg-white/5 hover:bg-red-500/20 text-slate-300 hover:text-red-400 rounded-lg text-sm font-semibold transition-colors gap-2">
+                                <button onClick={() => handleDeleteParams(pkg._id || '')} className="flex-1 flex items-center justify-center py-2.5 bg-white/5 hover:bg-red-500/20 text-slate-300 hover:text-red-400 rounded-lg text-sm font-semibold transition-colors gap-2">
                                     <Trash2 className="w-4 h-4" /> Hapus
                                 </button>
                             </div>

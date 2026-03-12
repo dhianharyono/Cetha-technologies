@@ -13,15 +13,16 @@ import OrderDetailModal from '@/components/admin/OrderDetailModal';
 import { Trash2, RefreshCcw, Eye, Edit2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+import { IOrder } from '@/types';
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   const fetchOrders = async () => {
@@ -67,12 +68,12 @@ export default function OrdersPage() {
     }
   };
 
-  const handleViewDetail = (order: any) => {
+  const handleViewDetail = (order: IOrder) => {
     setSelectedOrder(order);
     setDetailModalOpen(true);
   };
 
-  const handleUpdateOrder = async (id: string, data: any) => {
+  const handleUpdateOrder = async (id: string, data: Partial<IOrder>) => {
     try {
       await updateOrder(id, data);
       showToast('Order berhasil diperbarui', 'success');
@@ -140,8 +141,8 @@ export default function OrdersPage() {
               ) : (
                 orders.map((order) => (
                   <tr
-                    key={order._id}
-                    className='hover:bg-white/[0.02] transition-colors'
+                    key={order._id || Math.random().toString()}
+                    className='hover:bg-white/2 transition-colors'
                   >
                     <td className='px-6 py-4 font-medium text-white'>
                       {order.namaUsaha}
@@ -154,15 +155,19 @@ export default function OrdersPage() {
                     </td>
                     <td className='px-6 py-4'>{order.kategoriKebutuhan}</td>
                     <td className='px-6 py-4'>
-                      {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm', {
-                        locale: id,
-                      })}
+                      {format(
+                        new Date(order.createdAt || new Date()),
+                        'dd MMM yyyy, HH:mm',
+                        {
+                          locale: id,
+                        },
+                      )}
                     </td>
                     <td className='px-6 py-4'>
                       <select
                         value={order.status}
                         onChange={(e) =>
-                          handleStatusChange(order._id, e.target.value)
+                          handleStatusChange(order._id || '', e.target.value)
                         }
                         className={`text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 outline-none cursor-pointer appearance-none ${
                           order.status === 'Baru'
@@ -222,7 +227,7 @@ export default function OrdersPage() {
                           <Edit2 className='w-4 h-4' />
                         </button>
                         <button
-                          onClick={() => handleDeleteParams(order._id)}
+                          onClick={() => handleDeleteParams(order._id || '')}
                           className='p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors'
                           title='Hapus Order'
                         >
