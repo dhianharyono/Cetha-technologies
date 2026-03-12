@@ -10,30 +10,43 @@ import { projects as fallbackProjects } from '@/utils/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IPortfolio } from '@/types';
 
+const PortfolioSkeletonContent = () => (
+  <Card className='overflow-hidden border border-white/5 bg-[#131826]/40 backdrop-blur-sm h-full'>
+    <Skeleton className='h-48 w-full rounded-none' />
+    <CardContent className='p-6'>
+      <Skeleton className='h-6 w-3/4 mb-4' />
+      <Skeleton className='h-4 w-full mb-2' />
+      <Skeleton className='h-4 w-5/6 mb-6' />
+      <div className='flex gap-2 mb-6'>
+        <Skeleton className='h-6 w-16 rounded-full' />
+        <Skeleton className='h-6 w-16 rounded-full' />
+      </div>
+      <div className='flex justify-between items-center'>
+        <Skeleton className='h-8 w-24 rounded-full' />
+        <Skeleton className='h-8 w-16 rounded-full' />
+      </div>
+    </CardContent>
+  </Card>
+);
+
 const PortfolioSkeleton = () => (
-  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-    {[1, 2, 3].map((i) => (
-      <Card
-        key={i}
-        className='overflow-hidden border border-white/5 bg-[#131826]/40 backdrop-blur-sm'
-      >
-        <Skeleton className='h-48 w-full rounded-none' />
-        <CardContent className='p-6'>
-          <Skeleton className='h-6 w-3/4 mb-4' />
-          <Skeleton className='h-4 w-full mb-2' />
-          <Skeleton className='h-4 w-5/6 mb-6' />
-          <div className='flex gap-2 mb-6'>
-            <Skeleton className='h-6 w-16 rounded-full' />
-            <Skeleton className='h-6 w-16 rounded-full' />
-          </div>
-          <div className='flex justify-between items-center'>
-            <Skeleton className='h-8 w-24 rounded-full' />
-            <Skeleton className='h-8 w-16 rounded-full' />
-          </div>
-        </CardContent>
-      </Card>
-    ))}
-  </div>
+  <>
+    {/* Desktop Skeleton */}
+    <div className='hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <PortfolioSkeletonContent key={i} />
+      ))}
+    </div>
+
+    {/* Mobile Skeleton */}
+    <div className='md:hidden flex gap-5 overflow-x-auto pb-10 -mx-4 px-4 scrollbar-hide'>
+      {[1, 2, 3].map((i) => (
+        <div key={i} className='w-[85vw] shrink-0'>
+          <PortfolioSkeletonContent />
+        </div>
+      ))}
+    </div>
+  </>
 );
 
 export default function Portfolio() {

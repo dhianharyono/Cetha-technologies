@@ -18,22 +18,38 @@ import { pricingPlans as fallbackPlans } from '@/utils/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IPackage } from '@/types';
 
+const PricingSkeletonContent = () => (
+  <Card className='h-125 border border-white/5 bg-[#131826]/40 p-8 flex flex-col'>
+    <Skeleton className='h-8 w-1/2 mb-6' />
+    <Skeleton className='h-12 w-3/4 mb-4' />
+    <Skeleton className='h-4 w-full mb-10' />
+    <div className='space-y-4 mb-10'>
+      <Skeleton className='h-4 w-full' />
+      <Skeleton className='h-4 w-full' />
+      <Skeleton className='h-4 w-full' />
+    </div>
+    <Skeleton className='h-12 w-full mt-auto rounded-xl' />
+  </Card>
+);
+
 const PricingSkeleton = () => (
-  <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
-    {[1, 2, 3].map((i) => (
-      <Card key={i} className='h-125 border border-white/5 bg-[#131826]/40 p-8'>
-        <Skeleton className='h-8 w-1/2 mb-6' />
-        <Skeleton className='h-12 w-3/4 mb-4' />
-        <Skeleton className='h-4 w-full mb-10' />
-        <div className='space-y-4 mb-10'>
-          <Skeleton className='h-4 w-full' />
-          <Skeleton className='h-4 w-full' />
-          <Skeleton className='h-4 w-full' />
+  <>
+    {/* Desktop Skeleton */}
+    <div className='hidden lg:grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+      {[1, 2, 3].map((i) => (
+        <PricingSkeletonContent key={i} />
+      ))}
+    </div>
+
+    {/* Mobile Skeleton */}
+    <div className='lg:hidden flex gap-5 overflow-x-auto pb-10 -mx-4 px-4 scrollbar-hide'>
+      {[1, 2, 3].map((i) => (
+        <div key={i} className='w-[85vw] shrink-0'>
+          <PricingSkeletonContent />
         </div>
-        <Skeleton className='h-12 w-full mt-auto rounded-xl' />
-      </Card>
-    ))}
-  </div>
+      ))}
+    </div>
+  </>
 );
 
 export default function Pricing() {

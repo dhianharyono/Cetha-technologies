@@ -92,23 +92,23 @@ export default function WhyUs() {
                 viewport={{ once: true }}
                 className={`h-full ${colSpan}`}
               >
-                <Card className='h-full bg-[#131826]/60 backdrop-blur-xl border border-white/5 hover:bg-[#1A2235]/80 hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-500 group overflow-hidden relative'>
-                  {/* Aksen background dekoratif */}
+                <Card className='h-full bg-[#131826]/60 backdrop-blur-xl border border-white/5 hover:bg-[#1A2235]/80 hover:border-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-500 group overflow-hidden relative rounded-3xl'>
+                  {/* Aksen background dekoratif - hidden on mobile for simplicity */}
                   <div
-                    className={`absolute -right-12 -top-12 w-48 h-48 rounded-full blur-[80px] bg-white/5 group-hover:bg-cyan-500/10 transition-colors duration-500 pointer-events-none`}
+                    className='hidden md:block absolute -right-12 -top-12 w-48 h-48 rounded-full blur-[80px] bg-white/5 group-hover:bg-cyan-500/10 transition-colors duration-500 pointer-events-none'
                   ></div>
 
-                  <CardContent className='p-6 md:p-8 flex flex-col items-start text-left gap-5 h-full relative z-10'>
+                  <CardContent className='p-5 md:p-8 flex flex-row md:flex-col items-start text-left gap-4 md:gap-5 h-full relative z-10'>
                     <div
-                      className={`p-4 rounded-2xl ${reason.bg} ${reason.borderColor} border group-hover:scale-110 transition-transform duration-500`}
+                      className={`p-3 md:p-4 rounded-xl md:rounded-2xl ${reason.bg} ${reason.borderColor} border group-hover:scale-110 transition-transform duration-500 shrink-0`}
                     >
-                      <Icon className={`w-7 h-7 ${reason.color}`} />
+                      <Icon className={`w-5 h-5 md:w-7 md:h-7 ${reason.color}`} />
                     </div>
-                    <div className='mt-2'>
-                      <h3 className='text-lg md:text-2xl font-bold text-white mb-3 tracking-tight'>
+                    <div className='md:mt-2'>
+                      <h3 className='text-base md:text-2xl font-bold text-white mb-1.5 md:mb-3 tracking-tight'>
                         {reason.title}
                       </h3>
-                      <p className='text-slate-400 text-sm md:text-base leading-relaxed'>
+                      <p className='text-slate-400 text-[13px] md:text-base leading-relaxed line-clamp-4 md:line-clamp-none'>
                         {reason.description}
                       </p>
                     </div>

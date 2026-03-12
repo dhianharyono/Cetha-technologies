@@ -35,7 +35,7 @@ export default function LoginPage() {
             } else {
                 showToast(data.error || 'Login gagal, periksa kredensial Anda.', 'error');
             }
-        } catch (err) {
+        } catch {
             showToast('Terjadi kesalahan sistem', 'error');
         } finally {
             setIsLoading(false);
