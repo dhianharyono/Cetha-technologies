@@ -7,7 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 const steps = [
   {
     title: 'Mengisi Form',
-    description: 'Isi form yang tersedia dan ceritakan kebutuhan dan tujuan bisnis Anda kepada kami.',
+    description:
+      'Isi form yang tersedia dan ceritakan kebutuhan dan tujuan bisnis Anda kepada kami.',
     icon: MessageSquare,
     color: 'text-blue-400',
     bg: 'bg-blue-400/10',
@@ -51,8 +52,11 @@ export default function ServiceSteps() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className='text-lg md:text-5xl font-extrabold text-white mb-4'>
-            Langkah <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Memulai Layanan</span>
+          <h2 className='text-xl md:text-5xl font-extrabold text-white mb-2 md:mb-4'>
+            Langkah{' '}
+            <span className='text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400'>
+              Memulai Layanan
+            </span>
           </h2>
           <p className='text-sm md:text-lg text-slate-400'>
             Proses kerja transparan dan sistematis untuk memastikan hasil
@@ -74,10 +78,10 @@ export default function ServiceSteps() {
               >
                 {/* Arrow connecting steps (desktop only) */}
                 {index < steps.length - 1 && (
-                  <div className='hidden lg:block absolute top-[4.5rem] left-full w-full h-[2px] -ml-8 px-4 z-0'>
+                  <div className='hidden lg:block absolute top-18 left-full w-full h-0.5 -ml-8 px-4 z-0'>
                     <div className='w-full h-full bg-slate-800 rounded-full overflow-hidden'>
                       <motion.div
-                        className='h-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent'
+                        className='h-full bg-linear-to-r from-transparent via-cyan-500 to-transparent'
                         initial={{ x: '-100%' }}
                         whileInView={{ x: '100%' }}
                         transition={{
@@ -96,12 +100,16 @@ export default function ServiceSteps() {
                       <div
                         className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${step.bg} ${step.borderColor} border group-hover:scale-110 transition-transform duration-300`}
                       >
-                        <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${step.color}`} />
+                        <Icon
+                          className={`w-6 h-6 sm:w-8 sm:h-8 ${step.color}`}
+                        />
                       </div>
                     </div>
                     <div>
                       <h3 className='text-base sm:text-lg md:text-xl font-bold text-white mb-1 sm:mb-2'>
-                        <span className="text-white/40 mr-2 sm:hidden text-sm">0{index + 1}.</span>
+                        <span className='text-white/40 mr-2 sm:hidden text-sm'>
+                          0{index + 1}.
+                        </span>
                         {step.title}
                       </h3>
                       <p className='text-slate-400 text-xs sm:text-sm leading-relaxed'>

@@ -66,13 +66,17 @@ function PemesananFormContent() {
 
   const getCurrentPaket = () => {
     if (formData.kategoriKebutuhan === 'Portofolio') {
-      if (formData.pilihanKebutuhan.includes('Paket Lengkap')) return 'Portofolio Lengkap';
-      if (formData.pilihanKebutuhan.includes('Paket Standar')) return 'Portofolio Standar';
+      if (formData.pilihanKebutuhan.includes('Paket Lengkap'))
+        return 'Portofolio Lengkap';
+      if (formData.pilihanKebutuhan.includes('Paket Standar'))
+        return 'Portofolio Standar';
       return 'Portofolio';
     }
     if (formData.kategoriKebutuhan === 'Website Usaha') {
-      if (formData.pilihanKebutuhan.includes('Katalog Layanan/Produk')) return 'Katalog Produk';
-      if (formData.pilihanKebutuhan.includes('Company Profile')) return 'Company Profile';
+      if (formData.pilihanKebutuhan.includes('Katalog Layanan/Produk'))
+        return 'Katalog Produk';
+      if (formData.pilihanKebutuhan.includes('Company Profile'))
+        return 'Company Profile';
       return 'Website Usaha';
     }
     return 'Custom';
@@ -125,10 +129,10 @@ function PemesananFormContent() {
         transition={{ duration: 0.5 }}
       >
         <div className='text-center mb-10'>
-          <h1 className='text-3xl md:text-5xl font-extrabold text-white mb-4'>
+          <h1 className='text-2xl md:text-5xl font-extrabold text-white mb-2 md:mb-4'>
             Form Kebutuhan Website
           </h1>
-          <p className='text-slate-400 text-sm md:text-base mb-4'>
+          <p className='text-slate-400 text-xs md:text-sm mb-4'>
             Agar proses pengerjaan website bisa segera dimulai, mohon siapkan
             dan lengkapi data-data berikut ya.
           </p>
@@ -209,10 +213,11 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Portofolio'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Portofolio'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Portofolio
@@ -252,10 +257,11 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Website Usaha'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Website Usaha'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Website Usaha
@@ -298,10 +304,11 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Custom'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Custom'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Custom
@@ -590,7 +597,7 @@ function PemesananFormContent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <label className='block text-sm font-medium text-slate-300 mb-2'>
+              <label className='block text-xs md:text-sm font-medium text-slate-300 mb-2'>
                 Tautan / URL Folder GDrive (Logo PNG, Foto Produk/Tim, dsb)
               </label>
               <input
@@ -601,7 +608,7 @@ function PemesananFormContent() {
                 placeholder='Paste url / link Google Drive, pastikan akses Anyone With Context aktif'
                 className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors'
               />
-              <p className='text-xs text-slate-500 mt-3'>
+              <p className='text-[10px] md:text-xs text-slate-500 mt-3'>
                 * Catatan: Anda juga bisa menyusulkan / mengirimkan foto
                 langsung via WhatsApp setelah formulir ini dikirimkan.
               </p>
@@ -609,20 +616,26 @@ function PemesananFormContent() {
           </Card>
 
           {successMsg && (
-            <div className="p-4 mb-4 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center font-medium">
-              Yeay! Pesanan berhasil dikirim. Anda akan dialihkan ke halaman utama...
+            <div className='p-4 mb-4 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center font-medium'>
+              Yeay! Pesanan berhasil dikirim. Anda akan dialihkan ke halaman
+              utama...
             </div>
           )}
 
           <Button
             type='submit'
             disabled={isSubmitting || successMsg}
-            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-md transition-all ${isSubmitting || successMsg
-              ? 'bg-cyan-500/50 cursor-not-allowed'
-              : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
-              }`}
+            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-xs md:text-md transition-all ${
+              isSubmitting || successMsg
+                ? 'bg-cyan-500/50 cursor-not-allowed'
+                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
+            }`}
           >
-            {isSubmitting ? 'Mengirim Data...' : successMsg ? 'Terkirim!' : 'Submit Order'}{' '}
+            {isSubmitting
+              ? 'Mengirim Data...'
+              : successMsg
+                ? 'Terkirim!'
+                : 'Submit Order'}{' '}
             <Send className='w-4 h-4' />
           </Button>
         </form>
@@ -633,7 +646,13 @@ function PemesananFormContent() {
 
 export default function PemesananForm() {
   return (
-    <Suspense fallback={<div className="container mx-auto p-8 text-center text-white/50">Memuat form...</div>}>
+    <Suspense
+      fallback={
+        <div className='container mx-auto p-8 text-center text-white/50'>
+          Memuat form...
+        </div>
+      }
+    >
       <PemesananFormContent />
     </Suspense>
   );

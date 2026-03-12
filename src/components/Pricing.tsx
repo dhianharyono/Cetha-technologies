@@ -40,14 +40,13 @@ export default function Pricing() {
     loadData();
   }, []);
 
-  const getFormUrl = (planName: string) => {
-    return `/pemesanan?paket=${encodeURIComponent(planName)}`;
-  };
-
   const PricingSkeleton = () => (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
       {[1, 2, 3].map((i) => (
-        <Card key={i} className='h-[500px] border border-white/5 bg-[#131826]/40 p-8'>
+        <Card
+          key={i}
+          className='h-[500px] border border-white/5 bg-[#131826]/40 p-8'
+        >
           <Skeleton className='h-8 w-1/2 mb-6' />
           <Skeleton className='h-12 w-3/4 mb-4' />
           <Skeleton className='h-4 w-full mb-10' />
@@ -75,11 +74,15 @@ export default function Pricing() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className='text-lg md:text-5xl font-extrabold text-white mb-6 tracking-tight'>
-              Paket <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Investasi Digital</span>
+            <h2 className='text-xl md:text-5xl font-extrabold text-white mb-2 md:mb-6 tracking-tight'>
+              Paket{' '}
+              <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400'>
+                Investasi Digital
+              </span>
             </h2>
             <p className='text-sm md:text-lg text-slate-400 leading-relaxed'>
-              Pilih paket yang paling sesuai dengan skala bisnis dan kebutuhan fitur Anda.
+              Pilih paket yang paling sesuai dengan skala bisnis dan kebutuhan
+              fitur Anda.
             </p>
           </motion.div>
         </div>
@@ -87,7 +90,7 @@ export default function Pricing() {
         <AnimatePresence mode='wait'>
           {isLoading ? (
             <motion.div
-              key="skeleton"
+              key='skeleton'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -99,7 +102,7 @@ export default function Pricing() {
             <>
               {/* Desktop Grid View */}
               <motion.div
-                key="content-desktop"
+                key='content-desktop'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -112,14 +115,17 @@ export default function Pricing() {
 
               {/* Mobile Swipeable View */}
               <motion.div
-                key="content-mobile"
+                key='content-mobile'
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
                 className='lg:hidden flex gap-5 overflow-x-auto snap-x snap-mandatory pb-10 -mx-4 px-4 scrollbar-hide'
               >
                 {plans.map((plan, index) => (
-                  <div key={plan.name} className='w-[85vw] shrink-0 snap-center'>
+                  <div
+                    key={plan.name}
+                    className='w-[85vw] shrink-0 snap-center'
+                  >
                     <PricingCard plan={plan} index={index} isMobile />
                   </div>
                 ))}
@@ -132,7 +138,15 @@ export default function Pricing() {
   );
 }
 
-function PricingCard({ plan, index, isMobile = false }: { plan: any, index: number, isMobile?: boolean }) {
+function PricingCard({
+  plan,
+  index,
+  isMobile = false,
+}: {
+  plan: any;
+  index: number;
+  isMobile?: boolean;
+}) {
   const getFormUrl = (planName: string) => {
     return `/pemesanan?paket=${encodeURIComponent(planName)}`;
   };
@@ -146,10 +160,11 @@ function PricingCard({ plan, index, isMobile = false }: { plan: any, index: numb
       className='h-full'
     >
       <Card
-        className={`h-full relative flex flex-col transition-all duration-500 rounded-3xl overflow-hidden group ${plan.popular
-          ? 'bg-gradient-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
-          : 'bg-[#131826]/60 backdrop-blur-xl border-white/5 hover:border-white/10 hover:-translate-y-2'
-          }`}
+        className={`h-full relative flex flex-col transition-all duration-500 rounded-3xl overflow-hidden group ${
+          plan.popular
+            ? 'bg-gradient-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
+            : 'bg-[#131826]/60 backdrop-blur-xl border-white/5 hover:border-white/10 hover:-translate-y-2'
+        }`}
       >
         {plan.popular && (
           <div className='absolute top-0 right-0'>
@@ -160,7 +175,9 @@ function PricingCard({ plan, index, isMobile = false }: { plan: any, index: numb
         )}
 
         <CardHeader className='pt-10 pb-8 px-8'>
-          <CardTitle className={`text-xl font-bold mb-2 ${plan.popular ? 'text-cyan-400' : 'text-white'}`}>
+          <CardTitle
+            className={`text-xl font-bold mb-2 ${plan.popular ? 'text-cyan-400' : 'text-white'}`}
+          >
             {plan.name}
           </CardTitle>
           <div className='flex flex-col mb-4'>
@@ -171,13 +188,13 @@ function PricingCard({ plan, index, isMobile = false }: { plan: any, index: numb
             )}
             <div className='flex items-baseline gap-1'>
               <div
-                className={`text-4xl md:text-5xl font-black tracking-tight ${plan.popular ? 'text-white' : 'text-white'}`}
+                className={`text-3xl md:text-5xl font-black tracking-tight ${plan.popular ? 'text-white' : 'text-white'}`}
               >
                 {plan.price}
               </div>
             </div>
           </div>
-          <CardDescription className='text-slate-400 text-sm leading-relaxed'>
+          <CardDescription className='text-slate-400 text-xs md:text-sm leading-relaxed'>
             {plan.description}
           </CardDescription>
         </CardHeader>
@@ -187,10 +204,14 @@ function PricingCard({ plan, index, isMobile = false }: { plan: any, index: numb
             {plan.features?.map((feature: string) => (
               <li
                 key={feature}
-                className='flex items-start gap-3 text-sm text-slate-300'
+                className='flex items-start gap-3 text-xs md:text-sm text-slate-300'
               >
-                <div className={`mt-1 rounded-full p-0.5 ${plan.popular ? 'bg-cyan-500/20' : 'bg-white/5'}`}>
-                  <Check className={`w-3.5 h-3.5 ${plan.popular ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <div
+                  className={`mt-1 rounded-full p-0.5 ${plan.popular ? 'bg-cyan-500/20' : 'bg-white/5'}`}
+                >
+                  <Check
+                    className={`w-3.5 h-3.5 ${plan.popular ? 'text-cyan-400' : 'text-slate-400'}`}
+                  />
                 </div>
                 <span>{feature}</span>
               </li>
@@ -199,13 +220,20 @@ function PricingCard({ plan, index, isMobile = false }: { plan: any, index: numb
         </CardContent>
 
         <CardFooter className='p-8 pt-0 mt-auto'>
-          <Link href={getFormUrl(plan.name)} target='_blank' rel='noopener noreferrer' className='w-full'>
+          <Link
+            href={getFormUrl(plan.name)}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='w-full'
+          >
             <Button
-              className={`w-full group/btn relative overflow-hidden h-14 rounded-2xl font-bold transition-all duration-300 ${plan.popular
-                ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
-                : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}
+              className={`w-full group/btn relative overflow-hidden h-14 rounded-2xl font-bold transition-all duration-300 ${
+                plan.popular
+                  ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                  : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+              }`}
             >
-              <span className='relative z-10 flex items-center justify-center gap-2'>
+              <span className='relative z-10 flex items-center justify-center gap-2 text-xs md:text-sm'>
                 {plan.cta}
                 <ArrowRight className='w-4 h-4 group-hover/btn:translate-x-1 transition-transform' />
               </span>

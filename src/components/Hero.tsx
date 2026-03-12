@@ -5,9 +5,6 @@ import { Button } from '@/components/ui/button';
 import { motion, Variants } from 'framer-motion';
 
 export default function Hero() {
-  const whatsappUrl =
-    'https://wa.me/6281320005405?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis%20pembuatan%20website';
-
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -67,7 +64,7 @@ export default function Hero() {
             <span className='ml-5 text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 relative inline-block'>
               Bisnis
               <motion.span
-                className='absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full'
+                className='absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-cyan-400 to-blue-500 rounded-full'
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 1, duration: 0.8, ease: 'easeOut' }}
@@ -89,10 +86,7 @@ export default function Hero() {
             variants={itemVariants}
             className='flex flex-row gap-3 md:gap-4 mb-16 w-full sm:w-auto justify-center'
           >
-            <Link
-              href={'/pemesanan'}
-              className='flex-1 sm:w-auto'
-            >
+            <Link href={'/pemesanan'} className='flex-1 sm:w-auto'>
               <Button
                 size='lg'
                 className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-md shadow-cyan-500/20 sm:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer w-full rounded-full transition-all hover:scale-105 group/btn border-none whitespace-nowrap'
