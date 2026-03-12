@@ -12,19 +12,19 @@ export default function Footer() {
           <div className='flex flex-col'>
             <Link
               href='/'
-              className='text-2xl font-extrabold text-white mb-4 block group'
+              className='text-lg md:text-2xl font-extrabold text-white mb-4 block group'
             >
               <span className='group-hover:text-cyan-400 transition-colors'>
                 Cetha
               </span>{' '}
               Technologies
             </Link>
-            <p className='text-slate-400 text-sm leading-relaxed max-w-sm mb-6'>
+            <p className='text-slate-400 text-xs md:text-sm leading-relaxed max-w-sm mb-6'>
               Partner digital terpercaya untuk transformasi bisnis atau personal
               branding Anda. Kami membangun website yang tidak hanya indah, tapi
               juga berfungsi optimal untuk kebutuhan Anda.
             </p>
-            <div className='flex items-center gap-3 text-slate-400 text-sm '>
+            <div className='flex items-center gap-3 text-slate-400 text-xs md:text-sm '>
               <MapPin className='w-5 h-5 text-blue-500 shrink-0 mt-1' />
               <span>Bandung, Jawa Barat, Indonesia</span>
             </div>
@@ -32,8 +32,10 @@ export default function Footer() {
 
           {/* Menu Column */}
           <div className='md:pl-8'>
-            <h4 className='text-white font-semibold mb-6 text-lg'>Menu</h4>
-            <ul className='space-y-4 text-sm'>
+            <h4 className='text-white font-semibold mb-6 text-sm md:text-lg'>
+              Menu
+            </h4>
+            <ul className='space-y-4 text-xs md:text-sm'>
               <li>
                 <Link
                   href='#services'
@@ -71,8 +73,10 @@ export default function Footer() {
 
           {/* Connect Column */}
           <div>
-            <h4 className='text-white font-semibold mb-6 text-lg'>Connect</h4>
-            <div className='flex flex-col gap-4 text-sm'>
+            <h4 className='text-white font-semibold mb-6 text-sm md:text-lg'>
+              Connect
+            </h4>
+            <div className='flex flex-col gap-4 text-xs md:text-sm'>
               <a
                 href='https://www.instagram.com/cethatechnologies/'
                 target='_blank'
@@ -99,7 +103,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className='border-t border-slate-800 pt-8 text-center text-sm text-slate-500'>
+        <div className='border-t border-slate-800 pt-8 text-center text-xs md:text-sm text-slate-500'>
           <p>
             &copy; {new Date().getFullYear()} Cetha Technologies. All rights
             reserved.
