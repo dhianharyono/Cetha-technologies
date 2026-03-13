@@ -18,35 +18,40 @@ declare global {
     | undefined;
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!global.mongoose) {
+  global.mongoose = { conn: null, promise: null };
 }
+
+const cached = global.mongoose!;
 
 async function connectToDatabase() {
   if (!MONGODB_URI) {
     console.warn('MONGODB_URI is not defined in env variables.');
-    // In actual production this should throw, but for Next.js build we can just log
-    // throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
     return null;
   }
 
-  if (cached?.conn) {
-    return cached?.conn;
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  if (!cached?.promise) {
+  if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose;
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((m) => {
+      return m;
     });
   }
-  cached.conn = await cached.promise;
-  return cached?.conn;
+  
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+  
+  return cached.conn;
 }
 
 export default connectToDatabase;
