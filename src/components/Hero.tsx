@@ -2,110 +2,204 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { useRef, useEffect } from 'react';
+import { Code, Rocket, Zap, Globe } from 'lucide-react';
 
 export default function Hero() {
+  const containerRef = useRef<HTMLElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const absoluteMouseX = useMotionValue(0);
+  const absoluteMouseY = useMotionValue(0);
+
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+
+  // Smooth mouse move for parallax
+  const smoothX = useSpring(mouseX, { damping: 50, stiffness: 400 });
+  const smoothY = useSpring(mouseY, { damping: 50, stiffness: 400 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+
+      // Relative for parallax
+      mouseX.set((clientX / innerWidth) - 0.5);
+      mouseY.set((clientY / innerHeight) - 0.5);
+
+      // Absolute for spotlight effect
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        absoluteMouseX.set(clientX - rect.left);
+        absoluteMouseY.set(clientY - rect.top);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY, absoluteMouseX, absoluteMouseY]);
+
+  // Spotlight mask for the grid
+  const maskImage = useMotionTemplate`radial-gradient(450px circle at ${absoluteMouseX}px ${absoluteMouseY}px, white, transparent)`;
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: 'spring', stiffness: 100, damping: 12 },
+      filter: 'blur(0px)',
+      transition: { type: 'spring', stiffness: 80, damping: 20 },
     },
   };
 
-  return (
-    <section className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-[90vh]'>
-      {/* Decorative Spheres/Glows */}
-      <div className='absolute top-20 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-[100px] -z-10 animate-pulse'></div>
-      <div
-        className='absolute bottom-20 right-1/4 w-96 h-96 bg-cyan-400/10 rounded-full blur-[120px] -z-10 animate-pulse'
-        style={{ animationDelay: '1s' }}
-      ></div>
-      <div className='absolute top-40 right-[10%] w-32 h-32 bg-purple-500/20 rounded-full blur-[80px] -z-10'></div>
-      <div
-        className='absolute bottom-1/4 left-1/4 w-40 h-40 bg-pink-500/10 rounded-full blur-[90px] -z-10 animate-pulse'
-        style={{ animationDelay: '2s' }}
-      ></div>
+  const icons = [
+    { icon: Code, top: '20%', left: '10%', delay: 0 },
+    { icon: Globe, top: '65%', left: '15%', delay: 0.5 },
+    { icon: Zap, top: '15%', right: '15%', delay: 1 },
+    { icon: Rocket, top: '70%', right: '10%', delay: 1.5 },
+  ];
 
-      <div className='container mx-auto px-4 md:px-6 z-10 relative'>
+  return (
+    <section
+      ref={containerRef}
+      id="home"
+      className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-screen'
+    >
+      {/* Background Grid - Static */}
+      <div className="absolute inset-0 z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}>
+      </div>
+
+      {/* Interactive Spotlight Grid Mask */}
+      <motion.div
+        className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none"
+        style={{
+          maskImage,
+          WebkitMaskImage: maskImage,
+          backgroundImage: `linear-gradient(rgba(6,182,212,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.5) 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}
+      />
+
+      {/* Visual Hook: Interactive Glows */}
+      <motion.div
+        style={{ x: useTransform(smoothX, [-0.5, 0.5], [-50, 50]), y: useTransform(smoothY, [-0.5, 0.5], [-50, 50]) }}
+        className='absolute top-[10%] left-[15%] w-[40rem] h-[40rem] bg-cyan-500/10 rounded-full blur-[120px] -z-10'
+      />
+      <motion.div
+        style={{ x: useTransform(smoothX, [-0.5, 0.5], [50, -50]), y: useTransform(smoothY, [-0.5, 0.5], [50, -50]) }}
+        className='absolute bottom-[10%] right-[10%] w-[50rem] h-[50rem] bg-blue-500/10 rounded-full blur-[150px] -z-10'
+      />
+
+      {/* Floating Abstract Elements */}
+      {icons.map((item, i) => (
         <motion.div
-          className='max-w-4xl mx-auto flex flex-col items-center text-center'
+          key={i}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 0.3, scale: 1 }}
+          transition={{ delay: 1 + item.delay, duration: 2, repeat: Infinity, repeatType: 'reverse' }}
+          className="absolute hidden lg:block text-cyan-500/40"
+          style={{ top: item.top, left: item.left, right: (item as any).right }}
+        >
+          <item.icon size={40} strokeWidth={1} />
+        </motion.div>
+      ))}
+
+      <div className='container mx-auto px-4 md:px-6 z-10 relative flex flex-col items-center justify-center min-h-screen'>
+        <motion.div
+          className='max-w-5xl mx-auto flex flex-col items-center text-center py-20'
           variants={containerVariants}
           initial='hidden'
           animate='visible'
         >
           <motion.div variants={itemVariants}>
-            <div className='inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs md:text-sm font-medium mb-8 backdrop-blur-md'>
-              <span className='relative flex h-2 w-2'>
+            <div className='inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs md:text-sm font-semibold mb-10 backdrop-blur-xl shadow-[0_0_15px_rgba(6,182,212,0.1)]'>
+              <span className='relative flex h-2.5 w-2.5'>
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75'></span>
-                <span className='relative inline-flex rounded-full h-2 w-2 bg-cyan-500'></span>
+                <span className='relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500'></span>
               </span>
-              Available for New Projects
+              Digital Presence Architects
             </div>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className='text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 md:mb-8 leading-[1.1]'
+            className='text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white mb-8 md:mb-10 leading-[0.9] overflow-visible'
           >
-            Website Modern & Cepat untuk
-            <span className='ml-2 md:ml-5 text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500 relative inline-block'>
-              Bisnis
+            Ubah Pengunjung Menjadi{' '}
+            <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 relative inline-block'>
+              Pelanggan
               <motion.span
-                className='absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-cyan-400 to-blue-500 rounded-full'
+                className='absolute -bottom-2 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full shadow-[0_2px_15px_rgba(6,182,212,0.5)]'
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ delay: 1, duration: 0.8, ease: 'easeOut' }}
+                transition={{ delay: 1.2, duration: 1, ease: 'circOut' }}
               />
             </span>{' '}
-            Anda
+            Setia Anda
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className='text-xs md:text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed'
+            className='text-base md:text-xl text-slate-300/80 mb-12 max-w-3xl leading-relaxed font-light'
           >
-            Membantu Anda menghadirkan rumah digital bagi bisnis dan personal
-            branding Anda. Dengan desain modern, performa cepat, dan fitur yang
-            bisa disesuaikan
+            Kami membangun <span className="text-white font-medium">website premium</span> yang memadukan desain modern dengan performa luar biasa untuk memaksimalkan ROI bisnis Anda.
           </motion.p>
 
           <motion.div
             variants={itemVariants}
-            className='flex flex-row gap-3 md:gap-4 mb-16 w-full sm:w-auto justify-center'
+            className='flex flex-col sm:flex-row gap-4 md:gap-6 mb-12 sm:mb-20 w-full sm:w-auto justify-center'
           >
-            <Link href={'/pemesanan'} className='flex-1 sm:w-auto'>
+            <Link href={'/pemesanan'} className='w-full sm:w-auto'>
               <Button
                 size='lg'
-                className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold shadow-md shadow-cyan-500/20 sm:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer w-full rounded-full transition-all hover:scale-105 group/btn border-none whitespace-nowrap'
+                className='px-10 py-7 md:py-8 text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-extrabold shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] cursor-pointer w-full rounded-2xl transition-all hover:scale-[1.03] active:scale-[0.98] group/btn border-none'
               >
-                Pesan Sekarang
+                Mulai Konsultasi Gratis
               </Button>
             </Link>
-            <Link href='#pricing' className='flex-1 sm:w-auto'>
+            <Link href='#pricing' className='w-full sm:w-auto'>
               <Button
                 size='lg'
                 variant='outline'
-                className='px-3 sm:px-8 py-5 md:py-6 text-[12px] sm:text-base w-full cursor-pointer border-white/20 text-white bg-white/5 hover:bg-white/10 hover:text-white rounded-full transition-all backdrop-blur-sm whitespace-nowrap'
+                className='px-10 py-7 md:py-8 text-base w-full cursor-pointer border-white/10 text-white hover:text-white bg-white/5 hover:bg-white/10 hover:border-white/20 rounded-2xl transition-all backdrop-blur-md active:scale-[0.98] font-semibold'
               >
-                Lihat Paket Layanan
+                Lihat Paket & Harga
               </Button>
             </Link>
+          </motion.div>
+
+          {/* Visual Hook: Scrolling Indicator - Now with relative margin to avoid overlap */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2, duration: 1 }}
+            className="flex flex-col items-center gap-3 mt-4 sm:mt-8"
+          >
+            <span className="text-[10px] uppercase tracking-[0.3em] text-cyan-500/60 font-bold font-mono">Scroll Explore</span>
+            <div className="w-[1px] h-12 md:h-20 bg-gradient-to-b from-cyan-500 to-transparent" />
           </motion.div>
         </motion.div>
       </div>
     </section>
   );
 }
+
+

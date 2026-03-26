@@ -117,9 +117,18 @@ export default function Portfolio() {
               {/* Desktop Grid View */}
               <motion.div
                 key='content-desktop'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
+                initial='hidden'
+                whileInView='visible'
+                viewport={{ once: true, margin: '-100px' }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1,
+                    },
+                  },
+                }}
                 className='hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8'
               >
                 {projects.map((project, index) => (
@@ -131,7 +140,8 @@ export default function Portfolio() {
               <motion.div
                 key='content-mobile'
                 initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
                 className='md:hidden flex gap-5 overflow-x-auto snap-x snap-mandatory pb-10 -mx-4 px-4 scrollbar-hide'
               >
@@ -141,6 +151,7 @@ export default function Portfolio() {
                   </div>
                 ))}
               </motion.div>
+
             </>
           )}
         </AnimatePresence>

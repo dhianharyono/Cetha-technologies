@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  variable: '--font-plus-jakarta',
+});
 
 export const metadata: Metadata = {
   title: 'Cetha Technologies | Jasa Pembuatan Website Modern & Cepat',
@@ -18,10 +22,11 @@ export default function RootLayout({
   return (
     <html lang='id' className='scroll-smooth dark'>
       <body
-        className={`${inter.className} antialiased text-slate-50 bg-[#07090E]`}
+        className={`${plusJakartaSans.variable} font-sans antialiased text-slate-50 bg-[#07090E]`}
       >
         {children}
       </body>
     </html>
   );
 }
+

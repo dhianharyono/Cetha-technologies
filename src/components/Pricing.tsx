@@ -117,10 +117,19 @@ export default function Pricing() {
               {/* Desktop Grid View */}
               <motion.div
                 key='content-desktop'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className='hidden lg:grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto'
+                initial='hidden'
+                whileInView='visible'
+                viewport={{ once: true, margin: '-100px' }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1,
+                    },
+                  },
+                }}
+                className='hidden lg:grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-center'
               >
                 {plans.map((plan, index) => (
                   <PricingCard key={plan.name} plan={plan} index={index} />
@@ -131,7 +140,8 @@ export default function Pricing() {
               <motion.div
                 key='content-mobile'
                 initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
                 className='lg:hidden flex gap-5 overflow-x-auto snap-x snap-mandatory pb-10 -mx-4 px-4 scrollbar-hide'
               >
@@ -147,6 +157,7 @@ export default function Pricing() {
             </>
           )}
         </AnimatePresence>
+
       </div>
     </section>
   );
@@ -188,13 +199,16 @@ function PricingCard({
           </div>
         )}
 
-        <CardHeader className='pt-10 pb-8 px-8'>
+        <CardHeader className='pt-12 pb-8 px-8 relative overflow-hidden'>
+          {plan.popular && (
+            <div className='absolute -right-8 -top-8 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl animate-pulse'></div>
+          )}
           <CardTitle
-            className={`text-xl font-bold mb-2 ${plan.popular ? 'text-cyan-400' : 'text-white'}`}
+            className={`text-xl md:text-2xl font-black mb-4 tracking-tight ${plan.popular ? 'text-cyan-400' : 'text-white'}`}
           >
             {plan.name}
           </CardTitle>
-          <div className='flex flex-col mb-4'>
+          <div className='flex flex-col mb-6'>
             {plan.originalPrice && (
               <div className='text-slate-500 line-through text-sm font-medium mb-1'>
                 {plan.originalPrice}
@@ -202,16 +216,17 @@ function PricingCard({
             )}
             <div className='flex items-baseline gap-1'>
               <div
-                className={`text-3xl md:text-5xl font-black tracking-tight ${plan.popular ? 'text-white' : 'text-white'}`}
+                className={`text-4xl md:text-6xl font-black tracking-tighter ${plan.popular ? 'text-white' : 'text-white'}`}
               >
                 {plan.price}
               </div>
             </div>
           </div>
-          <CardDescription className='text-slate-400 text-xs md:text-sm leading-relaxed'>
+          <CardDescription className='text-slate-400 text-sm md:text-base leading-relaxed font-light'>
             {plan.description}
           </CardDescription>
         </CardHeader>
+
 
         <CardContent className='flex-1 px-8 pb-10'>
           <ul className='space-y-4'>
