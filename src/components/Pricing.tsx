@@ -218,10 +218,10 @@ function PricingCard({
             {plan.features?.map((feature: string) => (
               <li
                 key={feature}
-                className='flex items-start gap-3 text-xs md:text-sm text-slate-300'
+                className='flex gap-3 text-xs md:text-sm text-slate-300 items-center'
               >
                 <div
-                  className={`mt-1 rounded-full p-0.5 ${plan.popular ? 'bg-cyan-500/20' : 'bg-white/5'}`}
+                  className={`rounded-full p-0.5 ${plan.popular ? 'bg-cyan-500/20' : 'bg-white/5'}`}
                 >
                   <Check
                     className={`w-3.5 h-3.5 ${plan.popular ? 'text-cyan-400' : 'text-slate-400'}`}
