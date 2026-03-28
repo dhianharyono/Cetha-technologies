@@ -33,7 +33,7 @@ const PortfolioSkeleton = () => (
   <>
     {/* Desktop Skeleton */}
     <div className='hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-      {[1, 2, 3, 4, 5, 6].map((i) => (
+      {[1, 2, 3].map((i) => (
         <PortfolioSkeletonContent key={i} />
       ))}
     </div>
@@ -151,7 +151,6 @@ export default function Portfolio() {
                   </div>
                 ))}
               </motion.div>
-
             </>
           )}
         </AnimatePresence>

@@ -20,7 +20,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Home', href: '#home' },
-    { name: 'Layanan', href: '#services' },
+    { name: 'Mulai Layanan', href: '#process' },
     { name: 'Portofolio', href: '#portfolio' },
     { name: 'Harga', href: '#pricing' },
     { name: 'FAQ', href: '#faq' },

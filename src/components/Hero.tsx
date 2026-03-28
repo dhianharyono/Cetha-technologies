@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { motion, Variants, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
+import {
+  motion,
+  Variants,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  useMotionTemplate,
+} from 'framer-motion';
 import { useRef, useEffect } from 'react';
 import { Code, Rocket, Zap, Globe } from 'lucide-react';
 
@@ -27,8 +35,8 @@ export default function Hero() {
       const { innerWidth, innerHeight } = window;
 
       // Relative for parallax
-      mouseX.set((clientX / innerWidth) - 0.5);
-      mouseY.set((clientY / innerHeight) - 0.5);
+      mouseX.set(clientX / innerWidth - 0.5);
+      mouseY.set(clientY / innerHeight - 0.5);
 
       // Absolute for spotlight effect
       if (containerRef.current) {
@@ -76,35 +84,42 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      id="home"
+      id='home'
       className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-screen'
     >
       {/* Background Grid - Static */}
-      <div className="absolute inset-0 z-0 opacity-[0.03]"
+      <div
+        className='absolute inset-0 z-0 opacity-[0.03]'
         style={{
           backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
-        }}>
-      </div>
+          backgroundSize: '50px 50px',
+        }}
+      ></div>
 
       {/* Interactive Spotlight Grid Mask */}
       <motion.div
-        className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none"
+        className='absolute inset-0 z-0 opacity-[0.15] pointer-events-none'
         style={{
           maskImage,
           WebkitMaskImage: maskImage,
           backgroundImage: `linear-gradient(rgba(6,182,212,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.5) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
+          backgroundSize: '50px 50px',
         }}
       />
 
       {/* Visual Hook: Interactive Glows */}
       <motion.div
-        style={{ x: useTransform(smoothX, [-0.5, 0.5], [-50, 50]), y: useTransform(smoothY, [-0.5, 0.5], [-50, 50]) }}
+        style={{
+          x: useTransform(smoothX, [-0.5, 0.5], [-50, 50]),
+          y: useTransform(smoothY, [-0.5, 0.5], [-50, 50]),
+        }}
         className='absolute top-[10%] left-[15%] w-[40rem] h-[40rem] bg-cyan-500/10 rounded-full blur-[120px] -z-10'
       />
       <motion.div
-        style={{ x: useTransform(smoothX, [-0.5, 0.5], [50, -50]), y: useTransform(smoothY, [-0.5, 0.5], [50, -50]) }}
+        style={{
+          x: useTransform(smoothX, [-0.5, 0.5], [50, -50]),
+          y: useTransform(smoothY, [-0.5, 0.5], [50, -50]),
+        }}
         className='absolute bottom-[10%] right-[10%] w-[50rem] h-[50rem] bg-blue-500/10 rounded-full blur-[150px] -z-10'
       />
 
@@ -114,8 +129,13 @@ export default function Hero() {
           key={i}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 0.3, scale: 1 }}
-          transition={{ delay: 1 + item.delay, duration: 2, repeat: Infinity, repeatType: 'reverse' }}
-          className="absolute hidden lg:block text-cyan-500/40"
+          transition={{
+            delay: 1 + item.delay,
+            duration: 2,
+            repeat: Infinity,
+            repeatType: 'reverse',
+          }}
+          className='absolute hidden lg:block text-cyan-500/40'
           style={{ top: item.top, left: item.left, right: (item as any).right }}
         >
           <item.icon size={40} strokeWidth={1} />
@@ -144,14 +164,8 @@ export default function Hero() {
             className='text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white mb-8 md:mb-10 leading-[0.9] overflow-visible'
           >
             Ubah Pengunjung Menjadi{' '}
-            <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 relative inline-block'>
+            <span className=' bg-clip-text bg-gradient-to-r from-cyan-400 text-blue-500 via-blue-500 to-indigo-600 relative inline-block'>
               Pelanggan
-              <motion.span
-                className='absolute -bottom-2 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full shadow-[0_2px_15px_rgba(6,182,212,0.5)]'
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 1.2, duration: 1, ease: 'circOut' }}
-              />
             </span>{' '}
             Setia Anda
           </motion.h1>
@@ -160,7 +174,10 @@ export default function Hero() {
             variants={itemVariants}
             className='text-base md:text-xl text-slate-300/80 mb-12 max-w-3xl leading-relaxed font-light'
           >
-            Kami membangun <span className="text-white font-medium">website premium</span> yang memadukan desain modern dengan performa luar biasa untuk memaksimalkan ROI bisnis Anda.
+            Kami membangun{' '}
+            <span className='text-white font-medium'>website premium</span> yang
+            memadukan desain modern dengan performa luar biasa untuk
+            memaksimalkan ROI bisnis Anda.
           </motion.p>
 
           <motion.div
@@ -172,7 +189,7 @@ export default function Hero() {
                 size='lg'
                 className='px-10 py-7 md:py-8 text-base bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-extrabold shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] cursor-pointer w-full rounded-2xl transition-all hover:scale-[1.03] active:scale-[0.98] group/btn border-none'
               >
-                Mulai Konsultasi Gratis
+                Pesan Sekarang
               </Button>
             </Link>
             <Link href='#pricing' className='w-full sm:w-auto'>
@@ -191,15 +208,15 @@ export default function Hero() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2, duration: 1 }}
-            className="flex flex-col items-center gap-3 mt-4 sm:mt-8"
+            className='flex flex-col items-center gap-3 mt-4 sm:mt-8'
           >
-            <span className="text-[10px] uppercase tracking-[0.3em] text-cyan-500/60 font-bold font-mono">Scroll Explore</span>
-            <div className="w-[1px] h-12 md:h-20 bg-gradient-to-b from-cyan-500 to-transparent" />
+            <span className='text-[10px] uppercase tracking-[0.3em] text-cyan-500/60 font-bold font-mono'>
+              Scroll Explore
+            </span>
+            <div className='w-[1px] h-12 md:h-20 bg-gradient-to-b from-cyan-500 to-transparent' />
           </motion.div>
         </motion.div>
       </div>
     </section>
   );
 }
-
-
