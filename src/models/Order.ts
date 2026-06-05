@@ -7,6 +7,7 @@ export interface IOrder extends Document {
     deskripsiSingkat: string;
     kategoriKebutuhan: string;
     pilihanKebutuhan: string;
+    deskripsiFitur?: string;
     sudahDomain: string;
     namaDomain?: string;
     referensiDesain?: string;
@@ -28,6 +29,7 @@ const OrderSchema: Schema = new Schema(
         deskripsiSingkat: { type: String, required: true },
         kategoriKebutuhan: { type: String, required: true },
         pilihanKebutuhan: { type: String, required: true },
+        deskripsiFitur: { type: String },
         sudahDomain: { type: String, required: true },
         namaDomain: { type: String },
         referensiDesain: { type: String },

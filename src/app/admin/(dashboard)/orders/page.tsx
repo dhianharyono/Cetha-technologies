@@ -10,7 +10,7 @@ import {
 import { useToast } from '@/components/admin/ToastProvider';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import OrderDetailModal from '@/components/admin/OrderDetailModal';
-import { Trash2, RefreshCcw, Eye, Edit2 } from 'lucide-react';
+import { Trash2, RefreshCcw, Eye, Edit2, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { IOrder } from '@/types';
@@ -246,6 +246,15 @@ export default function OrdersPage() {
                         >
                           <Eye className='w-4 h-4' />
                         </button>
+                        <a
+                          href={`/lacak-pesanan?id=${order._id}`}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center justify-center'
+                          title='Cek Tampilan Lacak Pesanan'
+                        >
+                          <ExternalLink className='w-4 h-4' />
+                        </a>
                         <button
                           onClick={() => {
                             setSelectedOrder(order);

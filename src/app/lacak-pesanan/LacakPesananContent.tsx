@@ -111,12 +111,16 @@ export default function LacakPesananContent() {
       desc: 'Koding front-end, integrasi basis data, pengoptimalan performa, dan pengujian internal.',
       icon: Code2
     },
-    {
-      index: 4,
-      title: 'Tahap Revisi',
-      desc: 'Peninjauan hasil website, penyempurnaan fitur, dan penyesuaian berdasarkan masukan Anda.',
-      icon: RefreshCw
-    },
+    ...(order?.currentStep && order.currentStep >= 4
+      ? [
+          {
+            index: 4,
+            title: 'Tahap Revisi',
+            desc: 'Peninjauan hasil website, penyempurnaan fitur, dan penyesuaian berdasarkan masukan Anda.',
+            icon: RefreshCw
+          }
+        ]
+      : []),
     {
       index: 5,
       title: 'Selesai & Go Live',
@@ -349,6 +353,14 @@ export default function LacakPesananContent() {
                       <span className="text-xs text-slate-400 block mt-1 leading-relaxed bg-[#0B101C]/50 border border-white/5 p-2 rounded-lg">
                         {order.pilihanKebutuhan}
                       </span>
+                      {order.deskripsiFitur && (
+                        <div className="mt-2">
+                          <span className="text-[11px] text-slate-500 block mb-0.5 font-medium">Deskripsi Fitur yang Diinginkan</span>
+                          <p className="text-slate-300 text-xs leading-relaxed bg-[#0B101C]/50 border border-white/5 p-3 rounded-xl whitespace-pre-wrap">
+                            {order.deskripsiFitur}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
 

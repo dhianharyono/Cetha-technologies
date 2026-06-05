@@ -57,6 +57,7 @@ function PemesananFormContent() {
       deskripsiSingkat: '',
       kategoriKebutuhan: kategori,
       pilihanKebutuhan: pilihan,
+      deskripsiFitur: '',
       sudahDomain: 'Belum',
       namaDomain: '',
       referensiDesain: '',
@@ -217,12 +218,14 @@ function PemesananFormContent() {
                       ...prev,
                       kategoriKebutuhan: 'Portofolio',
                       pilihanKebutuhan: '',
+                      deskripsiFitur: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Portofolio'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Portofolio'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Portofolio
@@ -260,12 +263,14 @@ function PemesananFormContent() {
                       ...prev,
                       kategoriKebutuhan: 'Website Usaha',
                       pilihanKebutuhan: '',
+                      deskripsiFitur: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Website Usaha'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Website Usaha'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Website Usaha
@@ -306,12 +311,14 @@ function PemesananFormContent() {
                       ...prev,
                       kategoriKebutuhan: 'Custom',
                       pilihanKebutuhan: '',
+                      deskripsiFitur: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Custom'
-                    ? 'border-cyan-500 bg-cyan-500/10'
-                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                    }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
+                    formData.kategoriKebutuhan === 'Custom'
+                      ? 'border-cyan-500 bg-cyan-500/10'
+                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                  }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Custom
@@ -395,6 +402,27 @@ function PemesananFormContent() {
                       </div>
                     </label>
                   </div>
+                  {formData.pilihanKebutuhan && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className='mt-6'
+                    >
+                      <label className='block text-sm font-medium text-slate-300 mb-2'>
+                        Deskripsi Fitur yang Diinginkan{' '}
+                        <span className='text-red-400'>*</span>
+                      </label>
+                      <textarea
+                        required
+                        name='deskripsiFitur'
+                        value={formData.deskripsiFitur}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder='Tuliskan detail fitur spesifik yang Anda inginkan (misal: "Saya ingin galeri karya saya memiliki efek zoom", dsb.)'
+                        className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors resize-none shadow-inner'
+                      />
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
 
@@ -424,14 +452,15 @@ function PemesananFormContent() {
                       />
                       <div>
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
-                          Company Profile Modern + Dashboard Admin {' '}
+                          Company Profile Modern + Dashboard Admin{' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
                             (2,5 Jt)
                           </span>
                         </span>
                         <p className='text-xs text-slate-400 mt-1 leading-relaxed'>
                           Menampilkan informasi perusahaan ditambah akses
-                          Dashboard Admin untuk mengelola data dasar website Anda.
+                          Dashboard Admin untuk mengelola data dasar website
+                          Anda.
                         </p>
                       </div>
                     </label>
@@ -450,7 +479,8 @@ function PemesananFormContent() {
                       />
                       <div>
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
-                          Katalog Produk/Layanan + Kelola Pesanan + Dashboard Admin{' '}
+                          Katalog Produk/Layanan + Kelola Pesanan + Dashboard
+                          Admin{' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
                             (3 Jt)
                           </span>
@@ -462,6 +492,27 @@ function PemesananFormContent() {
                       </div>
                     </label>
                   </div>
+                  {formData.pilihanKebutuhan && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className='mt-6'
+                    >
+                      <label className='block text-sm font-medium text-slate-300 mb-2'>
+                        Deskripsi Fitur yang Diinginkan{' '}
+                        <span className='text-red-400'>*</span>
+                      </label>
+                      <textarea
+                        required
+                        name='deskripsiFitur'
+                        value={formData.deskripsiFitur}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder='Tuliskan detail fitur spesifik yang Anda inginkan (misal: "Saya ingin ada fitur pesanan, dashboard admin, cek status pesanan", dsb.)'
+                        className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors resize-none shadow-inner'
+                      />
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
 
@@ -516,7 +567,8 @@ function PemesananFormContent() {
               </div>
               <div>
                 <label className='block text-sm font-medium text-slate-300 mb-2'>
-                  Tuliskan domain yang Anda inginkan (seperti .com / .id) <span className='text-red-400'>*</span>
+                  Tuliskan domain yang Anda inginkan (seperti .com / .id){' '}
+                  <span className='text-red-400'>*</span>
                 </label>
                 <input
                   required
@@ -530,7 +582,8 @@ function PemesananFormContent() {
               </div>
               <div className='pt-2'>
                 <label className='block text-sm font-medium text-slate-300 mb-2'>
-                  Referensi Design / Website (Minimal 2-3 untuk benchmark desain) <span className='text-red-400'>*</span>
+                  Referensi Design / Website (Minimal 2-3 untuk benchmark
+                  desain) <span className='text-red-400'>*</span>
                 </label>
                 <textarea
                   required
@@ -621,7 +674,8 @@ function PemesananFormContent() {
             </CardHeader>
             <CardContent>
               <label className='block text-xs md:text-sm font-medium text-slate-300 mb-2'>
-                Tautan / URL Folder GDrive (Logo PNG, Foto Produk/Tim, dsb) <span className='text-red-400'>*</span>
+                Tautan / URL Folder GDrive (Logo PNG, Foto Produk/Tim, dsb){' '}
+                <span className='text-red-400'>*</span>
               </label>
               <input
                 required
@@ -641,17 +695,19 @@ function PemesananFormContent() {
 
           {successMsg && (
             <div className='p-4 mb-4 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center font-medium'>
-              Pesanan berhasil dikirim! Silakan salin ID Pelacakan Anda pada popup yang muncul.
+              Pesanan berhasil dikirim! Silakan salin ID Pelacakan Anda pada
+              popup yang muncul.
             </div>
           )}
 
           <Button
             type='submit'
             disabled={isSubmitting || successMsg}
-            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-xs md:text-md transition-all ${isSubmitting || successMsg
-              ? 'bg-cyan-500/50 cursor-not-allowed'
-              : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
-              }`}
+            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-xs md:text-md transition-all ${
+              isSubmitting || successMsg
+                ? 'bg-cyan-500/50 cursor-not-allowed'
+                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
+            }`}
           >
             {isSubmitting
               ? 'Mengirim Data...'

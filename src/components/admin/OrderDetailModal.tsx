@@ -22,6 +22,107 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { IOrder } from '@/types';
 
+const renderValue = (val: string | undefined, fieldName: keyof IOrder) => {
+  if (!val) return <span className='text-slate-600 italic'>Tidak data</span>;
+  
+  if (fieldName === 'nomorWa') {
+    return (
+      <span className='inline-flex items-center gap-1'>
+        {val}
+        <a
+          href={`https://wa.me/${val.replace(/\D/g, '')}`}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='text-cyan-400 hover:text-cyan-300 inline-flex items-center align-middle'
+        >
+          <ExternalLink className='w-3 h-3 ml-1' />
+        </a>
+      </span>
+    );
+  }
+
+  if (fieldName === 'linkIg') {
+    return (
+      <span className='inline-flex items-center gap-1'>
+        {val}
+        <a
+          href={val.startsWith('http') ? val : `https://instagram.com/${val.replace('@', '')}`}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='text-pink-400 hover:text-pink-300 inline-flex items-center align-middle'
+        >
+          <ExternalLink className='w-3 h-3 ml-1' />
+        </a>
+      </span>
+    );
+  }
+
+  // Regex to check and parse URLs within normal text (e.g. referensiDesain or linkMateriVisual)
+  const urlRegex = /(https?:\/\/[^\s,]+)/g;
+  const parts = val.split(urlRegex);
+  
+  if (parts.length > 1) {
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={i}
+            href={part}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5 break-all font-semibold'
+          >
+            {part}
+            <ExternalLink className='w-3 h-3 shrink-0' />
+          </a>
+        );
+      }
+      return part;
+    });
+  }
+  
+  // Fallback for strings that are just domains without http/https protocol (e.g. www.google.com or example.com)
+  if (/^(www\.|[a-zA-Z0-9-]+\.)[a-zA-Z0-9-]+\.[a-z]{2,}/.test(val)) {
+    const href = val.startsWith('http') ? val : `https://${val}`;
+    return (
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5 break-all font-semibold'
+      >
+        {val}
+        <ExternalLink className='w-3 h-3 shrink-0' />
+      </a>
+    );
+  }
+
+  return val;
+};
+
+const getPaketPrice = (paket: string) => {
+  switch (paket) {
+    case 'Portofolio Standar':
+      return 'Rp 1.500.000 (1,5 Jt)';
+    case 'Portofolio Lengkap':
+      return 'Rp 2.000.000 (2 Jt)';
+    case 'Portofolio':
+      return 'Rp 2.000.000 (2 Jt)';
+    case 'Company Profile':
+      return 'Rp 2.500.000 (2,5 Jt)';
+    case 'Katalog Produk':
+      return 'Rp 3.000.000 (3 Jt)';
+    case 'Website Usaha':
+      return 'Rp 3.000.000 (3 Jt)';
+    case 'Custom':
+      return 'Sesuai Fitur (Up to 5 Jt)';
+    case 'Enterprise':
+      return 'Custom (Sesuai Kesepakatan)';
+    default:
+      return 'Sesuai Kesepakatan';
+  }
+};
+
 interface OrderDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -131,31 +232,9 @@ export default function OrderDetailModal({
           <Icon className='w-3 h-3' />
           {label}
         </span>
-        <p className='text-sm text-white font-medium wrap-break-word'>
-          {value || <span className='text-slate-600 italic'>Tidak data</span>}
-          {name === 'nomorWa' && value && (
-            <a
-              href={`https://wa.me/${value.replace(/\D/g, '')}`}
-              target='_blank'
-              className='inline-flex ml-2 text-cyan-400 hover:text-cyan-300'
-            >
-              <ExternalLink className='w-3 h-3' />
-            </a>
-          )}
-          {name === 'linkIg' && value && (
-            <a
-              href={
-                value.startsWith('http')
-                  ? value
-                  : `https://instagram.com/${value.replace('@', '')}`
-              }
-              target='_blank'
-              className='inline-flex ml-2 text-pink-400 hover:text-pink-300'
-            >
-              <ExternalLink className='w-3 h-3' />
-            </a>
-          )}
-        </p>
+        <div className='text-sm text-white font-medium wrap-break-word whitespace-pre-wrap'>
+          {renderValue(value, name)}
+        </div>
       </div>
     );
   };
@@ -199,15 +278,28 @@ export default function OrderDetailModal({
                     {order.status}
                   </span>
                 </h2>
-                <p className='text-xs text-slate-400 mt-1'>
-                  ID: {order._id} •{' '}
-                  {format(
-                    new Date(order.createdAt || new Date()),
-                    'dd MMMM yyyy HH:mm',
-                    {
-                      locale: id,
-                    },
-                  )}
+                <p className='text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5'>
+                  <span>ID: {order._id}</span>
+                  <span>•</span>
+                  <a
+                    href={`/lacak-pesanan?id=${order._id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5'
+                  >
+                    Lacak Pesanan
+                    <ExternalLink className='w-3 h-3' />
+                  </a>
+                  <span>•</span>
+                  <span>
+                    {format(
+                      new Date(order.createdAt || new Date()),
+                      'dd MMMM yyyy HH:mm',
+                      {
+                        locale: id,
+                      },
+                    )}
+                  </span>
                 </p>
               </div>
               <button
@@ -237,7 +329,7 @@ export default function OrderDetailModal({
                   <DetailItem
                     icon={Briefcase}
                     label='Paket Dipilih'
-                    value={order.paket}
+                    value={order.paket ? `${order.paket} - ${getPaketPrice(order.paket)}` : ''}
                     name='paket'
                   />
                   <DetailItem
@@ -277,6 +369,15 @@ export default function OrderDetailModal({
                       value={order.pilihanKebutuhan}
                       name='pilihanKebutuhan'
                     />
+                    <div className='md:col-span-2'>
+                      <DetailItem
+                        icon={FileText}
+                        label='Deskripsi Fitur yang Diinginkan'
+                        value={order.deskripsiFitur}
+                        name='deskripsiFitur'
+                        type='textarea'
+                      />
+                    </div>
                     <DetailItem
                       icon={Globe}
                       label='Sudah Punya Domain?'

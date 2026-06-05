@@ -36,6 +36,7 @@ export interface IOrder {
     sudahDomain: string;
     namaDomain?: string;
     referensiDesain?: string;
+    deskripsiFitur?: string;
     nomorWa: string;
     email?: string;
     linkIg?: string;
