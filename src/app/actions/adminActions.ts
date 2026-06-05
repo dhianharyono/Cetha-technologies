@@ -4,8 +4,9 @@ import connectToDatabase from '@/lib/db';
 import Order from '@/models/Order';
 import Portfolio from '@/models/Portfolio';
 import Package from '@/models/Package';
+import Testimonial from '@/models/Testimonial';
 import { revalidatePath } from 'next/cache';
-import { IPortfolio, IPackage, IOrder, IDashboardStats } from '@/types';
+import { IPortfolio, IPackage, IOrder, IDashboardStats, ITestimonial } from '@/types';
 
 // --- DASHBOARD ---
 export async function getDashboardStats(): Promise<IDashboardStats> {
@@ -148,5 +149,31 @@ export async function togglePackageVisibility(id: string, isHidden: boolean) {
     await connectToDatabase();
     await Package.findByIdAndUpdate(id, { isHidden });
     revalidatePath('/admin/packages');
+    revalidatePath('/');
+}
+
+// --- TESTIMONIAL ACTIONS ---
+export async function getTestimonials(): Promise<ITestimonial[]> {
+    try {
+        const conn = await connectToDatabase();
+        if (!conn) return [];
+        const testimonials = await Testimonial.find().sort({ createdAt: -1 }).lean();
+        return JSON.parse(JSON.stringify(testimonials));
+    } catch {
+        return [];
+    }
+}
+
+export async function toggleTestimonialVisibility(id: string, isVisible: boolean) {
+    await connectToDatabase();
+    await Testimonial.findByIdAndUpdate(id, { isVisible });
+    revalidatePath('/admin/testimonials');
+    revalidatePath('/');
+}
+
+export async function deleteTestimonial(id: string) {
+    await connectToDatabase();
+    await Testimonial.findByIdAndDelete(id);
+    revalidatePath('/admin/testimonials');
     revalidatePath('/');
 }

@@ -11,6 +11,7 @@ import {
   PackageSearch,
   LogOut,
   ChevronRight,
+  MessageSquare,
 } from 'lucide-react';
 import { useToast } from './ToastProvider';
 import ConfirmModal from './ConfirmModal';
@@ -21,6 +22,7 @@ const menuItems = [
   { name: 'Pemesanan', icon: ShoppingCart, path: '/admin/orders' },
   { name: 'Portofolio', icon: ImageIcon, path: '/admin/portfolio' },
   { name: 'Paket Layanan', icon: PackageSearch, path: '/admin/packages' },
+  { name: 'Testimoni', icon: MessageSquare, path: '/admin/testimonials' },
 ];
 
 export default function Sidebar() {

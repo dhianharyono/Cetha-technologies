@@ -60,3 +60,16 @@ export interface IDashboardStats {
         packages: Array<{ _id: string; count: number }>;
     };
 }
+
+export interface ITestimonial {
+    _id?: string;
+    orderId: string;
+    namaKlien: string;
+    namaUsaha: string;
+    rating: number;
+    ulasan: string;
+    avatarUrl?: string;
+    isVisible: boolean;
+    createdAt?: string | Date;
+    updatedAt?: string | Date;
+}

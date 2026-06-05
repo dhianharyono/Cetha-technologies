@@ -16,6 +16,7 @@ import {
 import { format } from 'date-fns';
 import { id as localeId } from 'date-fns/locale';
 import { IOrder } from '@/types';
+import { submitTestimonial } from '@/app/actions/userActions';
 
 const getDpAmount = (paket: string) => {
   switch (paket) {
@@ -51,6 +52,14 @@ export default function LacakPesananContent() {
   const [paymentFileBase64, setPaymentFileBase64] = useState('');
   const [isUploadingPayment, setIsUploadingPayment] = useState(false);
   const [uploadError, setUploadError] = useState('');
+
+  // Testimonial states
+  const [testimonialRating, setTestimonialRating] = useState(5);
+  const [testimonialUlasan, setTestimonialUlasan] = useState('');
+  const [testimonialAvatar, setTestimonialAvatar] = useState('');
+  const [isSubmittingTestimonial, setIsSubmittingTestimonial] = useState(false);
+  const [testimonialSubmitted, setTestimonialSubmitted] = useState(false);
+  const [testimonialError, setTestimonialError] = useState('');
 
   const handlePaymentFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -91,6 +100,51 @@ export default function LacakPesananContent() {
       setUploadError('Terjadi kesalahan jaringan.');
     } finally {
       setIsUploadingPayment(false);
+    }
+  };
+
+  const handleTestimonialAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setTestimonialError('');
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setTestimonialError('Ukuran file maksimal adalah 2MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTestimonialAvatar(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTestimonialSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!order?._id) return;
+    setIsSubmittingTestimonial(true);
+    setTestimonialError('');
+    
+    try {
+      const res = await submitTestimonial({
+        orderId: order._id,
+        namaKlien: order.namaUsaha || 'Klien Cetha',
+        namaUsaha: order.namaUsaha || '',
+        rating: testimonialRating,
+        ulasan: testimonialUlasan,
+        avatarUrl: testimonialAvatar || undefined,
+        isVisible: false
+      });
+
+      if (res.success) {
+        setTestimonialSubmitted(true);
+      } else {
+        setTestimonialError(res.error || 'Gagal mengirim testimoni.');
+      }
+    } catch {
+      setTestimonialError('Terjadi kesalahan sistem. Silakan coba lagi.');
+    } finally {
+      setIsSubmittingTestimonial(false);
     }
   };
 
@@ -608,6 +662,122 @@ export default function LacakPesananContent() {
                   </div>
                 </div>
               </div>
+
+              {/* Testimonial Form (Only visible when Step 5 / Selesai & Go Live) */}
+              {(order.currentStep === 5 || order.status === 'Selesai') && (
+                <div className="bg-[#131826]/80 backdrop-blur-xl border border-cyan-500/20 rounded-3xl p-5 sm:p-8 shadow-xl space-y-6 relative overflow-hidden text-left">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none" />
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-2xl">
+                      <MessageSquare className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Bagikan Pengalaman Anda</h3>
+                      <p className="text-slate-400 text-xs">Testimoni Anda sangat berharga bagi kami untuk terus meningkatkan kualitas pelayanan.</p>
+                    </div>
+                  </div>
+
+                  {testimonialSubmitted ? (
+                    <div className="p-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-center space-y-3">
+                      <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+                      <h4 className="text-white font-bold text-base">Terima Kasih Atas Testimoni Anda!</h4>
+                      <p className="text-slate-400 text-xs max-w-md mx-auto leading-relaxed">
+                        Ulasan Anda telah tersimpan dan akan ditinjau oleh tim admin sebelum ditampilkan ke landing page utama.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleTestimonialSubmit} className="space-y-5">
+                      {testimonialError && (
+                        <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs">
+                          {testimonialError}
+                        </div>
+                      )}
+
+                      {/* Star Rating */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Rating Kepuasan</label>
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setTestimonialRating(star)}
+                              className="focus:outline-none transition-transform hover:scale-110 cursor-pointer"
+                            >
+                              <svg
+                                className={`w-8 h-8 ${star <= testimonialRating ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                              </svg>
+                            </button>
+                          ))}
+                          <span className="text-xs text-slate-400 font-bold ml-2">
+                            {testimonialRating === 5 ? 'Sangat Puas' :
+                             testimonialRating === 4 ? 'Puas' :
+                             testimonialRating === 3 ? 'Cukup Puas' :
+                             testimonialRating === 2 ? 'Kurang Puas' : 'Sangat Kecewa'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Ulasan Teks */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Ulasan / Testimoni Anda</label>
+                        <textarea
+                          required
+                          value={testimonialUlasan}
+                          onChange={(e) => setTestimonialUlasan(e.target.value)}
+                          placeholder="Ceritakan pengalaman Anda bekerja sama dengan Cetha Technologies..."
+                          rows={4}
+                          className="w-full bg-[#0B101C]/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-colors resize-none"
+                        />
+                      </div>
+
+                      {/* Avatar / Logo Upload */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Foto Profil / Logo Usaha (Opsional)</label>
+                        <div className="flex items-center gap-4">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleTestimonialAvatarChange}
+                            className="text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 file:cursor-pointer transition-colors bg-[#0B101C]/50 border border-white/10 rounded-xl p-2 outline-none flex-1"
+                          />
+                          {testimonialAvatar && (
+                            <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                              <img src={testimonialAvatar} alt="Preview Avatar" className="w-full h-full object-cover" />
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-500 block">Format gambar JPG/PNG, ukuran maks. 2MB. Jika dikosongkan, kami akan menggunakan inisial nama Anda.</span>
+                      </div>
+
+                      {/* Submit Button */}
+                      <Button
+                        type="submit"
+                        disabled={isSubmittingTestimonial}
+                        className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-6 rounded-2xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      >
+                        {isSubmittingTestimonial ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Mengirimkan...
+                          </>
+                        ) : (
+                          'Kirim Testimoni'
+                        )}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              )}
 
               {/* Help & Support CTA */}
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/5 border border-cyan-500/20 rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-md">

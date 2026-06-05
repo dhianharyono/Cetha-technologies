@@ -26,9 +26,25 @@ const formatWhatsAppNumber = (num: string) => {
 const getWhatsAppLink = (order: IOrder) => {
   const num = order.nomorWa || '';
   const cleaned = formatWhatsAppNumber(num);
-  
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://cethatechnologies.com';
-  const templateMsg = `Halo Kak *${order.namaUsaha}*,
+  
+  let templateMsg = '';
+  
+  if (order.currentStep === 5 || order.status === 'Selesai') {
+    templateMsg = `Halo Kak *${order.namaUsaha}*,
+
+Kami dari *Cetha Technologies* ingin mengucapkan terima kasih yang sebesar-besarnya atas kepercayaan Anda menggunakan layanan kami untuk pembuatan website Anda.
+
+Website Anda saat ini sudah selesai dan online (live)! 🎉
+
+Sebagai bentuk peningkatan kualitas layanan kami, kami akan sangat menghargai jika Anda bersedia meluangkan waktu 1-2 menit untuk memberikan ulasan/testimoni singkat mengenai pengalaman Anda bekerja sama dengan kami.
+
+Anda dapat mengisi testimoni secara langsung melalui tautan pelacakan resmi Anda berikut ini:
+${origin}/lacak-pesanan?id=${order._id}
+
+Terima kasih banyak atas kerja samanya, semoga website baru ini dapat membantu menyukseskan bisnis Anda!`;
+  } else {
+    templateMsg = `Halo Kak *${order.namaUsaha}*,
 
 Kami dari *Cetha Technologies* ingin mengonfirmasi pesanan website Anda.
 
@@ -41,6 +57,7 @@ Anda dapat memantau progres pengerjaan website secara real-time dan mengunggah b
 ${origin}/lacak-pesanan?id=${order._id}
 
 Jika ada pertanyaan atau butuh bantuan lebih lanjut, silakan hubungi kami kembali. Terima kasih!`;
+  }
 
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(templateMsg)}`;
 };
@@ -156,7 +173,7 @@ export default function OrdersPage() {
                 <th className='px-6 py-4'>Kategori</th>
                 <th className='px-6 py-4'>Tanggal Order</th>
                 <th className='px-6 py-4'>Status</th>
-                <th className='px-6 py-4'>Langkah Progres</th>
+                <th className='px-6 py-4'>Progres</th>
                 <th className='px-6 py-4 text-right'>Aksi</th>
               </tr>
             </thead>
