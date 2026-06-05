@@ -185,11 +185,10 @@ function PricingCard({
       className='h-full'
     >
       <Card
-        className={`h-full relative flex flex-col transition-all duration-500 rounded-3xl overflow-hidden group ${
-          plan.popular
-            ? 'bg-linear-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
-            : 'bg-[#131826]/60 backdrop-blur-xl border-white/5 hover:border-white/10 hover:-translate-y-2'
-        }`}
+        className={`h-full relative flex flex-col transition-all duration-500 rounded-3xl overflow-hidden group ${plan.popular
+          ? 'bg-linear-to-b from-[#182136] to-[#0B101C] border-cyan-500/40 shadow-2xl shadow-cyan-500/10 scale-100 lg:scale-105 z-10'
+          : 'bg-[#131826]/60 backdrop-blur-xl border-white/5 hover:border-white/10 hover:-translate-y-2'
+          }`}
       >
         {plan.popular && (
           <div className='absolute top-0 right-0'>
@@ -210,8 +209,13 @@ function PricingCard({
           </CardTitle>
           <div className='flex flex-col mb-6'>
             {plan.originalPrice && (
-              <div className='text-slate-500 line-through text-sm font-medium mb-1'>
-                {plan.originalPrice}
+              <div className='flex items-center gap-2 mb-1'>
+                <span className='text-slate-500 line-through text-sm font-medium'>
+                  {plan.originalPrice}
+                </span>
+                <span className='bg-rose-500/10 text-rose-400 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-rose-500/20 uppercase tracking-wider animate-pulse'>
+                  Diskon!
+                </span>
               </div>
             )}
             <div className='flex items-baseline gap-1'>
@@ -256,11 +260,10 @@ function PricingCard({
             className='w-full'
           >
             <Button
-              className={`w-full group/btn relative overflow-hidden h-14 rounded-2xl font-bold transition-all duration-300 ${
-                plan.popular
-                  ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
-                  : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
-              }`}
+              className={`w-full cursor-pointer group/btn relative overflow-hidden h-14 rounded-2xl font-bold transition-all duration-300 ${plan.popular
+                ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+                }`}
             >
               <span className='relative z-10 flex items-center justify-center gap-2 text-xs md:text-sm'>
                 {plan.cta}

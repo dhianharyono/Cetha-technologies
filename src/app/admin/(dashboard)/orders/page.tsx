@@ -52,6 +52,16 @@ export default function OrdersPage() {
     }
   };
 
+  const handleStepChange = async (id: string, newStep: number) => {
+    try {
+      await updateOrder(id, { currentStep: newStep });
+      showToast(`Progress langkah berhasil diubah menjadi Langkah ${newStep}`, 'success');
+      fetchOrders();
+    } catch {
+      showToast('Gagal mengubah progress langkah', 'error');
+    }
+  };
+
   const handleDeleteParams = (id: string) => {
     setSelectedOrderId(id);
     setDeleteModalOpen(true);
@@ -116,6 +126,7 @@ export default function OrdersPage() {
                 <th className='px-6 py-4'>Kategori</th>
                 <th className='px-6 py-4'>Tanggal Order</th>
                 <th className='px-6 py-4'>Status</th>
+                <th className='px-6 py-4'>Langkah Progres</th>
                 <th className='px-6 py-4 text-right'>Aksi</th>
               </tr>
             </thead>
@@ -123,7 +134,7 @@ export default function OrdersPage() {
               {isLoading ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className='px-6 py-8 text-center text-slate-500'
                   >
                     Memuat data...
@@ -132,7 +143,7 @@ export default function OrdersPage() {
               ) : orders.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className='px-6 py-8 text-center text-slate-500'
                   >
                     Belum ada order masuk.
@@ -204,6 +215,27 @@ export default function OrdersPage() {
                           Batal
                         </option>
                       </select>
+                    </td>
+                    <td className='px-6 py-4'>
+                      {order.status !== 'Batal' && order.status !== 'Selesai' ? (
+                        <select
+                          value={order.currentStep || 1}
+                          onChange={(e) =>
+                            handleStepChange(order._id || '', parseInt(e.target.value))
+                          }
+                          className="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-[#0B101C] border border-white/10 text-cyan-400 outline-none cursor-pointer"
+                        >
+                          <option value={1} className="bg-[#131826] text-slate-300">Langkah 1 (Diterima)</option>
+                          <option value={2} className="bg-[#131826] text-slate-300">Langkah 2 (Desain)</option>
+                          <option value={3} className="bg-[#131826] text-slate-300">Langkah 3 (Koding)</option>
+                          <option value={4} className="bg-[#131826] text-slate-300">Langkah 4 (Revisi)</option>
+                          <option value={5} className="bg-[#131826] text-slate-300">Langkah 5 (Selesai)</option>
+                        </select>
+                      ) : (
+                        <span className="text-xs text-slate-500 italic">
+                          {order.status === 'Batal' ? 'Dibatalkan' : 'Selesai'}
+                        </span>
+                      )}
                     </td>
                     <td className='px-6 py-4 text-right'>
                       <div className='flex items-center justify-end gap-2'>

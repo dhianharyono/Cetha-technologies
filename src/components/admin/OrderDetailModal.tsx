@@ -16,6 +16,7 @@ import {
   Edit2,
   Save,
   ExternalLink,
+  Mail,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
@@ -296,6 +297,43 @@ export default function OrderDetailModal({
                       value={order.referensiDesain}
                       name='referensiDesain'
                     />
+                    {isEditing ? (
+                      <div className='space-y-1.5 w-full'>
+                        <label className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                          <CheckCircle className='w-3 h-3' />
+                          Langkah Progres Pelacakan
+                        </label>
+                        <select
+                          name='currentStep'
+                          value={formData?.currentStep || 1}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setFormData((prev) => prev ? { ...prev, currentStep: val } : null);
+                          }}
+                          className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors'
+                        >
+                          <option value={1}>1 - Pesanan Diterima</option>
+                          <option value={2}>2 - Validasi & Rencana Desain</option>
+                          <option value={3}>3 - Tahap Pengembangan</option>
+                          <option value={4}>4 - Tahap Revisi</option>
+                          <option value={5}>5 - Selesai & Go Live</option>
+                        </select>
+                      </div>
+                    ) : (
+                      <div className='space-y-1 w-full'>
+                        <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                          <CheckCircle className='w-3 h-3' />
+                          Langkah Progres Pelacakan
+                        </span>
+                        <p className='text-sm text-white font-medium wrap-break-word'>
+                          {order.currentStep === 1 ? '1 - Pesanan Diterima' :
+                           order.currentStep === 2 ? '2 - Validasi & Konsep Desain' :
+                           order.currentStep === 3 ? '3 - Tahap Pengembangan' :
+                           order.currentStep === 4 ? '4 - Tahap Revisi' :
+                           order.currentStep === 5 ? '5 - Selesai & Go Live' : '1 - Pesanan Diterima'}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -316,6 +354,12 @@ export default function OrderDetailModal({
                       label='Link Instagram'
                       value={order.linkIg}
                       name='linkIg'
+                    />
+                    <DetailItem
+                      icon={Mail}
+                      label='Alamat Email'
+                      value={order.email}
+                      name='email'
                     />
                     <div className='md:col-span-2'>
                       <DetailItem

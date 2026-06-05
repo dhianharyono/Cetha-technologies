@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
+import SuccessModal from '@/components/SuccessModal';
 
 function PemesananFormContent() {
   const searchParams = useSearchParams();
@@ -20,6 +21,8 @@ function PemesananFormContent() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedOrderId, setSubmittedOrderId] = useState('');
   const [formData, setFormData] = useState(() => {
     let kategori = '';
     let pilihan = '';
@@ -58,6 +61,7 @@ function PemesananFormContent() {
       namaDomain: '',
       referensiDesain: '',
       nomorWa: '',
+      email: '',
       linkIg: '',
       alamatFisik: '',
       linkMateriVisual: '',
@@ -107,10 +111,11 @@ function PemesananFormContent() {
       });
 
       if (res.ok) {
+        const result = await res.json();
+        const orderId = result.data?._id || '';
+        setSubmittedOrderId(orderId);
         setSuccessMsg(true);
-        setTimeout(() => {
-          router.push('/');
-        }, 3000);
+        setShowSuccessModal(true);
       } else {
         alert('Gagal mengirim form. Silakan coba lagi.');
         setIsSubmitting(false);
@@ -163,9 +168,10 @@ function PemesananFormContent() {
               </div>
               <div>
                 <label className='block text-sm font-medium text-slate-300 mb-2'>
-                  Slogan / Tagline
+                  Slogan / Tagline <span className='text-red-400'>*</span>
                 </label>
                 <input
+                  required
                   type='text'
                   name='slogan'
                   value={formData.slogan}
@@ -213,11 +219,10 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
-                    formData.kategoriKebutuhan === 'Portofolio'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                  }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Portofolio'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Portofolio
@@ -257,11 +262,10 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
-                    formData.kategoriKebutuhan === 'Website Usaha'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                  }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Website Usaha'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Website Usaha
@@ -304,11 +308,10 @@ function PemesananFormContent() {
                       pilihanKebutuhan: '',
                     }))
                   }
-                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${
-                    formData.kategoriKebutuhan === 'Custom'
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
-                  }`}
+                  className={`cursor-pointer p-4 rounded-xl border transition-all relative overflow-hidden group ${formData.kategoriKebutuhan === 'Custom'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-white/10 bg-[#0B101C]/50 hover:border-cyan-500/50'
+                    }`}
                 >
                   <h3 className='font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors'>
                     Custom
@@ -358,7 +361,7 @@ function PemesananFormContent() {
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
                           Portofolio Standar{' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
-                            (800 rb)
+                            (1,5 rb)
                           </span>
                         </span>
                         <p className='text-xs text-slate-400 mt-1 leading-relaxed'>
@@ -383,7 +386,7 @@ function PemesananFormContent() {
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
                           Portofolio Lengkap{' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
-                            (1,5 Jt)
+                            (2 Jt)
                           </span>
                         </span>
                         <p className='text-xs text-slate-400 mt-1 leading-relaxed'>
@@ -421,14 +424,14 @@ function PemesananFormContent() {
                       />
                       <div>
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
-                          Company Profile Modern + Dashboard{' '}
+                          Company Profile Modern + Dashboard Admin {' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
-                            (2 Jt)
+                            (2,5 Jt)
                           </span>
                         </span>
                         <p className='text-xs text-slate-400 mt-1 leading-relaxed'>
                           Menampilkan informasi perusahaan ditambah akses
-                          Dashboard Admin untuk mengelola data dasar Anda.
+                          Dashboard Admin untuk mengelola data dasar website Anda.
                         </p>
                       </div>
                     </label>
@@ -437,24 +440,24 @@ function PemesananFormContent() {
                         required
                         type='radio'
                         name='pilihanKebutuhan'
-                        value='Katalog Layanan/Produk + Dashboard Penjualan'
+                        value='Katalog Layanan/Produk + Pantau Pesanan + Dashboard Admin'
                         checked={
                           formData.pilihanKebutuhan ===
-                          'Katalog Layanan/Produk + Dashboard Penjualan'
+                          'Katalog Layanan/Produk + Pantau Pesanan + Dashboard Admin'
                         }
                         onChange={handleChange}
                         className='mt-1 text-cyan-500 focus:ring-cyan-500 w-4 h-4 accent-cyan-500 bg-transparent border-white/20'
                       />
                       <div>
                         <span className='text-sm text-white font-semibold group-hover:text-cyan-400 transition-colors'>
-                          Katalog Produk/Layanan + Dashboard{' '}
+                          Katalog Produk/Layanan + Kelola Pesanan + Dashboard Admin{' '}
                           <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
-                            (2,5 Jt)
+                            (3 Jt)
                           </span>
                         </span>
                         <p className='text-xs text-slate-400 mt-1 leading-relaxed'>
                           Fokus pada penawaran produk/jasa, dilengkapi dashboard
-                          khusus memantau pesan/interaksi pelanggan.
+                          khusus memantau pesanan/interaksi pelanggan.
                         </p>
                       </div>
                     </label>
@@ -470,6 +473,9 @@ function PemesananFormContent() {
                 >
                   <label className='block text-sm font-medium text-slate-300 mb-3'>
                     Tuliskan Fitur Spesifik yang Anda Butuhkan{' '}
+                    <span className='text-cyan-400 bg-cyan-400/10 px-1 py-0.5 rounded text-xs ml-1'>
+                      (Up to 5 Jt)
+                    </span>{' '}
                     <span className='text-red-400'>*</span>
                   </label>
                   <textarea
@@ -510,10 +516,10 @@ function PemesananFormContent() {
               </div>
               <div>
                 <label className='block text-sm font-medium text-slate-300 mb-2'>
-                  Jika belum punya, Tuliskan domain yang Anda inginkan (seperti
-                  .com / .id)
+                  Tuliskan domain yang Anda inginkan (seperti .com / .id) <span className='text-red-400'>*</span>
                 </label>
                 <input
+                  required
                   type='text'
                   name='namaDomain'
                   value={formData.namaDomain}
@@ -524,14 +530,15 @@ function PemesananFormContent() {
               </div>
               <div className='pt-2'>
                 <label className='block text-sm font-medium text-slate-300 mb-2'>
-                  Referensi Website (Minimal 2-3 untuk benchmark desain)
+                  Referensi Design / Website (Minimal 2-3 untuk benchmark desain) <span className='text-red-400'>*</span>
                 </label>
                 <textarea
+                  required
                   name='referensiDesain'
                   value={formData.referensiDesain}
                   onChange={handleChange}
                   rows={2}
-                  placeholder='Sertakan link referensi web saingan / web ide lain, bisa dicari dari Pinterest/Google'
+                  placeholder='Sertakan link referensi website / ide design yang kamu inginkan, bisa dicari dari Pinterest/Google'
                   className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors resize-none'
                 />
               </div>
@@ -562,9 +569,24 @@ function PemesananFormContent() {
               </div>
               <div>
                 <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
-                  Link Instagram
+                  Email <span className='text-red-400'>*</span>
                 </label>
                 <input
+                  required
+                  type='email'
+                  name='email'
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder='Contoh: nama@usaha.com'
+                  className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors'
+                />
+              </div>
+              <div>
+                <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
+                  Link Instagram <span className='text-red-400'>*</span>
+                </label>
+                <input
+                  required
                   type='text'
                   name='linkIg'
                   value={formData.linkIg}
@@ -575,9 +597,10 @@ function PemesananFormContent() {
               </div>
               <div>
                 <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
-                  Alamat Fisik Lengkap (opsional)
+                  Alamat Fisik Lengkap <span className='text-red-400'>*</span>
                 </label>
                 <textarea
+                  required
                   name='alamatFisik'
                   value={formData.alamatFisik}
                   onChange={handleChange}
@@ -598,14 +621,15 @@ function PemesananFormContent() {
             </CardHeader>
             <CardContent>
               <label className='block text-xs md:text-sm font-medium text-slate-300 mb-2'>
-                Tautan / URL Folder GDrive (Logo PNG, Foto Produk/Tim, dsb)
+                Tautan / URL Folder GDrive (Logo PNG, Foto Produk/Tim, dsb) <span className='text-red-400'>*</span>
               </label>
               <input
-                type='text'
+                required
+                type='url'
                 name='linkMateriVisual'
                 value={formData.linkMateriVisual}
                 onChange={handleChange}
-                placeholder='Paste url / link Google Drive, pastikan akses Anyone With Context aktif'
+                placeholder='Contoh: https://drive.google.com/drive/folders/...'
                 className='text-xs w-full px-4 py-3 bg-[#0B101C]/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors'
               />
               <p className='text-[10px] md:text-xs text-slate-500 mt-3'>
@@ -617,19 +641,17 @@ function PemesananFormContent() {
 
           {successMsg && (
             <div className='p-4 mb-4 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center font-medium'>
-              Yeay! Pesanan berhasil dikirim. Anda akan dialihkan ke halaman
-              utama...
+              Pesanan berhasil dikirim! Silakan salin ID Pelacakan Anda pada popup yang muncul.
             </div>
           )}
 
           <Button
             type='submit'
             disabled={isSubmitting || successMsg}
-            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-xs md:text-md transition-all ${
-              isSubmitting || successMsg
-                ? 'bg-cyan-500/50 cursor-not-allowed'
-                : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
-            }`}
+            className={`w-full py-6 rounded-2xl font-bold flex items-center justify-center gap-2 text-xs md:text-md transition-all ${isSubmitting || successMsg
+              ? 'bg-cyan-500/50 cursor-not-allowed'
+              : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer hover:scale-[1.02]'
+              }`}
           >
             {isSubmitting
               ? 'Mengirim Data...'
@@ -640,6 +662,12 @@ function PemesananFormContent() {
           </Button>
         </form>
       </motion.div>
+
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        orderId={submittedOrderId}
+      />
     </div>
   );
 }

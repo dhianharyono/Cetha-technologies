@@ -21,7 +21,7 @@ export default function Footer() {
             </Link>
             <p className='text-slate-400 text-xs md:text-sm leading-relaxed max-w-sm mb-6'>
               Partner digital terpercaya untuk transformasi bisnis atau personal
-              branding Anda. Kami membangun website yang tidak hanya indah, tapi
+              branding Anda. Kami membangun website yang tidak hanya indah dan modern, tapi
               juga berfungsi optimal untuk kebutuhan Anda.
             </p>
             <div className='flex items-center gap-3 text-slate-400 text-xs md:text-sm '>

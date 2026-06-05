@@ -37,10 +37,12 @@ export interface IOrder {
     namaDomain?: string;
     referensiDesain?: string;
     nomorWa: string;
+    email?: string;
     linkIg?: string;
     alamatFisik?: string;
     linkMateriVisual?: string;
     status: string;
+    currentStep?: number;
     createdAt?: string | Date;
     updatedAt?: string | Date;
 }

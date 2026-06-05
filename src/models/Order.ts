@@ -11,10 +11,12 @@ export interface IOrder extends Document {
     namaDomain?: string;
     referensiDesain?: string;
     nomorWa: string;
+    email?: string;
     linkIg?: string;
     alamatFisik?: string;
     linkMateriVisual?: string;
     status: string; // "Baru", "Diproses", "Selesai", "Batal"
+    currentStep?: number; // 1, 2, 3, 4
     createdAt: Date;
 }
 
@@ -30,10 +32,12 @@ const OrderSchema: Schema = new Schema(
         namaDomain: { type: String },
         referensiDesain: { type: String },
         nomorWa: { type: String, required: true },
+        email: { type: String },
         linkIg: { type: String },
         alamatFisik: { type: String },
         linkMateriVisual: { type: String },
         status: { type: String, default: 'Baru' },
+        currentStep: { type: Number, default: 1 },
     },
     { timestamps: true }
 );

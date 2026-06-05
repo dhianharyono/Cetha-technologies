@@ -19,11 +19,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'Mulai Layanan', href: '#process' },
-    { name: 'Portofolio', href: '#portfolio' },
-    { name: 'Harga', href: '#pricing' },
-    { name: 'FAQ', href: '#faq' },
+    { name: 'Home', href: '/#home' },
+    { name: 'Mulai Layanan', href: '/#process' },
+    { name: 'Portofolio', href: '/#portfolio' },
+    { name: 'Paket', href: '/#pricing' },
+    { name: 'Lacak Pesanan', href: '/lacak-pesanan' },
+    { name: 'FAQ', href: '/#faq' },
   ];
 
   const whatsappUrl =

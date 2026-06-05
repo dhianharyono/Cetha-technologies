@@ -155,7 +155,7 @@ export default function Hero() {
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75'></span>
                 <span className='relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500'></span>
               </span>
-              Digital Presence Architects
+              Solusi Digital Terpercaya
             </div>
           </motion.div>
 
@@ -176,8 +176,8 @@ export default function Hero() {
           >
             Kami membangun{' '}
             <span className='text-white font-medium'>website premium</span> yang
-            memadukan desain modern dengan performa luar biasa untuk
-            memaksimalkan ROI bisnis Anda.
+            memadukan desain modern dengan performa terbaik untuk
+            meningkatkan profitabilitas bisnis Anda.
           </motion.p>
 
           <motion.div
@@ -198,7 +198,7 @@ export default function Hero() {
                 variant='outline'
                 className='px-10 py-7 md:py-8 text-base w-full cursor-pointer border-white/10 text-white hover:text-white bg-white/5 hover:bg-white/10 hover:border-white/20 rounded-2xl transition-all backdrop-blur-md active:scale-[0.98] font-semibold'
               >
-                Lihat Paket & Harga
+                Lihat Paket Layanan
               </Button>
             </Link>
           </motion.div>

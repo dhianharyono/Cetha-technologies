@@ -25,7 +25,7 @@ const steps = [
   {
     title: 'Pengembangan',
     description:
-      'Proses penulisan kode (coding) dengan teknologi modern super cepat.',
+      'Proses penulisan kode (coding) dengan teknologi modern.',
     icon: Code2,
     color: 'text-cyan-400',
     bg: 'bg-cyan-400/10',
