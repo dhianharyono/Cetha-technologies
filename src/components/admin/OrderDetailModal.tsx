@@ -27,35 +27,53 @@ const renderValue = (val: string | undefined, fieldName: keyof IOrder) => {
   
   if (fieldName === 'nomorWa') {
     return (
-      <span className='inline-flex items-center gap-1'>
+      <a
+        href={`https://wa.me/${val.replace(/\D/g, '')}`}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-1 font-semibold cursor-pointer'
+      >
         {val}
-        <a
-          href={`https://wa.me/${val.replace(/\D/g, '')}`}
-          target='_blank'
-          rel='noopener noreferrer'
-          className='text-cyan-400 hover:text-cyan-300 inline-flex items-center align-middle'
-        >
-          <ExternalLink className='w-3 h-3 ml-1' />
-        </a>
-      </span>
+        <ExternalLink className='w-3 h-3 shrink-0' />
+      </a>
     );
   }
 
   if (fieldName === 'linkIg') {
+    const isUrl = val.startsWith('http') || val.includes('.com');
+    const href = isUrl ? val : `https://instagram.com/${val.replace('@', '')}`;
+    const displayName = isUrl ? 'Buka Instagram' : (val.startsWith('@') ? val : `@${val}`);
     return (
-      <span className='inline-flex items-center gap-1'>
-        {val}
-        <a
-          href={val.startsWith('http') ? val : `https://instagram.com/${val.replace('@', '')}`}
-          target='_blank'
-          rel='noopener noreferrer'
-          className='text-pink-400 hover:text-pink-300 inline-flex items-center align-middle'
-        >
-          <ExternalLink className='w-3 h-3 ml-1' />
-        </a>
-      </span>
+      <a
+        href={href}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-pink-400 hover:text-pink-300 underline inline-flex items-center gap-1 font-semibold cursor-pointer'
+      >
+        {displayName}
+        <ExternalLink className='w-3 h-3 shrink-0' />
+      </a>
     );
   }
+
+  const getShortenedLinkLabel = (url: string) => {
+    try {
+      const parsed = new URL(url.startsWith('http') ? url : `https://${url}`);
+      let hostname = parsed.hostname.replace('www.', '');
+      if (hostname.includes('drive.google.com')) return 'Google Drive';
+      if (hostname.includes('docs.google.com')) return 'Google Docs';
+      if (hostname.includes('dropbox.com')) return 'Dropbox';
+      if (hostname.includes('pinterest.com') || hostname.includes('pin.it')) return 'Pinterest';
+      if (hostname.includes('behance.net')) return 'Behance';
+      if (hostname.includes('dribbble.com')) return 'Dribbble';
+      if (hostname.includes('instagram.com')) return 'Instagram';
+      if (hostname.includes('github.com')) return 'GitHub';
+      if (hostname.includes('figma.com')) return 'Figma';
+      return `Buka ${hostname}`;
+    } catch {
+      return 'Buka Tautan';
+    }
+  };
 
   // Regex to check and parse URLs within normal text (e.g. referensiDesain or linkMateriVisual)
   const urlRegex = /(https?:\/\/[^\s,]+)/g;
@@ -70,9 +88,9 @@ const renderValue = (val: string | undefined, fieldName: keyof IOrder) => {
             href={part}
             target='_blank'
             rel='noopener noreferrer'
-            className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5 break-all font-semibold'
+            className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-1 font-semibold cursor-pointer'
           >
-            {part}
+            {getShortenedLinkLabel(part)}
             <ExternalLink className='w-3 h-3 shrink-0' />
           </a>
         );
@@ -89,9 +107,9 @@ const renderValue = (val: string | undefined, fieldName: keyof IOrder) => {
         href={href}
         target='_blank'
         rel='noopener noreferrer'
-        className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5 break-all font-semibold'
+        className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-1 font-semibold cursor-pointer'
       >
-        {val}
+        {getShortenedLinkLabel(val)}
         <ExternalLink className='w-3 h-3 shrink-0' />
       </a>
     );
@@ -142,7 +160,10 @@ export default function OrderDetailModal({
 
   useEffect(() => {
     if (order) {
-      setFormData({ ...order });
+      setFormData({
+        ...order,
+        statusPembayaran: order.statusPembayaran || 'Belum Bayar'
+      });
     }
   }, [order]);
 
@@ -165,6 +186,22 @@ export default function OrderDetailModal({
         await onUpdate(order._id, formData);
       }
       setIsEditing(false);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleApproveDp = async () => {
+    if (!order?._id) return;
+    setIsSaving(true);
+    try {
+      await onUpdate(order._id, {
+        statusPembayaran: 'DP Lunas',
+        currentStep: 2
+      });
+      setFormData((prev) => prev ? { ...prev, statusPembayaran: 'DP Lunas', currentStep: 2 } : null);
+    } catch (err) {
+      console.error("Failed to approve DP", err);
     } finally {
       setIsSaving(false);
     }
@@ -357,6 +394,114 @@ export default function OrderDetailModal({
                   </div>
                 </div>
 
+                {/* Section: Status & Pembayaran */}
+                <div className='pt-6 border-t border-white/5'>
+                  <h3 className='text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-4'>
+                    Status & Pembayaran
+                  </h3>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-start'>
+                    {/* Left: Status */}
+                    <div className='space-y-4'>
+                      <div className='space-y-1.5'>
+                        <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
+                          Status Pembayaran DP
+                        </span>
+                        {isEditing ? (
+                          <select
+                            name='statusPembayaran'
+                            value={formData?.statusPembayaran || 'Belum Bayar'}
+                            onChange={handleInputChange}
+                            className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors cursor-pointer'
+                          >
+                            <option value='Belum Bayar'>Belum Bayar</option>
+                            <option value='Menunggu Verifikasi'>Menunggu Verifikasi</option>
+                            <option value='DP Lunas'>DP Lunas</option>
+                            <option value='Lunas'>Lunas</option>
+                          </select>
+                        ) : (
+                          <div>
+                            {(() => {
+                              const status = order.statusPembayaran || 'Belum Bayar';
+                              if (status === 'Belum Bayar') {
+                                return (
+                                  <div className='flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl'>
+                                    <div className='w-2 h-2 rounded-full bg-red-500 animate-pulse' />
+                                    <div className='text-sm font-semibold'>Belum Bayar</div>
+                                  </div>
+                                );
+                              }
+                              if (status === 'Menunggu Verifikasi') {
+                                return (
+                                  <div className='flex flex-col gap-3 p-4 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl'>
+                                    <div className='flex items-center gap-3'>
+                                      <div className='w-2 h-2 rounded-full bg-amber-500 animate-pulse' />
+                                      <div className='text-sm font-semibold'>Menunggu Verifikasi</div>
+                                    </div>
+                                    <button
+                                      type='button'
+                                      onClick={handleApproveDp}
+                                      disabled={isSaving}
+                                      className='w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5'
+                                    >
+                                      {isSaving && <div className='w-3 h-3 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin' />}
+                                      Konfirmasi DP Lunas
+                                    </button>
+                                  </div>
+                                );
+                              }
+                              if (status === 'DP Lunas') {
+                                return (
+                                  <div className='flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl'>
+                                    <div className='w-2 h-2 rounded-full bg-emerald-500' />
+                                    <div className='text-sm font-semibold'>DP Lunas</div>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div className='flex items-center gap-3 p-4 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl'>
+                                  <div className='w-2 h-2 rounded-full bg-cyan-500' />
+                                  <div className='text-sm font-semibold'>Lunas</div>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right: Bukti Transfer */}
+                    <div className='space-y-2'>
+                      <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                        <FileText className='w-3.5 h-3.5 text-cyan-400' />
+                        Bukti Transfer DP
+                      </span>
+                      {order.buktiTransfer ? (
+                        <div className='flex items-start gap-4 p-3 bg-[#0B101C]/50 border border-white/10 rounded-xl'>
+                          <a
+                            href={order.buktiTransfer}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='shrink-0 block w-20 h-20 relative rounded-lg overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-colors'
+                          >
+                            <img src={order.buktiTransfer} alt='Bukti Transfer' className='w-full h-full object-cover' />
+                          </a>
+                          <div className='space-y-1.5 flex-grow'>
+                            <p className='text-xs text-white font-medium'>Bukti Pembayaran Tersedia</p>
+                            <p className='text-[11px] text-slate-400 leading-relaxed'>
+                              Klien telah mengunggah bukti pembayaran. Klik gambar thumbnail untuk melihat ukuran penuh.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className='flex items-center gap-3 p-4 bg-white/5 border border-white/10 text-slate-400 rounded-xl italic text-xs'>
+                          Belum ada bukti transfer yang diunggah
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Section: Technical Details */}
                 <div className='pt-6 border-t border-white/5'>
                   <h3 className='text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-6'>
@@ -401,7 +546,7 @@ export default function OrderDetailModal({
                     {isEditing ? (
                       <div className='space-y-1.5 w-full'>
                         <label className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
-                          <CheckCircle className='w-3 h-3' />
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
                           Langkah Progres Pelacakan
                         </label>
                         <select
@@ -411,28 +556,31 @@ export default function OrderDetailModal({
                             const val = parseInt(e.target.value);
                             setFormData((prev) => prev ? { ...prev, currentStep: val } : null);
                           }}
-                          className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors'
+                          className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors cursor-pointer'
                         >
-                          <option value={1}>1 - Pesanan Diterima</option>
-                          <option value={2}>2 - Validasi & Rencana Desain</option>
-                          <option value={3}>3 - Tahap Pengembangan</option>
-                          <option value={4}>4 - Tahap Revisi</option>
-                          <option value={5}>5 - Selesai & Go Live</option>
+                          <option value={1}>Pesanan Diterima</option>
+                          <option value={2}>Validasi & Konsep Desain</option>
+                          <option value={3}>Tahap Pengembangan</option>
+                          <option value={4}>Tahap Revisi</option>
+                          <option value={5}>Selesai & Go Live</option>
                         </select>
                       </div>
                     ) : (
-                      <div className='space-y-1 w-full'>
+                      <div className='space-y-1.5 w-full'>
                         <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
-                          <CheckCircle className='w-3 h-3' />
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
                           Langkah Progres Pelacakan
                         </span>
-                        <p className='text-sm text-white font-medium wrap-break-word'>
-                          {order.currentStep === 1 ? '1 - Pesanan Diterima' :
-                           order.currentStep === 2 ? '2 - Validasi & Konsep Desain' :
-                           order.currentStep === 3 ? '3 - Tahap Pengembangan' :
-                           order.currentStep === 4 ? '4 - Tahap Revisi' :
-                           order.currentStep === 5 ? '5 - Selesai & Go Live' : '1 - Pesanan Diterima'}
-                        </p>
+                        <div>
+                          <span className='inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-[0_2px_10px_rgba(6,182,212,0.15)]'>
+                            <span className='w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse' />
+                            {order.currentStep === 1 ? 'Pesanan Diterima' :
+                             order.currentStep === 2 ? 'Validasi & Konsep Desain' :
+                             order.currentStep === 3 ? 'Tahap Pengembangan' :
+                             order.currentStep === 4 ? 'Tahap Revisi' :
+                             order.currentStep === 5 ? 'Selesai & Go Live' : '1 - Pesanan Diterima'}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>

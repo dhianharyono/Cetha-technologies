@@ -42,6 +42,8 @@ export interface IOrder {
     linkIg?: string;
     alamatFisik?: string;
     linkMateriVisual?: string;
+    buktiTransfer?: string;
+    statusPembayaran: string;
     status: string;
     currentStep?: number;
     createdAt?: string | Date;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   Card,
@@ -16,7 +16,6 @@ import SuccessModal from '@/components/SuccessModal';
 
 function PemesananFormContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const initialPaket = searchParams.get('paket') || 'Starter';
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -607,7 +606,7 @@ function PemesananFormContent() {
             </CardHeader>
             <CardContent className='space-y-4'>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
+                <label className='text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
                   Nomor WhatsApp <span className='text-red-400'>*</span>
                 </label>
                 <input
@@ -621,7 +620,7 @@ function PemesananFormContent() {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
+                <label className='text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
                   Email <span className='text-red-400'>*</span>
                 </label>
                 <input
@@ -635,7 +634,7 @@ function PemesananFormContent() {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
+                <label className='text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
                   Link Instagram <span className='text-red-400'>*</span>
                 </label>
                 <input
@@ -649,7 +648,7 @@ function PemesananFormContent() {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
+                <label className='text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5'>
                   Alamat Fisik Lengkap <span className='text-red-400'>*</span>
                 </label>
                 <textarea

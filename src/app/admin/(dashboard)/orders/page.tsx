@@ -10,10 +10,40 @@ import {
 import { useToast } from '@/components/admin/ToastProvider';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import OrderDetailModal from '@/components/admin/OrderDetailModal';
-import { Trash2, RefreshCcw, Eye, Edit2, ExternalLink } from 'lucide-react';
+import { Trash2, RefreshCcw, Eye, Edit2, ExternalLink, MessageSquare } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { IOrder } from '@/types';
+
+const formatWhatsAppNumber = (num: string) => {
+  let cleaned = num.replace(/\D/g, '');
+  if (cleaned.startsWith('0')) {
+    cleaned = '62' + cleaned.slice(1);
+  }
+  return cleaned;
+};
+
+const getWhatsAppLink = (order: IOrder) => {
+  const num = order.nomorWa || '';
+  const cleaned = formatWhatsAppNumber(num);
+  
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://cethatechnologies.com';
+  const templateMsg = `Halo Kak *${order.namaUsaha}*,
+
+Kami dari *Cetha Technologies* ingin mengonfirmasi pesanan website Anda.
+
+*Detail Pesanan:*
+- Paket: ${order.paket}
+- ID Pelacakan: ${order._id}
+- Status Pembayaran DP: ${order.statusPembayaran || 'Belum Bayar'}
+
+Anda dapat memantau progres pengerjaan website secara real-time dan mengunggah bukti transfer DP melalui tautan pelacakan resmi berikut:
+${origin}/lacak-pesanan?id=${order._id}
+
+Jika ada pertanyaan atau butuh bantuan lebih lanjut, silakan hubungi kami kembali. Terima kasih!`;
+
+  return `https://wa.me/${cleaned}?text=${encodeURIComponent(templateMsg)}`;
+};
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -225,11 +255,11 @@ export default function OrdersPage() {
                           }
                           className="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-[#0B101C] border border-white/10 text-cyan-400 outline-none cursor-pointer"
                         >
-                          <option value={1} className="bg-[#131826] text-slate-300">Langkah 1 (Diterima)</option>
-                          <option value={2} className="bg-[#131826] text-slate-300">Langkah 2 (Desain)</option>
-                          <option value={3} className="bg-[#131826] text-slate-300">Langkah 3 (Koding)</option>
-                          <option value={4} className="bg-[#131826] text-slate-300">Langkah 4 (Revisi)</option>
-                          <option value={5} className="bg-[#131826] text-slate-300">Langkah 5 (Selesai)</option>
+                          <option value={1} className="bg-[#131826] text-slate-300">Diterima</option>
+                          <option value={2} className="bg-[#131826] text-slate-300">Konsep Desain</option>
+                          <option value={3} className="bg-[#131826] text-slate-300">Pengembangan</option>
+                          <option value={4} className="bg-[#131826] text-slate-300">Revisi</option>
+                          <option value={5} className="bg-[#131826] text-slate-300">Selesai & Go Live</option>
                         </select>
                       ) : (
                         <span className="text-xs text-slate-500 italic">
@@ -247,13 +277,13 @@ export default function OrdersPage() {
                           <Eye className='w-4 h-4' />
                         </button>
                         <a
-                          href={`/lacak-pesanan?id=${order._id}`}
+                          href={getWhatsAppLink(order)}
                           target='_blank'
                           rel='noopener noreferrer'
-                          className='p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center justify-center'
-                          title='Cek Tampilan Lacak Pesanan'
+                          className='p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center justify-center cursor-pointer'
+                          title='Kirim Konfirmasi WhatsApp'
                         >
-                          <ExternalLink className='w-4 h-4' />
+                          <MessageSquare className='w-4 h-4' />
                         </a>
                         <button
                           onClick={() => {
