@@ -7,6 +7,7 @@ export interface IOrder extends Document {
     deskripsiSingkat: string;
     kategoriKebutuhan: string;
     pilihanKebutuhan: string;
+    deskripsiFitur?: string;
     sudahDomain: string;
     namaDomain?: string;
     referensiDesain?: string;
@@ -15,6 +16,8 @@ export interface IOrder extends Document {
     linkIg?: string;
     alamatFisik?: string;
     linkMateriVisual?: string;
+    buktiTransfer?: string;
+    statusPembayaran: string;
     status: string; // "Baru", "Diproses", "Selesai", "Batal"
     currentStep?: number; // 1, 2, 3, 4
     createdAt: Date;
@@ -28,6 +31,7 @@ const OrderSchema: Schema = new Schema(
         deskripsiSingkat: { type: String, required: true },
         kategoriKebutuhan: { type: String, required: true },
         pilihanKebutuhan: { type: String, required: true },
+        deskripsiFitur: { type: String },
         sudahDomain: { type: String, required: true },
         namaDomain: { type: String },
         referensiDesain: { type: String },
@@ -36,6 +40,8 @@ const OrderSchema: Schema = new Schema(
         linkIg: { type: String },
         alamatFisik: { type: String },
         linkMateriVisual: { type: String },
+        buktiTransfer: { type: String },
+        statusPembayaran: { type: String, default: 'Belum Bayar' },
         status: { type: String, default: 'Baru' },
         currentStep: { type: Number, default: 1 },
     },

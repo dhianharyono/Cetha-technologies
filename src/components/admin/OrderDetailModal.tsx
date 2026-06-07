@@ -21,6 +21,30 @@ import {
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { IOrder } from '@/types';
+import Image from 'next/image';
+
+const getPaketPrice = (paket: string) => {
+  switch (paket) {
+    case 'Portofolio Standar':
+      return 'Rp 1.500.000 (1,5 Jt)';
+    case 'Portofolio Lengkap':
+      return 'Rp 2.000.000 (2 Jt)';
+    case 'Portofolio':
+      return 'Rp 2.000.000 (2 Jt)';
+    case 'Company Profile':
+      return 'Rp 2.500.000 (2,5 Jt)';
+    case 'Katalog Produk':
+      return 'Rp 3.000.000 (3 Jt)';
+    case 'Website Usaha':
+      return 'Rp 3.000.000 (3 Jt)';
+    case 'Custom':
+      return 'Sesuai Fitur (Up to 5 Jt)';
+    case 'Enterprise':
+      return 'Custom (Sesuai Kesepakatan)';
+    default:
+      return 'Sesuai Kesepakatan';
+  }
+};
 
 interface OrderDetailModalProps {
   isOpen: boolean;
@@ -41,7 +65,10 @@ export default function OrderDetailModal({
 
   useEffect(() => {
     if (order) {
-      setFormData({ ...order });
+      setFormData({
+        ...order,
+        statusPembayaran: order.statusPembayaran || 'Belum Bayar',
+      });
     }
   }, [order]);
 
@@ -64,6 +91,24 @@ export default function OrderDetailModal({
         await onUpdate(order._id, formData);
       }
       setIsEditing(false);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleApproveDp = async () => {
+    if (!order?._id) return;
+    setIsSaving(true);
+    try {
+      await onUpdate(order._id, {
+        statusPembayaran: 'DP Lunas',
+        currentStep: 2,
+      });
+      setFormData((prev) =>
+        prev ? { ...prev, statusPembayaran: 'DP Lunas', currentStep: 2 } : null,
+      );
+    } catch (err) {
+      console.error('Failed to approve DP', err);
     } finally {
       setIsSaving(false);
     }
@@ -166,11 +211,13 @@ export default function OrderDetailModal({
       const parts = value.split(urlRegex);
 
       if (parts.length === 1) {
-        return <span className='whitespace-pre-line break-words'>{value}</span>;
+        return (
+          <span className='whitespace-pre-line wrap-break-word'>{value}</span>
+        );
       }
 
       return (
-        <span className='whitespace-pre-line break-words'>
+        <span className='whitespace-pre-line wrap-break-word'>
           {parts.map((part, idx) => {
             if (part.match(urlRegex)) {
               const href = part.startsWith('http') ? part : `https://${part}`;
@@ -245,15 +292,28 @@ export default function OrderDetailModal({
                     {order.status}
                   </span>
                 </h2>
-                <p className='text-xs text-slate-400 mt-1'>
-                  ID: {order._id} •{' '}
-                  {format(
-                    new Date(order.createdAt || new Date()),
-                    'dd MMMM yyyy HH:mm',
-                    {
-                      locale: id,
-                    },
-                  )}
+                <p className='text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5'>
+                  <span>ID: {order._id}</span>
+                  <span>•</span>
+                  <a
+                    href={`/lacak-pesanan?id=${order._id}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-0.5'
+                  >
+                    Lacak Pesanan
+                    <ExternalLink className='w-3 h-3' />
+                  </a>
+                  <span>•</span>
+                  <span>
+                    {format(
+                      new Date(order.createdAt || new Date()),
+                      'dd MMMM yyyy HH:mm',
+                      {
+                        locale: id,
+                      },
+                    )}
+                  </span>
                 </p>
               </div>
               <button
@@ -283,7 +343,11 @@ export default function OrderDetailModal({
                   <DetailItem
                     icon={Briefcase}
                     label='Paket Dipilih'
-                    value={order.paket}
+                    value={
+                      order.paket
+                        ? `${order.paket} - ${getPaketPrice(order.paket)}`
+                        : ''
+                    }
                     name='paket'
                   />
                   <DetailItem
@@ -311,6 +375,169 @@ export default function OrderDetailModal({
                   </div>
                 </div>
 
+                {/* Section: Status & Pembayaran */}
+                <div className='pt-6 border-t border-white/5'>
+                  <h3 className='text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-4'>
+                    Status & Pembayaran
+                  </h3>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-start'>
+                    {/* Left: Status */}
+                    <div className='space-y-4'>
+                      <div className='space-y-1.5'>
+                        <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
+                          Status Pembayaran DP
+                        </span>
+                        {isEditing ? (
+                          <select
+                            name='statusPembayaran'
+                            value={formData?.statusPembayaran || 'Belum Bayar'}
+                            onChange={handleInputChange}
+                            className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors cursor-pointer'
+                          >
+                            <option value='Belum Bayar'>Belum Bayar</option>
+                            <option value='Menunggu Verifikasi'>
+                              Menunggu Verifikasi
+                            </option>
+                            <option value='DP Lunas'>DP Lunas</option>
+                            <option value='Lunas'>Lunas</option>
+                          </select>
+                        ) : (
+                          <div>
+                            {(() => {
+                              const status =
+                                order.statusPembayaran || 'Belum Bayar';
+                              if (status === 'Belum Bayar') {
+                                return (
+                                  <div className='flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl'>
+                                    <div className='w-2 h-2 rounded-full bg-red-500 animate-pulse' />
+                                    <div className='text-sm font-semibold'>
+                                      Belum Bayar
+                                    </div>
+                                  </div>
+                                );
+                              }
+                              if (status === 'Menunggu Verifikasi') {
+                                return (
+                                  <div className='flex flex-col gap-3 p-4 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl'>
+                                    <div className='flex items-center gap-3'>
+                                      <div className='w-2 h-2 rounded-full bg-amber-500 animate-pulse' />
+                                      <div className='text-sm font-semibold'>
+                                        Menunggu Verifikasi
+                                      </div>
+                                    </div>
+                                    <button
+                                      type='button'
+                                      onClick={handleApproveDp}
+                                      disabled={isSaving}
+                                      className='w-full px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5'
+                                    >
+                                      {isSaving && (
+                                        <div className='w-3 h-3 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin' />
+                                      )}
+                                      Konfirmasi DP Lunas
+                                    </button>
+                                  </div>
+                                );
+                              }
+                              if (status === 'DP Lunas') {
+                                return (
+                                  <div className='flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl'>
+                                    <div className='w-2 h-2 rounded-full bg-emerald-500' />
+                                    <div className='text-sm font-semibold'>
+                                      DP Lunas
+                                    </div>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div className='flex items-center gap-3 p-4 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl'>
+                                  <div className='w-2 h-2 rounded-full bg-cyan-500' />
+                                  <div className='text-sm font-semibold'>
+                                    Lunas
+                                  </div>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right: Bukti Transfer */}
+                    <div className='space-y-2'>
+                      <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
+                        <FileText className='w-3.5 h-3.5 text-cyan-400' />
+                        Bukti Transfer DP
+                      </span>
+                      {order.buktiTransfer ? (
+                        <div className='flex items-start gap-4 p-3 bg-[#0B101C]/50 border border-white/10 rounded-xl'>
+                          <button
+                            type='button'
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const newWindow = window.open();
+                              if (newWindow) {
+                                newWindow.document.write(`
+                                  <html>
+                                    <head>
+                                      <title>Bukti Transfer</title>
+                                      <style>
+                                        body {
+                                          margin: 0;
+                                          background-color: #07090e;
+                                          display: flex;
+                                          align-items: center;
+                                          justify-content: center;
+                                          min-height: 100vh;
+                                          font-family: system-ui, sans-serif;
+                                        }
+                                        img {
+                                          max-width: 90%;
+                                          max-height: 90vh;
+                                          object-fit: contain;
+                                          box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                                          border-radius: 8px;
+                                        }
+                                      </style>
+                                    </head>
+                                    <body>
+                                      <img src="${order.buktiTransfer}" alt="Bukti Transfer" />
+                                    </body>
+                                  </html>
+                                `);
+                                newWindow.document.close();
+                              }
+                            }}
+                            className='shrink-0 block w-20 h-20 relative rounded-lg overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-colors cursor-pointer text-left'
+                          >
+                            <Image
+                              src={order.buktiTransfer}
+                              alt='Bukti Transfer'
+                              fill
+                              className='object-cover'
+                              unoptimized
+                            />
+                          </button>
+                          <div className='space-y-1.5 grow'>
+                            <p className='text-xs text-white font-medium'>
+                              Bukti Pembayaran Tersedia
+                            </p>
+                            <p className='text-[11px] text-slate-400 leading-relaxed'>
+                              Klien telah mengunggah bukti pembayaran. Klik
+                              gambar thumbnail untuk melihat ukuran penuh.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className='flex items-center gap-3 p-4 bg-white/5 border border-white/10 text-slate-400 rounded-xl italic text-xs'>
+                          Belum ada bukti transfer yang diunggah
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Section: Technical Details */}
                 <div className='pt-6 border-t border-white/5'>
                   <h3 className='text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-6'>
@@ -323,6 +550,15 @@ export default function OrderDetailModal({
                       value={order.pilihanKebutuhan}
                       name='pilihanKebutuhan'
                     />
+                    <div className='md:col-span-2'>
+                      <DetailItem
+                        icon={FileText}
+                        label='Deskripsi Fitur yang Diinginkan'
+                        value={order.deskripsiFitur}
+                        name='deskripsiFitur'
+                        type='textarea'
+                      />
+                    </div>
                     <DetailItem
                       icon={Globe}
                       label='Sudah Punya Domain?'
@@ -346,7 +582,7 @@ export default function OrderDetailModal({
                     {isEditing ? (
                       <div className='space-y-1.5 w-full'>
                         <label className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
-                          <CheckCircle className='w-3 h-3' />
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
                           Langkah Progres Pelacakan
                         </label>
                         <select
@@ -354,30 +590,41 @@ export default function OrderDetailModal({
                           value={formData?.currentStep || 1}
                           onChange={(e) => {
                             const val = parseInt(e.target.value);
-                            setFormData((prev) => prev ? { ...prev, currentStep: val } : null);
+                            setFormData((prev) =>
+                              prev ? { ...prev, currentStep: val } : null,
+                            );
                           }}
-                          className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors'
+                          className='w-full bg-[#0B101C] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-cyan-500/50 transition-colors cursor-pointer'
                         >
-                          <option value={1}>1 - Pesanan Diterima</option>
-                          <option value={2}>2 - Validasi & Rencana Desain</option>
-                          <option value={3}>3 - Tahap Pengembangan</option>
-                          <option value={4}>4 - Tahap Revisi</option>
-                          <option value={5}>5 - Selesai & Go Live</option>
+                          <option value={1}>Pesanan Diterima</option>
+                          <option value={2}>Validasi & Konsep Desain</option>
+                          <option value={3}>Tahap Pengembangan</option>
+                          <option value={4}>Tahap Revisi</option>
+                          <option value={5}>Selesai & Go Live</option>
                         </select>
                       </div>
                     ) : (
-                      <div className='space-y-1 w-full'>
+                      <div className='space-y-1.5 w-full'>
                         <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
-                          <CheckCircle className='w-3 h-3' />
+                          <CheckCircle className='w-3.5 h-3.5 text-cyan-400' />
                           Langkah Progres Pelacakan
                         </span>
-                        <p className='text-sm text-white font-medium wrap-break-word'>
-                          {order.currentStep === 1 ? '1 - Pesanan Diterima' :
-                           order.currentStep === 2 ? '2 - Validasi & Konsep Desain' :
-                           order.currentStep === 3 ? '3 - Tahap Pengembangan' :
-                           order.currentStep === 4 ? '4 - Tahap Revisi' :
-                           order.currentStep === 5 ? '5 - Selesai & Go Live' : '1 - Pesanan Diterima'}
-                        </p>
+                        <div>
+                          <span className='inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-[0_2px_10px_rgba(6,182,212,0.15)]'>
+                            <span className='w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse' />
+                            {order.currentStep === 1
+                              ? 'Pesanan Diterima'
+                              : order.currentStep === 2
+                                ? 'Validasi & Konsep Desain'
+                                : order.currentStep === 3
+                                  ? 'Tahap Pengembangan'
+                                  : order.currentStep === 4
+                                    ? 'Tahap Revisi'
+                                    : order.currentStep === 5
+                                      ? 'Selesai & Go Live'
+                                      : '1 - Pesanan Diterima'}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>

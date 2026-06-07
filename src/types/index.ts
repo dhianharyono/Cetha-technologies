@@ -36,11 +36,14 @@ export interface IOrder {
     sudahDomain: string;
     namaDomain?: string;
     referensiDesain?: string;
+    deskripsiFitur?: string;
     nomorWa: string;
     email?: string;
     linkIg?: string;
     alamatFisik?: string;
     linkMateriVisual?: string;
+    buktiTransfer?: string;
+    statusPembayaran: string;
     status: string;
     currentStep?: number;
     createdAt?: string | Date;
@@ -56,4 +59,17 @@ export interface IDashboardStats {
         status: Array<{ _id: string; count: number }>;
         packages: Array<{ _id: string; count: number }>;
     };
+}
+
+export interface ITestimonial {
+    _id?: string;
+    orderId: string;
+    namaKlien: string;
+    namaUsaha: string;
+    rating: number;
+    ulasan: string;
+    avatarUrl?: string;
+    isVisible: boolean;
+    createdAt?: string | Date;
+    updatedAt?: string | Date;
 }

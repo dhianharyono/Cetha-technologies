@@ -36,3 +36,11 @@ body {
     }
   }
 }
+
+button,
+input[type="button"],
+input[type="submit"],
+select,
+[role="button"] {
+  cursor: pointer !important;
+}

@@ -22,6 +22,7 @@ export default function PortfolioPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -121,6 +122,7 @@ export default function PortfolioPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       const payload = {
         ...formData,
@@ -141,6 +143,8 @@ export default function PortfolioPage() {
       fetchPortfolios();
     } catch {
       showToast('Gagal menyimpan data', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -382,15 +386,18 @@ export default function PortfolioPage() {
                 <button
                   type='button'
                   onClick={() => setIsModalOpen(false)}
-                  className='px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-sm font-medium transition-colors'
+                  disabled={isSaving}
+                  className='px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50'
                 >
                   Batal
                 </button>
                 <button
                   type='submit'
-                  className='px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-slate-900 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-colors'
+                  disabled={isSaving}
+                  className='px-4 py-2 bg-cyan-500 hover:bg-cyan-600 disabled:opacity-50 text-slate-900 rounded-lg text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-colors flex items-center gap-2'
                 >
-                  Simpan
+                  {isSaving && <div className='w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin' />}
+                  {isSaving ? 'Menyimpan...' : 'Simpan'}
                 </button>
               </div>
             </form>

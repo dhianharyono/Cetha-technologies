@@ -16,6 +16,26 @@ import {
 import { format } from 'date-fns';
 import { id as localeId } from 'date-fns/locale';
 import { IOrder } from '@/types';
+import { submitTestimonial } from '@/app/actions/userActions';
+
+const getDpAmount = (paket: string) => {
+  switch (paket) {
+    case 'Portofolio Standar':
+      return 'Rp 750.000 (50%)';
+    case 'Portofolio Lengkap':
+      return 'Rp 1.000.000 (50%)';
+    case 'Company Profile':
+      return 'Rp 1.250.000 (50%)';
+    case 'Katalog Produk':
+      return 'Rp 1.500.000 (50%)';
+    case 'Portofolio':
+      return 'Rp 1.000.000 (50%)';
+    case 'Website Usaha':
+      return 'Rp 1.500.000 (50%)';
+    default:
+      return 'Hubungi Admin untuk nominal DP';
+  }
+};
 
 export default function LacakPesananContent() {
   const searchParams = useSearchParams();
@@ -26,6 +46,107 @@ export default function LacakPesananContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
+  const [copiedRekening, setCopiedRekening] = useState(false);
+
+  // Payment proof uploads states
+  const [paymentFileBase64, setPaymentFileBase64] = useState('');
+  const [isUploadingPayment, setIsUploadingPayment] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
+  // Testimonial states
+  const [testimonialRating, setTestimonialRating] = useState(5);
+  const [testimonialUlasan, setTestimonialUlasan] = useState('');
+  const [testimonialAvatar, setTestimonialAvatar] = useState('');
+  const [isSubmittingTestimonial, setIsSubmittingTestimonial] = useState(false);
+  const [testimonialSubmitted, setTestimonialSubmitted] = useState(false);
+  const [testimonialError, setTestimonialError] = useState('');
+
+  const handlePaymentFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setUploadError('');
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setUploadError('Ukuran file maksimal adalah 5MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPaymentFileBase64(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUploadPaymentSubmit = async () => {
+    if (!order?._id || !paymentFileBase64) return;
+    setIsUploadingPayment(true);
+    setUploadError('');
+    try {
+      const res = await fetch('/api/orders/upload-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: order._id, buktiTransfer: paymentFileBase64 }),
+      });
+      const result = await res.json();
+      if (res.ok && result.success) {
+        fetchOrder(order._id);
+        setPaymentFileBase64('');
+      } else {
+        setUploadError(result.error || 'Gagal mengunggah bukti pembayaran.');
+      }
+    } catch {
+      setUploadError('Terjadi kesalahan jaringan.');
+    } finally {
+      setIsUploadingPayment(false);
+    }
+  };
+
+  const handleTestimonialAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setTestimonialError('');
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setTestimonialError('Ukuran file maksimal adalah 2MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTestimonialAvatar(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTestimonialSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!order?._id) return;
+    setIsSubmittingTestimonial(true);
+    setTestimonialError('');
+    
+    try {
+      const res = await submitTestimonial({
+        orderId: order._id,
+        namaKlien: order.namaUsaha || 'Klien Cetha',
+        namaUsaha: order.namaUsaha || '',
+        rating: testimonialRating,
+        ulasan: testimonialUlasan,
+        avatarUrl: testimonialAvatar || undefined,
+        isVisible: false
+      });
+
+      if (res.success) {
+        setTestimonialSubmitted(true);
+      } else {
+        setTestimonialError(res.error || 'Gagal mengirim testimoni.');
+      }
+    } catch {
+      setTestimonialError('Terjadi kesalahan sistem. Silakan coba lagi.');
+    } finally {
+      setIsSubmittingTestimonial(false);
+    }
+  };
 
   const queryId = searchParams.get('id') || '';
 
@@ -83,6 +204,16 @@ export default function LacakPesananContent() {
     }
   };
 
+  const handleCopyRekening = async () => {
+    try {
+      await navigator.clipboard.writeText('1380012792003');
+      setCopiedRekening(true);
+      setTimeout(() => setCopiedRekening(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy account number: ', err);
+    }
+  };
+
   const getStepStatus = (stepIndex: number, currentStatus: string, currentStep: number = 1) => {
     if (currentStatus === 'Batal') return 'batal';
     if (currentStatus === 'Selesai') return 'completed';
@@ -111,12 +242,16 @@ export default function LacakPesananContent() {
       desc: 'Koding front-end, integrasi basis data, pengoptimalan performa, dan pengujian internal.',
       icon: Code2
     },
-    {
-      index: 4,
-      title: 'Tahap Revisi',
-      desc: 'Peninjauan hasil website, penyempurnaan fitur, dan penyesuaian berdasarkan masukan Anda.',
-      icon: RefreshCw
-    },
+    ...(order?.currentStep && order.currentStep >= 4
+      ? [
+          {
+            index: 4,
+            title: 'Tahap Revisi',
+            desc: 'Peninjauan hasil website, penyempurnaan fitur, dan penyesuaian berdasarkan masukan Anda.',
+            icon: RefreshCw
+          }
+        ]
+      : []),
     {
       index: 5,
       title: 'Selesai & Go Live',
@@ -318,6 +453,124 @@ export default function LacakPesananContent() {
                 </div>
               )}
 
+              {/* Payment Proof / DP Card */}
+              {order.status !== 'Batal' && (
+                <div className="bg-[#131826]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-5 sm:p-8 shadow-xl relative overflow-hidden space-y-6">
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <ClipboardCheck className="w-5 h-5 text-cyan-500" />
+                    Status Pembayaran DP (Down Payment)
+                  </h3>
+
+                  {(!order.statusPembayaran || order.statusPembayaran === 'Belum Bayar') && (
+                    <div className="space-y-6">
+                      <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-2xl text-xs sm:text-sm leading-relaxed">
+                        <strong>Perhatian:</strong> Pengerjaan desain dan website baru akan dimulai setelah pembayaran DP (50%) telah dikonfirmasi oleh Admin. Silakan lakukan transfer ke rekening di bawah ini dan unggah bukti transfer Anda.
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#0B101C]/80 border border-white/5 p-4 rounded-2xl">
+                        <div>
+                          <span className="text-[10px] text-slate-500 font-semibold block uppercase tracking-wider mb-1">Transfer Bank</span>
+                          <span className="text-white font-bold block text-sm sm:text-base">Bank Mandiri</span>
+                          <span className="text-white flex items-center gap-1.5 text-xs mt-1">
+                            No. Rekening: <strong className="text-cyan-400 font-mono select-all">1380012792003</strong>
+                            <button
+                              type="button"
+                              onClick={handleCopyRekening}
+                              className="p-1 hover:bg-white/10 rounded transition-colors text-slate-400 hover:text-white inline-flex items-center justify-center cursor-pointer"
+                              title="Salin Nomor Rekening"
+                            >
+                              {copiedRekening ? (
+                                <Check className="w-3 h-3 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3 h-3" />
+                              )}
+                            </button>
+                            {copiedRekening && (
+                              <span className="text-[10px] text-emerald-400 font-semibold">Tersalin!</span>
+                            )}
+                          </span>
+                          <span className="text-white block text-xs">A/N: <strong>Dhian Haryono</strong></span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-slate-500 font-semibold block uppercase tracking-wider mb-1">Nominal Transfer (DP 50%)</span>
+                          <span className="text-cyan-400 font-extrabold block text-lg sm:text-xl">{getDpAmount(order.paket)}</span>
+                          <span className="text-slate-400 text-[10px] block mt-1">* Simpan bukti transfer Anda dalam format gambar (PNG/JPG).</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className="block text-xs font-semibold text-slate-300">Unggah Bukti Transfer (Format JPG/PNG, Maks. 5MB)</label>
+                        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePaymentFileChange}
+                            disabled={isUploadingPayment}
+                            className="flex-1 text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 file:cursor-pointer transition-colors bg-[#0B101C]/50 border border-white/10 rounded-xl p-2 outline-none"
+                          />
+                          {paymentFileBase64 && (
+                            <Button
+                              onClick={handleUploadPaymentSubmit}
+                              disabled={isUploadingPayment}
+                              className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold px-6 py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2 cursor-pointer text-xs"
+                            >
+                              {isUploadingPayment ? 'Mengirim...' : 'Kirim Bukti'}
+                            </Button>
+                          )}
+                        </div>
+                        {uploadError && <p className="text-red-400 text-xs mt-1">{uploadError}</p>}
+                      </div>
+                    </div>
+                  )}
+
+                  {order.statusPembayaran === 'Menunggu Verifikasi' && (
+                    <div className="space-y-4 text-center py-4">
+                      <div className="inline-flex p-3 bg-amber-500/10 text-amber-400 rounded-full animate-pulse mb-2">
+                        <RefreshCw className="w-8 h-8" />
+                      </div>
+                      <h4 className="text-white font-bold text-base">Menunggu Verifikasi Pembayaran</h4>
+                      <p className="text-slate-400 text-xs max-w-md mx-auto leading-relaxed">
+                        Bukti transfer Anda telah berhasil dikirim. Admin kami sedang memverifikasi pembayaran Anda. Status pengerjaan akan segera diperbarui setelah verifikasi selesai.
+                      </p>
+                      {order.buktiTransfer && (
+                        <div className="mt-4 max-w-xs mx-auto border border-white/10 rounded-2xl overflow-hidden bg-[#0B101C]/50 p-2">
+                          <span className="text-[10px] text-slate-500 block mb-2 uppercase font-semibold">Bukti Transfer Anda</span>
+                          <img src={order.buktiTransfer} alt="Bukti Transfer" className="w-full h-auto max-h-48 object-contain rounded-xl" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {order.statusPembayaran === 'DP Lunas' && (
+                    <div className="flex items-center gap-4 p-5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-3xl">
+                      <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-full shrink-0">
+                        <Check className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold text-sm sm:text-base">DP Pembayaran Diterima (DP Lunas)</h4>
+                        <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+                          Terima kasih! Pembayaran DP Anda telah kami verifikasi. Tahap pengembangan sedang dikerjakan sesuai antrean.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {order.statusPembayaran === 'Lunas' && (
+                    <div className="flex items-center gap-4 p-5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-3xl">
+                      <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-full shrink-0">
+                        <Check className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-bold text-sm sm:text-base">Pembayaran Lunas (Lengkap)</h4>
+                        <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">
+                          Terima kasih banyak! Pembayaran untuk proyek website Anda telah lunas sepenuhnya.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Order Details Accordion/Card */}
               <div className="bg-[#131826]/60 backdrop-blur-xl border border-white/5 rounded-3xl p-5 sm:p-8 shadow-xl">
                 <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
@@ -349,6 +602,14 @@ export default function LacakPesananContent() {
                       <span className="text-xs text-slate-400 block mt-1 leading-relaxed bg-[#0B101C]/50 border border-white/5 p-2 rounded-lg">
                         {order.pilihanKebutuhan}
                       </span>
+                      {order.deskripsiFitur && (
+                        <div className="mt-2">
+                          <span className="text-[11px] text-slate-500 block mb-0.5 font-medium">Deskripsi Fitur yang Diinginkan</span>
+                          <p className="text-slate-300 text-xs leading-relaxed bg-[#0B101C]/50 border border-white/5 p-3 rounded-xl whitespace-pre-wrap">
+                            {order.deskripsiFitur}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -401,6 +662,122 @@ export default function LacakPesananContent() {
                   </div>
                 </div>
               </div>
+
+              {/* Testimonial Form (Only visible when Step 5 / Selesai & Go Live) */}
+              {(order.currentStep === 5 || order.status === 'Selesai') && (
+                <div className="bg-[#131826]/80 backdrop-blur-xl border border-cyan-500/20 rounded-3xl p-5 sm:p-8 shadow-xl space-y-6 relative overflow-hidden text-left">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none" />
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-2xl">
+                      <MessageSquare className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Bagikan Pengalaman Anda</h3>
+                      <p className="text-slate-400 text-xs">Testimoni Anda sangat berharga bagi kami untuk terus meningkatkan kualitas pelayanan.</p>
+                    </div>
+                  </div>
+
+                  {testimonialSubmitted ? (
+                    <div className="p-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-center space-y-3">
+                      <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+                      <h4 className="text-white font-bold text-base">Terima Kasih Atas Testimoni Anda!</h4>
+                      <p className="text-slate-400 text-xs max-w-md mx-auto leading-relaxed">
+                        Ulasan Anda telah tersimpan dan akan ditinjau oleh tim admin sebelum ditampilkan ke landing page utama.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleTestimonialSubmit} className="space-y-5">
+                      {testimonialError && (
+                        <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs">
+                          {testimonialError}
+                        </div>
+                      )}
+
+                      {/* Star Rating */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Rating Kepuasan</label>
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setTestimonialRating(star)}
+                              className="focus:outline-none transition-transform hover:scale-110 cursor-pointer"
+                            >
+                              <svg
+                                className={`w-8 h-8 ${star <= testimonialRating ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                              </svg>
+                            </button>
+                          ))}
+                          <span className="text-xs text-slate-400 font-bold ml-2">
+                            {testimonialRating === 5 ? 'Sangat Puas' :
+                             testimonialRating === 4 ? 'Puas' :
+                             testimonialRating === 3 ? 'Cukup Puas' :
+                             testimonialRating === 2 ? 'Kurang Puas' : 'Sangat Kecewa'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Ulasan Teks */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Ulasan / Testimoni Anda</label>
+                        <textarea
+                          required
+                          value={testimonialUlasan}
+                          onChange={(e) => setTestimonialUlasan(e.target.value)}
+                          placeholder="Ceritakan pengalaman Anda bekerja sama dengan Cetha Technologies..."
+                          rows={4}
+                          className="w-full bg-[#0B101C]/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-colors resize-none"
+                        />
+                      </div>
+
+                      {/* Avatar / Logo Upload */}
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-slate-300">Foto Profil / Logo Usaha (Opsional)</label>
+                        <div className="flex items-center gap-4">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleTestimonialAvatarChange}
+                            className="text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 file:cursor-pointer transition-colors bg-[#0B101C]/50 border border-white/10 rounded-xl p-2 outline-none flex-1"
+                          />
+                          {testimonialAvatar && (
+                            <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                              <img src={testimonialAvatar} alt="Preview Avatar" className="w-full h-full object-cover" />
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-500 block">Format gambar JPG/PNG, ukuran maks. 2MB. Jika dikosongkan, kami akan menggunakan inisial nama Anda.</span>
+                      </div>
+
+                      {/* Submit Button */}
+                      <Button
+                        type="submit"
+                        disabled={isSubmittingTestimonial}
+                        className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-6 rounded-2xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      >
+                        {isSubmittingTestimonial ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Mengirimkan...
+                          </>
+                        ) : (
+                          'Kirim Testimoni'
+                        )}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              )}
 
               {/* Help & Support CTA */}
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/5 border border-cyan-500/20 rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-md">
