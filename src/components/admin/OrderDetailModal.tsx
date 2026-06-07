@@ -125,37 +125,83 @@ export default function OrderDetailModal({
       );
     }
 
+    const renderValue = () => {
+      if (!value) {
+        return <span className='text-slate-600 italic'>Tidak ada data</span>;
+      }
+
+      if (name === 'nomorWa') {
+        return (
+          <a
+            href={`https://wa.me/${value.replace(/\D/g, '')}`}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1 break-all'
+          >
+            {value}
+            <ExternalLink className='w-3.5 h-3.5 shrink-0' />
+          </a>
+        );
+      }
+
+      if (name === 'linkIg') {
+        const href = value.startsWith('http')
+          ? value
+          : `https://instagram.com/${value.replace('@', '')}`;
+        return (
+          <a
+            href={href}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-pink-400 hover:text-pink-300 hover:underline inline-flex items-center gap-1 break-all'
+          >
+            {value}
+            <ExternalLink className='w-3.5 h-3.5 shrink-0' />
+          </a>
+        );
+      }
+
+      // Automatically detect and format URLs for other text fields
+      const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+      const parts = value.split(urlRegex);
+
+      if (parts.length === 1) {
+        return <span className='whitespace-pre-line break-words'>{value}</span>;
+      }
+
+      return (
+        <span className='whitespace-pre-line break-words'>
+          {parts.map((part, idx) => {
+            if (part.match(urlRegex)) {
+              const href = part.startsWith('http') ? part : `https://${part}`;
+              return (
+                <a
+                  key={idx}
+                  href={href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-0.5 break-all font-semibold'
+                >
+                  {part}
+                  <ExternalLink className='w-3 h-3 inline-block shrink-0' />
+                </a>
+              );
+            }
+            return part;
+          })}
+        </span>
+      );
+    };
+
     return (
       <div className='space-y-1 w-full'>
         <span className='text-[10px] uppercase font-bold text-slate-500 flex items-center gap-1.5'>
           <Icon className='w-3 h-3' />
           {label}
         </span>
-        <p className='text-sm text-white font-medium wrap-break-word'>
-          {value || <span className='text-slate-600 italic'>Tidak data</span>}
-          {name === 'nomorWa' && value && (
-            <a
-              href={`https://wa.me/${value.replace(/\D/g, '')}`}
-              target='_blank'
-              className='inline-flex ml-2 text-cyan-400 hover:text-cyan-300'
-            >
-              <ExternalLink className='w-3 h-3' />
-            </a>
-          )}
-          {name === 'linkIg' && value && (
-            <a
-              href={
-                value.startsWith('http')
-                  ? value
-                  : `https://instagram.com/${value.replace('@', '')}`
-              }
-              target='_blank'
-              className='inline-flex ml-2 text-pink-400 hover:text-pink-300'
-            >
-              <ExternalLink className='w-3 h-3' />
-            </a>
-          )}
-        </p>
+        <div className='text-sm text-white font-medium wrap-break-word'>
+          {renderValue()}
+        </div>
       </div>
     );
   };

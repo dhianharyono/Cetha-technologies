@@ -176,7 +176,26 @@ export default function PortfolioPage() {
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {isLoading ? (
-          <p className='text-slate-500 col-span-3'>Memuat portofolio...</p>
+          [...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-[#131826]/40 border border-white/5 rounded-2xl overflow-hidden animate-pulse flex flex-col"
+            >
+              <div className="h-48 w-full bg-white/5" />
+              <div className="p-5 flex flex-col grow space-y-3">
+                <div className="h-6 w-20 bg-white/5 rounded-md" />
+                <div className="h-6 w-3/4 bg-white/5 rounded" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-white/5 rounded" />
+                  <div className="h-4 w-5/6 bg-white/5 rounded" />
+                </div>
+                <div className="flex gap-2 pt-4 border-t border-white/10 mt-auto">
+                  <div className="flex-1 h-9 bg-white/5 rounded-lg" />
+                  <div className="flex-1 h-9 bg-white/5 rounded-lg" />
+                </div>
+              </div>
+            </div>
+          ))
         ) : portfolios.length === 0 ? (
           <p className='text-slate-500 col-span-3'>Belum ada portofolio.</p>
         ) : (

@@ -132,14 +132,36 @@ export default function OrdersPage() {
             </thead>
             <tbody className='divide-y divide-white/5 text-slate-300'>
               {isLoading ? (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className='px-6 py-8 text-center text-slate-500'
-                  >
-                    Memuat data...
-                  </td>
-                </tr>
+                [...Array(5)].map((_, i) => (
+                  <tr key={i} className="animate-pulse border-b border-white/5">
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-32 bg-white/5 rounded mb-1.5" />
+                      <div className="h-3 w-24 bg-white/5 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-20 bg-white/5 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-28 bg-white/5 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-24 bg-white/5 rounded" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-7 w-20 bg-white/5 rounded-full" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-7 w-32 bg-white/5 rounded-xl" />
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        <div className="w-8 h-8 bg-white/5 rounded-lg" />
+                        <div className="w-8 h-8 bg-white/5 rounded-lg" />
+                        <div className="w-8 h-8 bg-white/5 rounded-lg" />
+                      </div>
+                    </td>
+                  </tr>
+                ))
               ) : orders.length === 0 ? (
                 <tr>
                   <td

@@ -31,13 +31,13 @@ export default function LoginPage() {
             if (res.ok) {
                 showToast('Berhasil masuk ke Dashboard!', 'success');
                 router.push('/admin');
-                router.refresh();
+                // Keep loading active during redirection
             } else {
                 showToast(data.error || 'Login gagal, periksa kredensial Anda.', 'error');
+                setIsLoading(false);
             }
         } catch {
             showToast('Terjadi kesalahan sistem', 'error');
-        } finally {
             setIsLoading(false);
         }
     };

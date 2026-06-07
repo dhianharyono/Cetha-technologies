@@ -12,18 +12,25 @@ export async function getDashboardStats(): Promise<IDashboardStats> {
     try {
         const conn = await connectToDatabase();
         if (!conn) return { totalOrders: 0, pendingOrders: 0, totalPortfolios: 0, totalPackages: 0, analyticData: { status: [], packages: [] } };
-        const totalOrders = await Order.countDocuments();
-        const pendingOrders = await Order.countDocuments({ status: 'Baru' });
-        const totalPortfolios = await Portfolio.countDocuments();
-        const totalPackages = await Package.countDocuments();
-
-        const statusAnalytics = await Order.aggregate([
-            { $group: { _id: '$status', count: { $sum: 1 } } }
-        ]);
-
-        const packageAnalytics = await Order.aggregate([
-            { $group: { _id: '$paket', count: { $sum: 1 } } },
-            { $sort: { count: -1 } }
+        const [
+            totalOrders,
+            pendingOrders,
+            totalPortfolios,
+            totalPackages,
+            statusAnalytics,
+            packageAnalytics,
+        ] = await Promise.all([
+            Order.countDocuments(),
+            Order.countDocuments({ status: 'Baru' }),
+            Portfolio.countDocuments(),
+            Package.countDocuments(),
+            Order.aggregate([
+                { $group: { _id: '$status', count: { $sum: 1 } } }
+            ]),
+            Order.aggregate([
+                { $group: { _id: '$paket', count: { $sum: 1 } } },
+                { $sort: { count: -1 } }
+            ])
         ]);
 
         return {
