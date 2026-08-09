@@ -92,17 +92,29 @@ export async function getPortfolios(): Promise<IPortfolio[]> {
 }
 
 export async function addPortfolio(data: Partial<IPortfolio>) {
-    await connectToDatabase();
-    await Portfolio.create(data);
-    revalidatePath('/admin/portfolio');
-    revalidatePath('/'); // Landing page
+    try {
+        await connectToDatabase();
+        const portfolio = await Portfolio.create(data);
+        revalidatePath('/admin/portfolio');
+        revalidatePath('/'); // Landing page
+        return { success: true, id: portfolio._id.toString() };
+    } catch (error) {
+        console.error('Error adding portfolio:', error);
+        throw new Error(error instanceof Error ? error.message : 'Gagal menambahkan portofolio');
+    }
 }
 
 export async function updatePortfolio(id: string, data: Partial<IPortfolio>) {
-    await connectToDatabase();
-    await Portfolio.findByIdAndUpdate(id, data);
-    revalidatePath('/admin/portfolio');
-    revalidatePath('/');
+    try {
+        await connectToDatabase();
+        await Portfolio.findByIdAndUpdate(id, data);
+        revalidatePath('/admin/portfolio');
+        revalidatePath('/');
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating portfolio:', error);
+        throw new Error(error instanceof Error ? error.message : 'Gagal mengupdate portofolio');
+    }
 }
 
 export async function deletePortfolio(id: string) {
