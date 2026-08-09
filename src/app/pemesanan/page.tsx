@@ -3,10 +3,7 @@ import PemesananForm from '@/app/pemesanan/PemesananForm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export const metadata = {
-    title: 'Formulir Kebutuhan Website | Cetha Technologies',
-    description: 'Silahkan isi formulir kebutuhan website Anda untuk memulai proses pengerjaan.',
-};
+
 
 export default function PemesananPage() {
     return (

@@ -8,6 +8,7 @@ import Pricing from '@/components/Pricing';
 import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
 import Spotlight from '@/components/Spotlight';
+import ScrollToTop from '@/components/ScrollToTop';
 import { getPublicTestimonials } from '@/app/actions/userActions';
 
 export default async function Home() {
@@ -25,6 +26,7 @@ export default async function Home() {
       <Pricing />
       <FAQ />
       <Footer />
+      <ScrollToTop />
     </main>
   );
 }

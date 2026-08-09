@@ -1,10 +1,7 @@
 import { Suspense } from 'react';
 import LacakPesananContent from './LacakPesananContent';
 
-export const metadata = {
-    title: 'Lacak Progres Pesanan | Cetha Technologies',
-    description: 'Masukkan ID pesanan Anda untuk memantau status pengerjaan website Anda secara langsung.',
-};
+
 
 export default function LacakPesananPage() {
     return (
