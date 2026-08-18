@@ -40,6 +40,9 @@ export default function FAQ() {
     <section id='faq' className='py-16 md:py-24 relative z-10 p-5 mb-10'>
       <div className='container mx-auto px-4 md:px-6'>
         <div className='text-center max-w-2xl mx-auto mb-16'>
+          <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-bold tracking-[0.2em] text-cyan-500 uppercase bg-cyan-500/10 border border-cyan-500/20 rounded-full">
+            FAQ
+          </div>
           <h2 className='text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-4'>
             Pertanyaan yang Sering Diajukan
           </h2>

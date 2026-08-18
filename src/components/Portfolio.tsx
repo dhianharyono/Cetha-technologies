@@ -89,10 +89,13 @@ export default function Portfolio() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className='text-xl md:text-5xl font-extrabold text-white mb-2 md:mb-6 tracking-tight'>
+            <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-bold tracking-[0.2em] text-cyan-500 uppercase bg-cyan-500/10 border border-cyan-500/20 rounded-full">
+              Our Work
+            </div>
+            <h2 className='text-2xl md:text-4xl font-extrabold text-white mb-2 md:mb-4 tracking-tight'>
               Karya{' '}
               <span className='text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500'>
-                Kami
+                Terbaik Kami
               </span>
             </h2>
             <p className='text-sm md:text-lg text-slate-400 leading-relaxed'>

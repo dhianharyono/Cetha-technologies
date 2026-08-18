@@ -131,13 +131,13 @@ export default function WhyUs() {
           <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-bold tracking-[0.2em] text-cyan-500 uppercase bg-cyan-500/10 border border-cyan-500/20 rounded-full">
             The Advantage
           </div>
-          <h2 className='text-3xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-tight'>
-            Bukan Sekadar <br />
+          <h2 className='text-2xl md:text-4xl font-extrabold text-white mb-4 tracking-tight leading-tight'>
+            Bukan Sekadar{" "}
             <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500'>
               Punya Website
             </span>
           </h2>
-          <p className='text-sm md:text-xl text-slate-400 font-light max-w-2xl mx-auto'>
+          <p className='text-sm md:text-base text-slate-400 font-normal max-w-2xl mx-auto'>
             Di era digital, sekadar eksis di media sosial tidaklah cukup. Website adalah rumah digital yang sepenuhnya Anda kendalikan.
           </p>
         </motion.div>

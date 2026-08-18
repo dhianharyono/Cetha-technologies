@@ -99,13 +99,13 @@ export default function Services() {
             <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-bold tracking-[0.2em] text-cyan-500 uppercase bg-cyan-500/10 border border-cyan-500/20 rounded-full">
               Built for Scale
             </div>
-            <h2 className='text-3xl md:text-6xl font-black text-white mb-8 tracking-tighter'>
+            <h2 className='text-2xl md:text-4xl font-extrabold text-white mb-4 tracking-tight'>
               Layanan{' '}
               <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400'>
                 Unggulan
               </span>
             </h2>
-            <p className='text-sm md:text-xl text-slate-400 font-light max-w-2xl mx-auto'>
+            <p className='text-sm md:text-base text-slate-400 font-normal max-w-2xl mx-auto'>
               Solusi digital komprehensif untuk membantu bisnis Anda tumbuh lebih cepat dengan teknologi terkini.
             </p>
           </motion.div>

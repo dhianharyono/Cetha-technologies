@@ -71,11 +71,10 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
       <div className="container mx-auto px-4 max-w-5xl relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-bold uppercase tracking-wider">
-            <MessageSquare className="w-3.5 h-3.5" />
-            Testimoni Klien
+          <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-bold tracking-[0.2em] text-cyan-500 uppercase bg-cyan-500/10 border border-cyan-500/20 rounded-full">
+            What They Said About Us
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
             Apa Kata Mereka Tentang Kami
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
@@ -84,7 +83,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
         </div>
 
         {/* Carousel Slider */}
-        <div className="relative bg-[#131826]/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-12 shadow-2xl overflow-hidden min-h-[300px] flex flex-col justify-between">
+        <div className="relative bg-[#131826]/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 sm:p-10 shadow-2xl overflow-hidden min-h-[260px] flex flex-col justify-between">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -92,17 +91,17 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4 }}
-              className="space-y-6"
+              className="space-y-4"
             >
               {/* Rating Star Indicator */}
               <div className="flex items-center gap-1">
                 {Array.from({ length: activeTestimonial.rating }).map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                  <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
                 ))}
               </div>
 
               {/* Testimonial Quote */}
-              <blockquote className="text-lg sm:text-2xl text-slate-100 font-medium leading-relaxed italic">
+              <blockquote className="text-base sm:text-lg text-slate-200 font-normal leading-relaxed italic">
                 "{activeTestimonial.ulasan}"
               </blockquote>
 
@@ -141,9 +140,8 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    index === activeIndex ? 'w-8 bg-cyan-400' : 'w-2.5 bg-slate-700 hover:bg-slate-500'
-                  }`}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${index === activeIndex ? 'w-8 bg-cyan-400' : 'w-2.5 bg-slate-700 hover:bg-slate-500'
+                    }`}
                   title={`Pergi ke slide ${index + 1}`}
                 />
               ))}

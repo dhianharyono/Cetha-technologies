@@ -85,7 +85,7 @@ export default function Hero() {
     <section
       ref={containerRef}
       id='home'
-      className='relative pt-32 lg:pt-48 overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-screen'
+      className='relative overflow-hidden bg-[#07090E] flex flex-col items-center justify-center min-h-screen pt-24 pb-8 lg:pt-28 lg:pb-12'
     >
       {/* Background Grid - Static */}
       <div
@@ -142,37 +142,27 @@ export default function Hero() {
         </motion.div>
       ))}
 
-      <div className='container mx-auto px-4 md:px-6 z-10 relative flex flex-col items-center justify-center min-h-screen'>
+      <div className='container mx-auto px-4 md:px-6 z-10 relative flex flex-col items-center justify-center my-auto'>
         <motion.div
-          className='max-w-5xl mx-auto flex flex-col items-center text-center py-20'
+          className='max-w-5xl mx-auto flex flex-col items-center text-center py-4 lg:py-6'
           variants={containerVariants}
           initial='hidden'
           animate='visible'
         >
-          <motion.div variants={itemVariants}>
-            <div className='inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs md:text-sm font-semibold mb-10 backdrop-blur-xl shadow-[0_0_15px_rgba(6,182,212,0.1)]'>
-              <span className='relative flex h-2.5 w-2.5'>
-                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75'></span>
-                <span className='relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500'></span>
-              </span>
-              Solusi Digital Terpercaya
-            </div>
-          </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className='text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-white mb-8 md:mb-10 leading-[0.9] overflow-visible'
+            className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 md:mb-8 leading-tight overflow-visible'
           >
-            Ubah Pengunjung Menjadi{' '}
-            <span className=' bg-clip-text bg-gradient-to-r from-cyan-400 text-blue-500 via-blue-500 to-indigo-600 relative inline-block'>
-              Pelanggan
-            </span>{' '}
-            Setia Anda
+            Tingkatkan Kredibilitas Bisnis & Dapatkan{' '}
+            <span className='bg-clip-text bg-gradient-to-r from-cyan-400 text-blue-500 via-blue-500 to-indigo-600 relative inline-block'>
+              Lebih Banyak Klien
+            </span>
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className='text-base md:text-xl text-slate-300/80 mb-12 max-w-3xl leading-relaxed font-light'
+            className='text-sm md:text-lg text-slate-300/80 mb-8 lg:mb-10 max-w-2xl leading-relaxed font-normal'
           >
             Kami membangun{' '}
             <span className='text-white font-medium'>website premium</span> yang
@@ -182,7 +172,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className='flex flex-col sm:flex-row gap-4 md:gap-6 mb-12 sm:mb-20 w-full sm:w-auto justify-center'
+            className='flex flex-col sm:flex-row gap-4 md:gap-6 mb-8 lg:mb-12 w-full sm:w-auto justify-center'
           >
             <Link href={'/pemesanan'} className='w-full sm:w-auto'>
               <Button
@@ -203,17 +193,17 @@ export default function Hero() {
             </Link>
           </motion.div>
 
-          {/* Visual Hook: Scrolling Indicator - Now with relative margin to avoid overlap */}
+          {/* Visual Hook: Scrolling Indicator */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2, duration: 1 }}
-            className='flex flex-col items-center gap-3 mt-4 sm:mt-8'
+            className='flex flex-col items-center gap-2 mt-2 lg:mt-4'
           >
             <span className='text-[10px] uppercase tracking-[0.3em] text-cyan-500/60 font-bold font-mono'>
               Scroll Explore
             </span>
-            <div className='w-[1px] h-12 md:h-20 bg-gradient-to-b from-cyan-500 to-transparent' />
+            <div className='w-[1px] h-10 md:h-16 bg-gradient-to-b from-cyan-500 to-transparent' />
           </motion.div>
         </motion.div>
       </div>
